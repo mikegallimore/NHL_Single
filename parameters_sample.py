@@ -13,8 +13,8 @@ shifts_root = 'http://www.nhl.com/stats/rest/shiftcharts?cayenneExp=gameId='
 ROS_root = 'http://www.nhl.com/scores/htmlreports/' + season_id + '/RO0'
 
 ### root file locations
-files_root = '/your/path/NHL_Tools/Single_Game/Files/'
-charts_root = '/your/path/NHL_Tools/Single_Game/Charts/'
+files_root = '/your/path/NHL_Single/Files/'
+charts_root = '/your/path/NHL_Single/Charts/'
 
 charts_players = charts_root + 'Players/'
 
