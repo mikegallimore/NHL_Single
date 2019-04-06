@@ -1,0 +1,48 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Sep 14 21:10:47 2017
+
+@author: Michael
+"""
+NHL = {'ANAHEIM DUCKS': 'ANA',
+					'ARIZONA COYOTES': 'ARI',
+					'ATLANTA THRASHERS': 'ATL',
+					'BOSTON BRUINS': 'BOS',
+					'BUFFALO SABRES': 'BUF',
+					'CALGARY FLAMES': 'CGY',
+					'CAROLINA HURRICANES': 'CAR',
+					'CHICAGO BLACKHAWKS': 'CHI',
+					'COLORADO AVALANCHE': 'COL',
+					'COLUMBUS BLUE JACKETS': 'CBJ',
+					'DALLAS STARS': 'DAL',
+					'DETROIT RED WINGS': 'DET',
+					'EDMONTON OILERS': 'EDM',
+					'FLORIDA PANTHERS': 'FLA',
+					'LOS ANGELES KINGS': 'LAK',
+					'MINNESOTA WILD': 'MIN',
+					'CANADIENS MONTREAL': 'MTL',
+					'CANADIENS MONTRÉAL': 'MTL',
+					'MONTRÉAL CANADIENS': 'MTL',
+					'MONTREAL CANADIENS': 'MTL',
+					'NASHVILLE PREDATORS': 'NSH',
+					'NEW JERSEY DEVILS': 'NJD',
+					'NEW YORK RANGERS': 'NYR',
+					'NEW YORK ISLANDERS': 'NYI',
+					'OTTAWA SENATORS': 'OTT',
+					'PHILADELPHIA FLYERS': 'PHI',
+					'PHOENIX COYOTES': 'PHX',
+					'PITTSBURGH PENGUINS': 'PIT',
+					'SAN JOSE SHARKS': 'SJS',
+					'ST. LOUIS BLUES': 'STL',
+					'TAMPA BAY LIGHTNING': 'TBL',
+					'TORONTO MAPLE LEAFS': 'TOR',
+					'VANCOUVER CANUCKS': 'VAN',
+					'VEGAS GOLDEN KNIGHTS': 'VGK',
+					'WASHINGTON CAPITALS': 'WSH',
+					'WINNIPEG JETS': 'WPG'}
+					
+TRICODES = {'BUF': 'BUF',
+				'L.A': 'LAK', 
+				'N.J': 'NJD',
+				'S.J': 'SJS',
+				'T.B': 'TBL'}
