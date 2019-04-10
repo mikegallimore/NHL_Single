@@ -2,7 +2,7 @@
 """
 Created on Thu Sep 14 21:10:47 2017
 
-@author: Michael
+@author: @mikegallimore
 """
 NHL = {'ANAHEIM DUCKS': 'ANA',
 					'ARIZONA COYOTES': 'ARI',

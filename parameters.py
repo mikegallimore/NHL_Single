@@ -7,7 +7,7 @@ Created on Thu Sep 14 20:40:14 2017
 import pandas as pd
 
 season_id = '20182019'
-game_id = '21243'
+game_id = '21254'
 
 ### url roots for game files (JSON)
 livefeed_root = 'http://statsapi.web.nhl.com/api/v1/game/'
@@ -15,8 +15,8 @@ shifts_root = 'http://www.nhl.com/stats/rest/shiftcharts?cayenneExp=gameId='
 ROS_root = 'http://www.nhl.com/scores/htmlreports/' + season_id + '/RO0'
 
 ### root file locations
-files_root = '/your/path/NHL_Single/Files/'
-charts_root = '/your/path/NHL_Single/Charts/'
+files_root = '/Users/micha/Desktop/NHL_Single/Files/'
+charts_root = '/Users/micha/Desktop/NHL_Single/Charts/'
 
 charts_players = charts_root + 'Players/'
 

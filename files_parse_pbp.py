@@ -2,7 +2,7 @@
 """
 Created on Fri Feb 16 22:10:14 2018
 
-@author: Michael
+@author: @mikegallimore
 """
 
 from bs4 import BeautifulSoup
@@ -17,6 +17,10 @@ import dict_teams
 ### pull common variables from the parameters file
 season_id = parameters.season_id
 game_id = parameters.game_id
+date = parameters.date
+home = parameters.home
+away = parameters.away
+teams = parameters.teams
 files_root = parameters.files_root
 
 ### establish file locations and destinations
@@ -24,17 +28,6 @@ livefeed_source = files_root + 'livefeed.json'
 livefeed_outfile = files_root + 'livefeed.csv'
 pbp_source = files_root + 'pbp.HTM'
 pbp_outfile = files_root + 'pbp.csv'
-
-### pull schedule info; generate key values
-schedule_csv = files_root + season_id + "_schedule.csv"
-
-schedule_df = pd.read_csv(schedule_csv)
-schedule_date = schedule_df[(schedule_df['GAME_ID'] == int(game_id))]
-
-date = schedule_date['DATE'].item()
-home = schedule_date['HOME'].item()
-away = schedule_date['AWAY'].item()
-teams = [away, home]
 
 ### access the game's roster file in order to create team-specific dicts and lists
 rosters_csv = files_root + 'rosters.csv'
@@ -61,7 +54,7 @@ awayG_df = rosters_table.copy()
 awayG_df = awayG_df[(awayG_df.TEAM == away) & (awayG_df.PLAYER_POS == 'G')]
 awayG = awayG_df['PLAYER_NAME'].tolist()
 
-### opens the game's livefeed (JSON) file to create a few shared variables
+### open the game's livefeed (JSON) file to create a few shared variables
 with open(livefeed_source) as livefeed_json:
     livefeed_data = json.load(livefeed_json)
 
@@ -531,7 +524,6 @@ with open(pbp_source, 'r') as HTM_pbp_source, open(pbp_outfile, 'w', newline = '
 
         ### find all the rows with on-ice player information
         get_players = get_rows.find_all('font')
-#            print(get_players)
 
         ### formats the home players on-ice
         try:

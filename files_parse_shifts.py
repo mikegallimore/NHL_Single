@@ -2,7 +2,7 @@
 """
 Created on Fri Feb 16 22:10:14 2018
 
-@author: Michael
+@author: @mikegallimore
 """
 
 from bs4 import BeautifulSoup
@@ -16,6 +16,10 @@ import dict_teams
 ### pull common variables from the parameters file
 season_id = parameters.season_id
 game_id = parameters.game_id
+date = parameters.date
+home = parameters.home
+away = parameters.away
+teams = parameters.teams
 files_root = parameters.files_root
 
 ### establish file locations and destinations
@@ -23,17 +27,6 @@ livefeed_file = files_root + 'livefeed.json'
 away_shifts_file = files_root + 'shifts_away.HTM'
 home_shifts_file = files_root + 'shifts_home.HTM'
 shifts_outfile = files_root + 'shifts.csv'
-
-### pull schedule info; generate key values
-schedule_csv = files_root + season_id + "_schedule.csv"
-
-schedule_df = pd.read_csv(schedule_csv)
-schedule_date = schedule_df[(schedule_df['GAME_ID'] == int(game_id))]
-
-date = schedule_date['DATE'].item()
-home = schedule_date['HOME'].item()
-away = schedule_date['AWAY'].item()
-teams = [away, home]
 
 ### access the game's roster file in order to create team-specific lists
 rosters_csv = files_root + 'rosters.csv'
@@ -65,6 +58,10 @@ with open(livefeed_file) as livefeed_json:
 
     current_period = livefeed_data["liveData"]["linescore"]["currentPeriod"]
     current_time_remaining = livefeed_data["liveData"]["linescore"]["currentPeriodTimeRemaining"]
+    
+    time_remaining_min = 0
+    time_remaining_sec = 0
+
     try:
         time_remaining_min = int(current_time_remaining.split(':')[0])
         time_remaining_sec = int(current_time_remaining.split(':')[1])
@@ -117,7 +114,7 @@ with open(away_shifts_file, 'r') as away_shifts, open(shifts_outfile, 'w', newli
             away2 = Visitor2[0]
             away = dict_teams.NHL[away2]
 
-        ### creates a list of all the rows in the .HTM file
+        ### create a list of all the rows in the .HTM file
         rowList = shiftsSoup.find_all('tr')
 
         for i in range(len(rowList)-1):
@@ -146,15 +143,15 @@ with open(away_shifts_file, 'r') as away_shifts, open(shifts_outfile, 'w', newli
                     except:
                         rowClass = []
 
-                    ### iterates through the next rows and pull shift information out of the shift rows
+                    ### iterate through the next rows and pull shift information out of the shift rows
                     while ('evenColor' in rowClass or 'oddColor' in rowClass):
                         tds = row.find_all('td')
                         shiftNo = tds[0].string
 
-                        ### gets the period number. Regular season OT should be changed to period 4
+                        ### get the period number. Regular season OT should be changed to period 4
                         period = int(tds[1].string) if tds[1].string != 'OT' else 4
 
-                        ### gets shift start and end and change the times to seconds from start of game
+                        ### get shift start and end and change the times to seconds from start of game
                         shiftStart = tds[2].string.split(' / ')[0].split(':')
                         shiftEnd = tds[3].string.split(' / ')[0].split(':')
                         duration = tds[4].string.split(' / ')[0].split(':')
@@ -169,7 +166,7 @@ with open(away_shifts_file, 'r') as away_shifts, open(shifts_outfile, 'w', newli
                             duration = 1200 * (period - 1) + 60 * int(duration[0]) + int(duration[1])
                             shiftEnd = shiftStart + duration
 
-                        ### creates a shift tuple of the information to be written and add to csvRows
+                        ### create a shift tuple of the information to be written and add to csvRows
                         shiftTup = [(season_id, game_id, date, 'Away', away, player_no, player_name, period, shiftNo, shiftStart, shiftEnd)]
                         csvRows += shiftTup
                         i += 1
@@ -226,7 +223,7 @@ with open(home_shifts_file, 'r') as home_shifts, open(shifts_outfile, 'a', newli
             home2 = Home2[0]
             home = dict_teams.NHL[home2]
 
-        ### creates a list of all the rows in the .HTM file
+        ### create a list of all the rows in the .HTM file
         rowList = shiftsSoup.find_all('tr')
 
         for i in range(len(rowList)-1):
@@ -255,12 +252,12 @@ with open(home_shifts_file, 'r') as home_shifts, open(shifts_outfile, 'a', newli
                     except:
                         rowClass = []
 
-                    ### iterates through the next rows and pull shift information out of the shift rows
+                    ### iterate through the next rows and pull shift information out of the shift rows
                     while ('evenColor' in rowClass or 'oddColor' in rowClass):
                         tds = row.find_all('td')
                         shiftNo = tds[0].string
 
-                        ### gets the period number. Regular season OT should be changed to period 4
+                        ### get the period number. Regular season OT should be changed to period 4
                         period = int(tds[1].string) if tds[1].string != 'OT' else 4
 
                         ### gets shift start and end and change the times to seconds from start of game
@@ -278,7 +275,7 @@ with open(home_shifts_file, 'r') as home_shifts, open(shifts_outfile, 'a', newli
                             duration = 1200 * (period - 1) + 60 * int(duration[0]) + int(duration[1])
                             shiftEnd = shiftStart + duration
 
-                        ### creates a shift tuple of the information to be written and add to csvRows
+                        ### create a shift tuple of the information to be written and add to csvRows
                         shiftTup = [(season_id, game_id, date, 'Home', home, player_no, player_name, period, shiftNo, shiftStart, shiftEnd)]
                         csvRows += shiftTup
                         i += 1
@@ -344,7 +341,7 @@ try:
     ### change any player names that have been given specific styling
     shifts_df['PLAYER_NAME'] = shifts_df['PLAYER_NAME'].replace(dict_names.NAMES)
 
-    ### deletes rows with botched names
+    ### delete rows with botched names
     shifts_df = shifts_df[shifts_df.PLAYER_NAME != '.']
 
     ### save the adjusted dataframe to file

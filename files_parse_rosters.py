@@ -2,7 +2,7 @@
 """
 Created on Fri Feb 16 22:10:14 2018
 
-@author: Michael
+@author: @mikegallimore
 """
 
 from bs4 import BeautifulSoup
@@ -14,22 +14,15 @@ import dict_names
 ### pull common variables from the parameters file
 season_id = parameters.season_id
 game_id = parameters.game_id
+date = parameters.date
+home = parameters.home
+away = parameters.away
+teams = parameters.teams
 files_root = parameters.files_root
 
 ### establish file locations and destinations
 rosters_in = files_root + 'rosters.HTM'
 rosters_out = files_root + 'rosters.csv'
-
-### pull schedule info; generate key values
-schedule_csv = files_root + season_id + "_schedule.csv"
-
-schedule_df = pd.read_csv(schedule_csv)
-schedule_date = schedule_df[(schedule_df['GAME_ID'] == int(game_id))]
-
-date = schedule_date['DATE'].item()
-home = schedule_date['HOME'].item()
-away = schedule_date['AWAY'].item()
-teams = [away, home]
 
 ###
 ### ROSTERS (HTM)

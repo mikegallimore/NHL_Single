@@ -2,7 +2,7 @@
 """
 Created on Thu Sep 14 21:10:47 2017
 
-@author: Michael
+@author: @mikegallimore
 """
 PENALTIES = {'Abuse of officials': 'Abusive.Behavior',
                 'Abuse of Officials': 'Abusive.Behavior',

@@ -2,18 +2,18 @@
 """
 Created on Fri Feb 16 23:55:23 2018
 
-@author: Michael
+@author: @mikegallimore
 """
 
 import requests
 import parameters
 
+### pull common variables from the parameters file
 season_id = parameters.season_id
 game_id = parameters.game_id
-
 files_root = parameters.files_root
 
-### Retrieve HTM rosters
+### retrieve HTM rosters
 try:
     ROS_content = requests.get('http://www.nhl.com/scores/htmlreports/' + season_id + '/RO0' + game_id + '.HTM', timeout=5).text
     if(len(ROS_content) < 10000):
@@ -25,7 +25,7 @@ try:
 except:
     print('ERROR: Could not retrieve NHL rosters (HTM) for ' + season_id + ' ' + game_id)
 
-### Retrieve HTM play-by-play
+### retrieve HTM play-by-play
 try:
     PBP_content = requests.get('http://www.nhl.com/scores/htmlreports/' + season_id + '/PL0' + game_id + '.HTM', timeout=5).text
     if(len(ROS_content) < 10000):
@@ -37,7 +37,7 @@ try:
 except:
     print('ERROR: Could not retrieve NHL play-by-play (HTM) for ' + season_id + ' ' + game_id)
 
-### Retrieve HTM home shift charts
+### retrieve HTM home shift charts
 try:
     TH0_content = requests.get('http://www.nhl.com/scores/htmlreports/' + season_id + '/TH0' + game_id + '.HTM', timeout=5).text
     if(len(TH0_content) < 10000):
@@ -49,7 +49,7 @@ try:
 except:
     print('ERROR: Could not retrieve NHL shifts (THO, HTM) for ' + season_id + ' ' + game_id)
 
-### Retrieve HTM visitor shift charts
+### retrieve HTM visitor shift charts
 try:
     TV0_content = requests.get('http://www.nhl.com/scores/htmlreports/' + season_id + '/TV0' + game_id + '.HTM', timeout=5).text
     if(len(TV0_content) < 10000):
@@ -61,7 +61,7 @@ try:
 except:
     print('ERROR: Could not retrieve NHL shifts (TVI, HTM) for ' + season_id + ' ' + game_id)
 
-### Retrieve JSON livefeed
+### retrieve JSON livefeed
 try:
     JSON_content = requests.get('http://statsapi.web.nhl.com/api/v1/game/' + season_id[0:4] + '0' + game_id + '/feed/live', timeout=5).text
     if(len(JSON_content) < 1000):
@@ -73,7 +73,7 @@ try:
 except:
     print('ERROR: Could not retrieve NHL livefeed (JSON) ' + season_id + ' ' + game_id)
 
-### Retrieve JSON shifts
+### retrieve JSON shifts
 try:
     JSON_content = requests.get('http://www.nhl.com/stats/rest/shiftcharts?cayenneExp=gameId=' + season_id[0:4] + '0' + game_id, timeout=5).text
     if(len(JSON_content) < 1000):

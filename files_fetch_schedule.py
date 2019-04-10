@@ -12,12 +12,16 @@ import pandas as pd
 import parameters
 import dict_teams
 
+### pull common variables from the parameters file
 season_id = parameters.season_id
 game_id = parameters.game_id
-
 files_root = parameters.files_root
 
-### Retrieve the JSON schedule information
+### create variables that point to the .csv processed stats files for players
+JSON_schedule = files_root + season_id + "_schedule.json"
+schedule_csv = files_root + season_id + "_schedule.csv"
+
+### retrieve the JSON schedule information
 try:    
     year_start = season_id[0:4]
     year_end = season_id[4:8]
@@ -35,9 +39,6 @@ except:
 ###
 ### SCHEDULE (JSON)
 ###
-
-JSON_schedule = files_root + season_id + "_schedule.json"
-schedule_csv = files_root + season_id + "_schedule.csv"
 
 with open(JSON_schedule) as JSON_schedule_in:
     JSON_schedule_parsed = json.load(JSON_schedule_in)
@@ -82,7 +83,7 @@ with open(JSON_schedule) as JSON_schedule_in:
                 JSON_csvWriter.writerows([JSON_game_data])
 
 try:
-    ### reloads the newly minted csv file to replace the team names with their tricodes
+    ### reload the newly minted csv file to replace the team names with their tricodes
     schedule_df = pd.read_csv(schedule_csv)
  
     schedule_df = schedule_df[(schedule_df.GAME_ID > 20000)].sort_values('GAME_ID')
@@ -93,7 +94,7 @@ try:
     schedule_df.to_csv(schedule_csv, index = False)
 
 except:
-    ### reloads the newly minted csv file to replace the team names with their tricodes
+    ### reload the newly minted csv file to replace the team names with their tricodes
     schedule_df = pd.read_csv(schedule_csv, encoding='latin-1')
     
     schedule_df = schedule_df[(schedule_df.GAME_ID > 20000)].sort_values('GAME_ID')

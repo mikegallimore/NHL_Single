@@ -5,13 +5,16 @@ Created on Fri Feb 16 22:10:14 2018
 @author: @mikegallimore
 """
 
-import json
 import pandas as pd
 import parameters
 
 ### pull common variables from the parameters file
 season_id = parameters.season_id
 game_id = parameters.game_id
+date = parameters.date
+home = parameters.home
+away = parameters.away
+teams = parameters.teams
 files_root = parameters.files_root
 
 ### establish file locations and destinations
@@ -21,42 +24,6 @@ pbp_parsed = files_root + 'pbp.csv'
 rosters_parsed = files_root + 'rosters.csv'
 shifts_parsed = files_root + 'shifts.csv'
 TOI_outfile = files_root + 'TOI_matrix.csv'
-
-### pull schedule info; generate key values
-schedule_csv = files_root + season_id + "_schedule.csv"
-
-schedule_df = pd.read_csv(schedule_csv)
-schedule_date = schedule_df[(schedule_df['GAME_ID'] == int(game_id))]
-
-date = schedule_date['DATE'].item()
-home = schedule_date['HOME'].item()
-away = schedule_date['AWAY'].item()
-teams = [away, home]
-
-### opens the game's livefeed (JSON) file to create a few shared variables
-with open(livefeed_source) as livefeed_json:
-    livefeed_data = json.load(livefeed_json)
-   
-    current_period = livefeed_data["liveData"]["linescore"]["currentPeriod"]
-    current_time_remaining = livefeed_data["liveData"]["linescore"]["currentPeriodTimeRemaining"]
-    try:
-        time_remaining_min = int(current_time_remaining.split(':')[0])
-        time_remaining_sec = int(current_time_remaining.split(':')[1])
-    except:
-        pass
-
-    if current_period == 1 and current_time_remaining != 'END':
-        current_seconds_gone = 1200 - ((time_remaining_min * 60) + time_remaining_sec)
-    elif current_period ==1 and current_time_remaining == 'END':
-        current_seconds_gone = 1200        
-    if current_period == 2 and current_time_remaining != 'END':
-        current_seconds_gone = 2400 - ((time_remaining_min * 60) + time_remaining_sec)
-    elif current_period == 2 and current_time_remaining == 'END':
-        current_seconds_gone = 2400
-    if current_period == 3 and current_time_remaining != 'Final':
-        current_seconds_gone = 3600 - ((time_remaining_min * 60) + time_remaining_sec)
-    elif current_period == 4 and current_time_remaining != 'Final':
-        current_seconds_gone = 3900 - ((time_remaining_min * 60) + time_remaining_sec)
 
 ###
 ### PLAY-BY-PLAY FROM LIVEFEED (CSV) & TOI MATRIX (CSV)

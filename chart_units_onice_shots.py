@@ -10,36 +10,25 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 import parameters
 
+### pull common variables from the parameters file
 season_id = parameters.season_id
 game_id = parameters.game_id
-
+date = parameters.date
+home = parameters.home
+away = parameters.away
+teams = parameters.teams
 charts_units = parameters.charts_units
 files_root = parameters.files_root
 
-### pulls schedule info
-schedule_csv = files_root + season_id + "_schedule.csv"
-
-schedule_df = pd.read_csv(schedule_csv)
-#print(schedule_df)
-schedule_date = schedule_df[(schedule_df['GAME_ID'] == int(game_id))]
-date = schedule_date['DATE'].item()
-home = schedule_date['HOME'].item()
-away = schedule_date['AWAY'].item()
-#print(date, home, away)
-
-### creates variables that point to the .csv processed stats files for lines and pairings
+### create variables that point to the .csv processed stats files for lines and pairings
 lines_file = files_root + 'stats_units_lines_onice.csv'
 pairings_file = files_root + 'stats_units_pairings_onice.csv'
 
-### creates a dataframe object that reads in info from the .csv files
+### create dataframe objects that read in info from the .csv files
 lines_df = pd.read_csv(lines_file)
-#print(lines_df)
-
 pairings_df = pd.read_csv(pairings_file)
-#print(lines_df)
 
-teams = [away, home]
-
+### choose colors for each team; set them in a list
 away_color = '#e60000'
 home_color = '#206a92'
 
@@ -49,6 +38,7 @@ team_colors = [away_color, home_color]
 ### 5v5
 ###
 
+### loop through each team
 for team in teams:
   
     if team == away:
@@ -69,7 +59,7 @@ for team in teams:
         team_color_map = plt.cm.get_cmap('Blues')
         opponent_color_map = plt.cm.get_cmap('Reds')        
         
-
+    ### create a lines dataframe; filter for team; sort by time on ice; keep the lines with the 4 highest totals; rank and then invert the rankings
     team_lines_df = lines_df.copy()
     team_lines_df = team_lines_df[(team_lines_df['TEAM'] == team)]  
     team_lines_df = team_lines_df.sort_values(by=['TOI'], ascending = True)
@@ -77,40 +67,50 @@ for team in teams:
     team_lines_df['RANK'] = team_lines_df['TOI'].rank(method='first')
     team_lines_df = team_lines_df.sort_values(by=['RANK'], ascending = True)
     team_lines_df['RANK'] -= 1
+    
+    ### make shots against negative values    
     team_lines_df['SA'] *= -1
 
+    ### create another lines dataframe with just the time on ice column; set a max value; scale each line's time on ice relative to the max value
     lines_toi = team_lines_df['TOI']
     
     max_lines_toi = max(lines_toi)
 
     lines_toi_color = lines_toi / float(max(lines_toi))
-    
+
+    ### connect team and opponent color map colors to each line's scaled time on ice   
     lines_toi_color_map_for = team_color_map(lines_toi_color)
     lines_toi_color_map_against = opponent_color_map(lines_toi_color)    
            
+    ### create a pairings dataframe; filter for team; sort by time on ice; keep the pairs with the 3 highest totals; rank and then invert the rankings   
     team_pairings_df = pairings_df.copy()
     team_pairings_df = team_pairings_df[(team_pairings_df['TEAM'] == team)]
     team_pairings_df = team_pairings_df.sort_values(by=['TOI'], ascending = True)
     team_pairings_df = team_pairings_df.iloc[-3:]    
     team_pairings_df['RANK'] = team_pairings_df['TOI'].rank(method='first')
     team_pairings_df['RANK'] -= 1
-    team_pairings_df['SA'] *= -1
     
+    ### make shots against negative values    
+    team_pairings_df['SA'] *= -1
+
+    ### create another pairings dataframe with just the time on ice column; set a max value; scale each pair's time on ice relative to the max  
     pairings_toi = team_pairings_df['TOI']
 
     max_pairings_toi = max(pairings_toi)
 
     pairings_toi_color = pairings_toi / float(max(pairings_toi))
 
+    ### connect team and opponent color map colors to each line's scaled time on ice 
     pairings_toi_color_map_for = team_color_map(pairings_toi_color)
     pairings_toi_color_map_against = opponent_color_map(pairings_toi_color)
        
-    ### creates a figure with two subplots sharing the Y-axis
+    ### create a figure with two subplots sharing the y-axis
     fig, axarr = plt.subplots(2, sharex=True)
     
-     ### sets the plot title
+    ### set the plot title
     axarr[0].set_title(date + ' Unit 5v5 On-Ice Shots\n ' + away + ' @ ' + home + '\n' )
 
+    ### create bars for shots for and against as well as line markers (to note the shot differential) for each line
     try:
         lines_SF_plot = team_lines_df.plot.barh(x='LINE', y='SF', stacked=True, color=lines_toi_color_map_for, width=0.75, legend=None, label='', ax=axarr[0]);
     except:
@@ -124,8 +124,7 @@ for team in teams:
     except:
         pass
 
-
-#    ax2.set_title('Pairings')  
+    ### create bars for shots for and against as well as line markers (to note the shot differential) for each pair
     try:
         pairings_SF_plot = team_pairings_df.plot.barh(x='PAIRING', y='SF', stacked=True, color=pairings_toi_color_map_for, width=0.5, legend=None, label='', ax=axarr[1]);
     except:
@@ -139,32 +138,33 @@ for team in teams:
     except:
         pass
     
-    ### removes the labels for each subplot
+    ### remove the labels for each subplot
     axarr[0].set_xlabel('')
     axarr[0].set_ylabel('')
 
     axarr[1].set_xlabel('')    
     axarr[1].set_ylabel('')  
 
-    ### sets vertical indicators for break-even shot differential
+    ### set vertical indicators for break-even shot differential
     axarr[0].axvspan(0, 0, ymin=0, ymax=1, alpha=0.5, color='black')
     axarr[1].axvspan(0, 0, ymin=0, ymax=1, alpha=0.5, color='black')
 
+    ### change the tick parameters for each axes
     axarr[0].tick_params(
-            axis='both',       # changes apply to the x-axis
-            which='both',      # both major and minor ticks are affected
-            bottom=False,      # ticks along the bottom edge are off
-            top=False,         # ticks along the top edge are off
-            left=False,        # ticks along the left edge are off
-            labelbottom=False) # labels along the bottom edge are off
+            axis='both',
+            which='both',
+            bottom=False,
+            top=False,
+            left=False,
+            labelbottom=False)
     
     axarr[1].tick_params(
-        axis='both',          # changes apply to the x-axis
-        which='both',      # both major and minor ticks are affected
-        bottom=False,      # ticks along the bottom edge are off
-        top=False,         # ticks along the top edge are off
-        left=False,        # ticks along the left edge are off
-        labelbottom=True) # labels along the bottom edge are off
+        axis='both',
+        which='both',
+        bottom=False,
+        top=False,
+        left=False,
+        labelbottom=True)
 
     ### remove the borders to each subplot
     axarr[0].spines["top"].set_visible(False)   
@@ -177,10 +177,7 @@ for team in teams:
     axarr[1].spines["right"].set_visible(False)    
     axarr[1].spines["left"].set_visible(False)  
 
-    ### sets the location of the plot legend
-#    plt.legend(loc='center', bbox_to_anchor=(0.5, -.3), ncol=3).get_frame().set_linewidth(0.0)
-
-    ### insert toi colorbars for each axis
+    ### insert time on ice colorbars for each axis
     lines_norm = mpl.colors.Normalize(vmin=0,vmax=1)
     lines_sm = plt.cm.ScalarMappable(cmap=team_color_map, norm=lines_norm)
     lines_sm.set_array([])
@@ -195,15 +192,18 @@ for team in teams:
     pairings_color_bar.ax.set_yticklabels(['0', '', '', '', max_pairings_toi])
     pairings_color_bar.set_label('Time On Ice', rotation=270)
 
-      ### saves the image to file
+    ### save the image to file
     if team == away:
         plt.savefig(charts_units + 'onice_shots_away.png', bbox_inches='tight', pad_inches=0.2)
     elif team == home:
         plt.savefig(charts_units + 'onice_shots_home.png', bbox_inches='tight', pad_inches=0.2)    
     
+    ### show and then close the current figure
     plt.show()
     plt.close(fig)
     
+    
     print('Plotting ' + team + ' lines and pairings 5v5 on-ice shots.')   
+    
     
 print('Finished plotting the 5v5 on-ice shots for lines and pairings.')

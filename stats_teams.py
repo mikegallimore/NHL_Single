@@ -12,23 +12,16 @@ import parameters
 ### pull common variables from the parameters file
 season_id = parameters.season_id
 game_id = parameters.game_id
+date = parameters.date
+home = parameters.home
+away = parameters.away
+teams = parameters.teams
 files_root = parameters.files_root
 
 ### establish file locations and destinations
 TOI_matrix = files_root + 'TOI_matrix.csv'
 pbp = files_root + 'pbp.csv'
 stats_teams = files_root + 'stats_teams.csv'
-
-### pull schedule info; generate key values
-schedule_csv = files_root + season_id + "_schedule.csv"
-
-schedule_df = pd.read_csv(schedule_csv)
-schedule_date = schedule_df[(schedule_df['GAME_ID'] == int(game_id))]
-
-date = schedule_date['DATE'].item()
-home = schedule_date['HOME'].item()
-away = schedule_date['AWAY'].item()
-teams = [away, home]
 
 ### create a dataframe for extracting TOI info
 TOI_df = pd.read_csv(TOI_matrix)

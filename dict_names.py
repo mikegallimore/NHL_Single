@@ -2,7 +2,7 @@
 """
 Created on Thu Sep 14 00:10:44 2017
 
-@author: Michael
+@author: @mikegallimore
 """
 import csv
 
