@@ -53,7 +53,6 @@ with open(JSON_schedule) as JSON_schedule_in:
         
         for JSON_allgames in JSON_game_dates:
             JSON_dates = JSON_allgames["date"]
-#            print(dates)
         
             JSON_games = JSON_allgames['games']
         
