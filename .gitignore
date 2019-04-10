@@ -3,6 +3,64 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Parameters
+parameters.py
+
+# Twitter Credentials
+twitter_credentials.py
+
+# Folders
+Charts/
+Files/
+
+# Images (Players)
+Charts/Players/skaters_5v5_onice_shots_away.png
+Charts/Players/skaters_5v5_onice_shots_home.png
+
+# Images (Teams)
+Charts/Teams/shots_density.png
+Charts/Teams/shots_density_5v5.png
+Charts/Teams/shots_density_pp_away.png
+Charts/Teams/shots_density_pp_home.png
+Charts/Teams/shots_gameflow.png
+Charts/Teams/shots_gameflow_5v5.png
+Charts/Teams/shots_scatter.png
+Charts/Teams/shots_scatter_5v5.png
+Charts/Teams/shots_scatter_pp_away.png
+Charts/Teams/shots_scatter_pp_home.png
+
+# Images (Teams: Period)
+Charts/Teams/Period/shots_scatter_1st.png
+Charts/Teams/Period/shots_scatter_2nd.png
+Charts/Teams/Period/shots_scatter_3rd.png
+Charts/Teams/Period/shots_scatter_5v5_1st.png
+Charts/Teams/Period/shots_scatter_5v5_2nd.png
+Charts/Teams/Period/shots_scatter_5v5_3rd.png
+Charts/Teams/Period/shots_scatter_pp_away_1st.png
+Charts/Teams/Period/shots_scatter_pp_away_2nd.png
+Charts/Teams/Period/shots_scatter_pp_away_3rd.png
+Charts/Teams/Period/shots_scatter_pp_home_1st.png
+Charts/Teams/Period/shots_scatter_pp_home_2nd.png
+Charts/Teams/Period/shots_scatter_pp_home_3rd.png
+
+# Images (Teams: Situation)
+Charts/Teams/Situation/shots_scatter_leading.png
+Charts/Teams/Situation/shots_scatter_tied.png
+Charts/Teams/Situation/shots_scatter_trailing.png
+Charts/Teams/Situation/shots_scatter_5v5_leading.png
+Charts/Teams/Situation/shots_scatter_5v5_tied.png
+Charts/Teams/Situation/shots_scatter_5v5_trailing.png
+Charts/Teams/Situation/shots_scatter_pp_away_leading.png
+Charts/Teams/Situation/shots_scatter_pp_away_tied.png
+Charts/Teams/Situation/shots_scatter_pp_away_trailing.png
+Charts/Teams/Situation/shots_scatter_pp_home_leading.png
+Charts/Teams/Situation/shots_scatter_pp_home_tied.png
+Charts/Teams/Situation/shots_scatter_pp_home_trailing.png
+
+# Images (Units)
+Charts/Units/onice_shots_away.png
+Charts/Units/onice_shots_home.png
+
 # C extensions
 *.so
 
