@@ -13,6 +13,10 @@ import parameters
 ### pull common variables from the parameters file
 season_id = parameters.season_id
 game_id = parameters.game_id
+date = parameters.date
+home = parameters.home
+away = parameters.away
+teams = parameters.teams
 files_root = parameters.files_root
 
 ### establish file locations and destinations
@@ -20,17 +24,6 @@ TOI_matrix = files_root + 'TOI_matrix.csv'
 pbp = files_root + 'pbp.csv'
 stats_individual = files_root + 'stats_units_lines_individual_matchups_pairings.csv'
 stats_onice = files_root + 'stats_units_lines_onice_matchups_pairings.csv'
-
-### pull schedule info; generate key values
-schedule_csv = files_root + season_id + "_schedule.csv"
-
-schedule_df = pd.read_csv(schedule_csv)
-schedule_date = schedule_df[(schedule_df['GAME_ID'] == int(game_id))]
-
-date = schedule_date['DATE'].item()
-home = schedule_date['HOME'].item()
-away = schedule_date['AWAY'].item()
-teams = [away, home]
 
 ### create a dataframe for extracting TOI info; add a column with all of the on-ice players for expedited searching; derive the last on-ice second recorded
 TOI_df = pd.read_csv(TOI_matrix).fillna("NaN")
