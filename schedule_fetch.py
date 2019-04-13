@@ -63,7 +63,7 @@ with open(JSON_schedule) as JSON_schedule_in:
                 JSON_game_id = str(JSON_game["gamePk"])[5:]
                 JSON_game_id = int(JSON_game_id)
                 ### skip any non-regular season games
-                if JSON_game_id > 29999:
+                if JSON_game_id > 39999:
                     continue
 
                 JSON_date = JSON_dates

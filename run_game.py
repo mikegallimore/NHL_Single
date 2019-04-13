@@ -5,15 +5,56 @@ Created on Thu Sep 14 21:10:47 2017
 @author: @mikegallimore
 """
 
-import files_fetch
-files_fetch
+import argparse
 
-import files_parse
-files_parse
+parser = argparse.ArgumentParser()
+
+### creates arguments to make use of in functions
+parser.add_argument("--season_id", dest="season_id", required=False)
+parser.add_argument("--game_id", dest="game_id", required=False)
+
+args = parser.parse_args()
+
+### passes the arguments through to parameters.py
+#import files_fetch
+#files_fetch.parse_ids(args.season_id, args.game_id)
+#files_fetch
+
+import files_parse_rosters
+files_parse_rosters.parse_ids(args.season_id, args.game_id)
+files_parse_rosters
+
+import files_parse_shifts
+files_parse_shifts.parse_ids(args.season_id, args.game_id)
+files_parse_shifts
+
+import files_parse_pbp
+files_parse_pbp.parse_ids(args.season_id, args.game_id)
+files_parse_pbp
+
+import files_parse_TOI
+files_parse_TOI.parse_ids(args.season_id, args.game_id)
+files_parse_TOI
+
+import files_parse_merge_pbp
+files_parse_merge_pbp.parse_ids(args.season_id, args.game_id)
+files_parse_merge_pbp
 
 
 ### Teams
 import stats_teams
+stats_teams.parse_ids(args.season_id, args.game_id)
+stats_teams
+
+import stats_teams_period
+stats_teams_period.parse_ids(args.season_id, args.game_id)
+stats_teams_period
+
+import stats_teams_situation
+stats_teams_situation.parse_ids(args.season_id, args.game_id)
+stats_teams_situation
+
+'''
 import stats_teams_period
 import stats_teams_situation
 stats_teams
@@ -63,3 +104,4 @@ chart_units_onice_shots
 
 import tweet_units_onice_shots
 tweet_units_onice_shots
+'''
