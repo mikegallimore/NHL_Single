@@ -102,14 +102,6 @@ if args.players != 'skip':
     stats_players.parse_ids(args.season_id, args.game_id)
     stats_players
     
-    import stats_players_period
-    stats_players_period.parse_ids(args.season_id, args.game_id)
-    stats_players_period
-    
-    import stats_players_situation
-    stats_players_situation.parse_ids(args.season_id, args.game_id)
-    stats_players_situation
-
     import chart_players_onice_shots
     chart_players_onice_shots.parse_ids(args.season_id, args.game_id, args.images)
     chart_players_onice_shots
@@ -120,6 +112,14 @@ if args.players != 'skip' and args.tweet != 'no':
     tweet_players_onice_shots
 
 if args.players != 'skip' and args.extent == 'full':    
+    import stats_players_period
+    stats_players_period.parse_ids(args.season_id, args.game_id)
+    stats_players_period
+    
+    import stats_players_situation
+    stats_players_situation.parse_ids(args.season_id, args.game_id)
+    stats_players_situation
+
     import stats_players_teammates
     stats_players_teammates.parse_ids(args.season_id, args.game_id)
     stats_players_teammates
