@@ -118,7 +118,7 @@ def parse_ids(season_id, game_id, images):
                 bottom=False,
                 top=False,
                 left=False,
-                labelbottom=False)
+                labelbottom=True)
     
         ### remove the borders to each subplot
         ax.spines["top"].set_visible(False)   

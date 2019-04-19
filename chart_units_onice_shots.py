@@ -189,14 +189,14 @@ def parse_ids(season_id, game_id, images):
         lines_sm = plt.cm.ScalarMappable(cmap=team_color_map, norm=lines_norm)
         lines_sm.set_array([])
         lines_color_bar = plt.colorbar(lines_sm, ax=axarr[0])
-        lines_color_bar.ax.set_yticklabels(['0', '', '', '' , max_lines_toi])
+        lines_color_bar.ax.set_yticklabels(['0', '', '', '' , '', max_lines_toi])
         lines_color_bar.set_label('Time On Ice', rotation=270)
     
         pairings_norm = mpl.colors.Normalize(vmin=0,vmax=1)
         pairings_sm = plt.cm.ScalarMappable(cmap=team_color_map, norm=pairings_norm)
         pairings_sm.set_array([])
         pairings_color_bar = plt.colorbar(pairings_sm, ax=axarr[1])
-        pairings_color_bar.ax.set_yticklabels(['0', '', '', '', max_pairings_toi])
+        pairings_color_bar.ax.set_yticklabels(['0', '', '', '', '', max_pairings_toi])
         pairings_color_bar.set_label('Time On Ice', rotation=270)
     
         ### save the image to file

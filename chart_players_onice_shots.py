@@ -111,12 +111,20 @@ def parse_ids(season_id, game_id, images):
     
         ### change the tick parameters for each axes
         ax.tick_params(
-                axis='both',          # changes apply to the x-axis
+                axis='both',       # changes apply to the x-axis
                 which='both',      # both major and minor ticks are affected
                 bottom=False,      # ticks along the bottom edge are off
                 top=False,         # ticks along the top edge are off
                 left=False,        # ticks along the left edge are off
                 labelbottom=False) # labels along the bottom edge are off
+
+        ax.tick_params(
+            axis='both',          # changes apply to the x-axis
+            which='both',      # both major and minor ticks are affected
+            bottom=False,      # ticks along the bottom edge are off
+            top=False,         # ticks along the top edge are off
+            left=False,        # ticks along the left edge are off
+            labelbottom=True) # labels along the bottom edge are off
         
         ### remove the borders to each subplot
         ax.spines["top"].set_visible(False)   
