@@ -20,14 +20,14 @@ At minimum, you must indicate the season and the particular game's 5-digit ident
 
 #### Modified
 There are optional arguments available for you to tack onto the basic structure as well:<br>
-<code>python run_game.py 20182019 20001 --extent full</code><br>
-<code>python run_game.py 20182019 20001 --images show</code><br>
-<code>python run_game.py 20182019 20001 --fetch skip</code><br>
-<code>python run_game.py 20182019 20001 --parse skip</code><br>
-<code>python run_game.py 20182019 20001 --players skip</code><br>
-<code>python run_game.py 20182019 20001 --teams skip</code><br>
-<code>python run_game.py 20182019 20001 --tweet no</code><br>
-<code>python run_game.py 20182019 20001 --units skip</code><br>
+<code>--extent full<br>
+<code>--images show</code><br>
+<code>--fetch skip</code><br>
+<code>--parse skip</code><br>
+<code>--players skip</code><br>
+<code>--teams skip</code><br>
+<code>--tweet no</code><br>
+<code>--units skip</code><br>
 
 You can always reference the required and optional arguments in the shell by typing the following:<br>
 <code>python run_game.py -h</code>
