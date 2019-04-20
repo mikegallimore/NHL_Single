@@ -11,7 +11,7 @@ If you intend on taking advantage of the script's Twitter functionality, you nee
 ### Installation
 
 ### Usage
-To use the script, you need to be in your interactive Python shell (i.e. command line interface). If you installed the Anaconda Distribution, this is the Anaconda Prompt program. 
+You need to be in your interactive Python shell (if you installed the Anaconda Distribution, this is the Aanaconda Prompt) in order to execute command lines.
 
 At minimum, you must indicate the season and the particular game's 5-digit identifier. For example:<br>
 <code>python run_game.py 20182019 20001</code>
