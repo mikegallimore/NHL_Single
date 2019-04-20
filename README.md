@@ -29,7 +29,7 @@ There are optional arguments available for you to tack onto the basic structure 
 <code>--tweet no</code><br>
 <code>--units skip</code><br>
 
-So, if you wanted, for example, to use the script without scraping and parsing the game files and you don't want to tweet out generated visualizations, you'd enter:<br>
+So, if you wanted, for example, to use the script without scraping and parsing the game files and without tweeting out generated visualizations, you'd enter:<br>
 <code>python run_game.py 20182019 20001 --fetch skip --parse skip --tweet no</code>
 
 You can always reference the required and optional arguments in the shell by typing the following:<br>
