@@ -29,7 +29,7 @@ There are optional arguments available for you to tack onto the basic structure 
 <code>python run_game.py 20182019 20001 --tweet no</code><br>
 <code>python run_game.py 20182019 20001 --units skip</code><br>
 
-You can always reference the required and optional arguments in the shell by typing the following:
+You can always reference the required and optional arguments in the shell by typing the following:<br>
 <code>python run_game.py -h</code>
 
 ### Acknowledgements
