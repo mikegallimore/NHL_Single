@@ -20,7 +20,7 @@ At minimum, you must indicate the season and the particular game's 5-digit ident
 
 #### Modified
 There are optional arguments available for you to tack onto the basic structure as well:<br>
-<code>--extent full<br>
+<code>--extent full</code><br>
 <code>--images show</code><br>
 <code>--fetch skip</code><br>
 <code>--parse skip</code><br>
