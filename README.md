@@ -9,7 +9,7 @@ This script requires Python (3.0 at minimum, 3.6+ is recommended) in order to ru
 If you intend on taking advantage of the script's Twitter functionality, you need to create a <a href="https://apps.twitter.com/app/new">Twitter application</a> and request its Access Token.
 
 ### Installation
-If you have the Anaconda Distribution or Miniconda, you can create a new environment with all the requirements as follows:<br>
+If you have the Anaconda Distribution or Miniconda, create a new environment with all the requirements as follows:<br>
 <code>conda create --enivornment_name --requirements_conda.txt</code><br>
 
 ### Usage
