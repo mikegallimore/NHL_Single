@@ -13,7 +13,7 @@ If you intend on taking advantage of the script's Twitter functionality, you nee
 ### Usage
 You need to be in your machine's interactive Python shell (if you installed the Anaconda Distribution, this is Anaconda Prompt) in order to execute command lines.
 
-At minimum, you must indicate the season and the particular game's 5-digit identifier. For example:<br>
+At minimum, you must indicate two positional arguments, which are the particular season and the 5-digit game number:<br>
 <code>python run_game.py 20182019 20001</code>
 
 There are optional arguments available for you to tack onto the basic structure as well:<br>
