@@ -20,8 +20,8 @@ If you intend on taking advantage of the script's Twitter functionality, you nee
 
    ##### PIP (requirements.txt)
    pipenv:<code>pipenv install</code><br>
-   venv: <code>py -m venv env</code>
-         Activate the environment
+   venv: <code>py -m venv env</code><br>
+         Activate the environment<br>
          <code>pip install -r requirements.txt</code><br>
       
 ### Usage
