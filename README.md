@@ -16,15 +16,19 @@ This script requires Python3 (written with 3.6.5; tested with 3.6.8). If you don
    
    ##### Pipenv
    <code>pipenv install</code><br>
+   
+   ##### venv
    <code>pip install -r requirements.txt</code><br>      
 
 4. If you intend on using the script's Twitter functionality, you need to create a <a href="https://apps.twitter.com/app/new">Twitter application</a> and request its Access Token, then rename <code>twitter_credentials_sample.py</code> to <code>twitter_credentials.py</code> and input your own APP_KEY, APP_SECRET, OAUTH_TOKEN and OAUTH_TOKEN_SECRET
 
 ### Usage
-You need to be in your machine's interactive Python shell (if you installed the Anaconda Distribution or Miniconda, this is Anaconda Prompt) in order to execute command lines.
+You need to activate the environment you created to run the NHL_Single files within your machine's interactive Python shell (if you installed the Anaconda Distribution or Miniconda, this is Anaconda Prompt) in order to execute command lines:
 
-Activate your environment:
-
+  ##### Anaconda / Miniconda
+  
+  ##### Pipenv
+  From within the directory with the NHL_Single files: <code>pipenv shell</code>
 
 ##### Game Usage
 At minimum, you must indicate two positional arguments, which are the particular season and the 5-digit game number:<br>
