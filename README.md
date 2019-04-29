@@ -11,13 +11,14 @@ This script requires Python3 (written with 3.6.5; tested with 3.6.8). If you don
 2. Move the folder containing the NHL_Single files wherever you want them stored on your machine
 3. Using your machine's interactive Python shell (i.e. command line interface; for Anaconda or Miniconda, this is Anaconda Prompt), change the working directory to the NHL_Single folder, create a new environment and install dependencies:
   
-   ##### Anaconda / Miniconda
+   ##### Anaconda or Miniconda as package and environment manager
    <code>conda create -n environment_name -f environment.yml</code><br>
    
-   ##### Pipenv
+   ##### PIP as package manager; Pipenv as environment manager
    <code>pipenv install</code><br>
    
-   ##### venv
+   ##### PIP as package manager; venv as environment manager
+   <code>py -m venv env</code><br>
    <code>pip install -r requirements.txt</code><br>      
 
 4. If you intend on using the script's Twitter functionality, you need to create a <a href="https://apps.twitter.com/app/new">Twitter application</a> and request its Access Token, then rename <code>twitter_credentials_sample.py</code> to <code>twitter_credentials.py</code> and input your own APP_KEY, APP_SECRET, OAUTH_TOKEN and OAUTH_TOKEN_SECRET
