@@ -12,10 +12,10 @@ If you intend on taking advantage of the script's Twitter functionality, you nee
 1. Clone this Git package
 2. Create an environment with the package dependencies:
   
-   Anaconda / Miniconda:
+   Anaconda / Miniconda:<br>
    <code>conda create -n environment_name -f environment.yml</code><br>
 
-   Vanilla Python:
+   Vanilla Python:<br>
    <code>conda create -n environment_name -f environment.yml</code><br>
       
 ### Usage
