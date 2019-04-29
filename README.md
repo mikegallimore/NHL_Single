@@ -17,7 +17,7 @@ This script requires Python3 (written with 3.6.5; tested with 3.6.8). If you don
    ##### PIP
    <code>pip install -r requirements.txt</code><br>      
 
-4. If you intend on using the script's Twitter functionality, you need to create a <a href="https://apps.twitter.com/app/new">Twitter application</a> and request its Access Token, then rename <code>twitter_credentials_sample.py</code> to <code>twitter_credentials.py</code> and update the APP_KEY, APP_SECRET, OAUTH_TOKEN and OAUTH_TOKEN_SECRET
+4. If you intend on using the script's Twitter functionality, you need to create a <a href="https://apps.twitter.com/app/new">Twitter application</a> and request its Access Token, then rename <code>twitter_credentials_sample.py</code> to <code>twitter_credentials.py</code> and input your own APP_KEY, APP_SECRET, OAUTH_TOKEN and OAUTH_TOKEN_SECRET
 
 ### Usage
 You need to be in your machine's interactive Python shell (if you installed the Anaconda Distribution or Miniconda, this is Anaconda Prompt) in order to execute command lines.
