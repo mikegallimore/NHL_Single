@@ -9,21 +9,14 @@ This script requires Python3 (written with 3.6.5; tested with 3.6.8). If you don
 If you intend on taking advantage of the script's Twitter functionality, you need to create a <a href="https://apps.twitter.com/app/new">Twitter application</a> and request its Access Token.
 
 ### Setup
-1. Clone/Download this Git package
-2. Move the package files to wherever you want them stored on your machine
-3. Install the package dependencies:
-   
-   After changing to the directory the package files are stored in:
-   
+1. Clone/Download the NHL_Single files
+2. Move the folder containing the NHL_Single files wherever you want them stored on your machine
+Using your machine's interactive Python shell (for Anaconda or Miniconda, this is Anaconda Prompt):
+3. Change to the NHL_Single folder
+4. Install the package dependencies (environment.yml for Anaconda/Miniconda; requirements.txt for PIP)  
+  
    ##### Anaconda / Miniconda (environment.yml)
    <code>conda create -n environment_name -f environment.yml</code><br>
-
-   ##### PIP (requirements.txt)
-   pipenv:<code>pipenv install</code><br>
-   venv:<br>
-      <code>py -m venv env</code><br>
-      Activate the environment<br>
-      <code>pip install -r requirements.txt</code><br>
       
 ### Usage
 You need to be in your machine's interactive Python shell (if you installed the Anaconda Distribution or Miniconda, this is Anaconda Prompt) in order to execute command lines.
