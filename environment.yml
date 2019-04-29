@@ -78,5 +78,6 @@ dependencies:
   - win_inet_pton=1.1.0=py36_0
   - wincertstore=0.2=py36h7fe50ca_0
   - zlib=1.2.11=h62dcd97_3
-prefix: C:\Users\micha\Miniconda3\envs\NHL_Single
+prefix: your_path
+# C:\Users\yourprofile\Miniconda3\envs\NHL_Single
 
