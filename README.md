@@ -36,4 +36,8 @@ So, if you wanted, for example, to use the script without scraping and parsing t
 You can always reference the required and optional arguments in the shell by typing the following:<br>
 <code>python run_game.py -h</code>
 
+### Notes
+To fetch a season's schedule, you must indicated a positional argument, which is the particular season:<br>
+<code>python run_schedule.py 20182019</code>
+
 ### Acknowledgements
