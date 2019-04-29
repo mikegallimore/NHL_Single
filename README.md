@@ -11,12 +11,12 @@ If you intend on taking advantage of the script's Twitter functionality, you nee
 ### Setup
 1. Clone/Download the NHL_Single files
 2. Move the folder containing the NHL_Single files wherever you want them stored on your machine
-Using your machine's interactive Python shell (for Anaconda or Miniconda, this is Anaconda Prompt):
-3. Change to the NHL_Single folder
-4. Install the package dependencies (environment.yml for Anaconda/Miniconda; requirements.txt for PIP)  
+3. Using your machine's interactive Python shell (for Anaconda or Miniconda, this is Anaconda Prompt), change to the NHL_Single folder and install (while or after creating a new environment is strongly recommended) the package dependencies:
   
    ##### Anaconda / Miniconda (environment.yml)
    <code>conda create -n environment_name -f environment.yml</code><br>
+   
+   ##### PIP (requirements.txt)
       
 ### Usage
 You need to be in your machine's interactive Python shell (if you installed the Anaconda Distribution or Miniconda, this is Anaconda Prompt) in order to execute command lines.
