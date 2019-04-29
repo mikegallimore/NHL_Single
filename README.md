@@ -15,7 +15,7 @@ If you intend on taking advantage of the script's Twitter functionality, you nee
    If you will be using Anaconda / Miniconda as your package and environment manager:<br>
    <code>conda create -n environment_name -f environment.yml</code><br>
 
-   If you will be using PIP with something else (e.g. pipenv, poetry, venv, etc.) as your package and environment managers:<br>
+   If you will be using PIP with something else (pipenv, venv, etc.) as your package and environment managers:<br>
    <code>pip install -r requirements.txt</code><br>
       
 ### Usage
