@@ -27,9 +27,9 @@ At minimum, a vanilla installation of Python3 (code written with 3.6.5; tested w
 4. If you intend on using the script's Twitter functionality:<br>
    a. Create a <a href="https://apps.twitter.com/app/new">Twitter application</a> and request its Access Token<br>
    b. Rename <code>twitter_credentials_sample.py</code> to <code>twitter_credentials.py</code><br>
-   c. Input your own APP_KEY, APP_SECRET, OAUTH_TOKEN and OAUTH_TOKEN_SECRET<br>
+   c. Input your own <code>APP_KEY</code>, <code>APP_SECRET</code>, <code>OAUTH_TOKEN</code> and <code>OAUTH_TOKEN_SECRET</code><br>
 
-5. Rename <code>parameters_sample.py</code> to <code>parameters.py</code> and update the files_root and charts_root objects with the path to your NHL_Single folder
+5. Rename <code>parameters_sample.py</code> to <code>parameters.py</code> and update the <code>files_root</code> and <code>charts_root</code> objects with the path to your NHL_Single folder
 
 ### Usage
 You must be within your machine's the command-line interface and need to activate the environment you created.
