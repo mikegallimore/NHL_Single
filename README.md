@@ -10,7 +10,7 @@ This script requires Python3 (written with 3.6.5; tested with 3.6.8). If you don
 1. Clone/Download the NHL_Single files
 2. Move the folder containing the NHL_Single files wherever you want them stored on your machine
 3. Using your machine's interactive Python shell (i.e. command line interface; for Anaconda or Miniconda, this is Anaconda Prompt):<br>
-   a. Change the working directory to the NHL_Single folder
+   a. Change the working directory to the NHL_Single folder<br>
    b. Create a new environment and install dependencies<br>
   
    ##### Anaconda or Miniconda as package and environment manager
