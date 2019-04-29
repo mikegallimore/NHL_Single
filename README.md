@@ -20,9 +20,10 @@ If you intend on taking advantage of the script's Twitter functionality, you nee
 
    ##### PIP (requirements.txt)
    pipenv:<code>pipenv install</code><br>
-   venv: <code>py -m venv env</code><br>
-         Activate the environment<br>
-         <code>pip install -r requirements.txt</code><br>
+   venv:<br>
+   <code>py -m venv env</code><br>
+   Activate the environment<br>
+   <code>pip install -r requirements.txt</code><br>
       
 ### Usage
 You need to be in your machine's interactive Python shell (if you installed the Anaconda Distribution or Miniconda, this is Anaconda Prompt) in order to execute command lines.
