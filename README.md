@@ -59,4 +59,4 @@ To fetch a season's schedule, either initially or to update (as you will need to
 ### Limitations
 
 ### Acknowledgements
-A lot of people have directly or indirectly helped me learn enough to put this thing together. Be it patiently answering my questions, making their own code publicly available, offering suggestions or simply encouragement, I am grateful for all of the feedback I received and resources that were available. 
+A lot of people have, in varying ways (be it by patiently answering questions, making their own code publically available, offering suggestions or simply encouragement), helped me learn enough to put this thing together. I am grateful for all of the feedback I received and resources that were available for consultation. 
