@@ -17,6 +17,7 @@ If you have the Anaconda Distribution or Miniconda, create a new environment wit
 ### Usage
 You need to be in your machine's interactive Python shell (if you installed the Anaconda Distribution or Miniconda, this is Anaconda Prompt) in order to execute command lines.
 
+<u>Game</u><br>
 At minimum, you must indicate two positional arguments, which are the particular season and the 5-digit game number:<br>
 <code>python run_game.py 20182019 20001</code>
 
@@ -36,7 +37,7 @@ So, if you wanted, for example, to use the script without scraping and parsing t
 You can always reference the required and optional arguments in the shell by typing the following:<br>
 <code>python run_game.py -h</code>
 
-### Notes
+<u>Season</u><br>
 To fetch a season's schedule, you must indicated a positional argument, which is the particular season:<br>
 <code>python run_schedule.py 20182019</code>
 
