@@ -13,13 +13,16 @@ If you intend on taking advantage of the script's Twitter functionality, you nee
 2. Move the package files to wherever you want them stored on your machine
 3. Install the package dependencies:
    
+   After changing to the directory the package files are stored in:
+   
    ##### Anaconda / Miniconda (environment.yml)
-   After changing to the directory the package files are stored in:<br>
    <code>conda create -n environment_name -f environment.yml</code><br>
 
    ##### PIP (requirements.txt)
-   After changing to the directory the package files are stored in:<br>
-   pipenv: <code>pipenv install</code><br>
+   pipenv:<code>pipenv install</code><br>
+   venv: <code>py -m venv env</code>
+         Activate the environment
+         <code>pip install -r requirements.txt</code><br>
       
 ### Usage
 You need to be in your machine's interactive Python shell (if you installed the Anaconda Distribution or Miniconda, this is Anaconda Prompt) in order to execute command lines.
