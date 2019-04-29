@@ -4,9 +4,7 @@
 This is a script for scraping and parsing the play-by-play, roster and shift files available for an NHL game in order to generate tabular and visualized data.
 
 ### Prerequisites
-This script requires Python3 (written with 3.6.5; tested with 3.6.8). If you don't already have Python on your machine, the simplest remedy is to install the <a href="https://www.anaconda.com/distribution/">Anaconda Distribution</a> (or, alternatively, <a href="https://docs.conda.io/en/latest/miniconda.html">Miniconda</a>). 
-
-If you intend on taking advantage of the script's Twitter functionality, you need to create a <a href="https://apps.twitter.com/app/new">Twitter application</a> and request its Access Token.
+This script requires Python3 (written with 3.6.5; tested with 3.6.8). If you don't already have Python on your machine, the simplest remedy is to install the <a href="https://www.anaconda.com/distribution/">Anaconda Distribution</a> or, alternatively, <a href="https://docs.conda.io/en/latest/miniconda.html">Miniconda</a>. 
 
 ### Setup
 1. Clone/Download the NHL_Single files
@@ -18,6 +16,8 @@ If you intend on taking advantage of the script's Twitter functionality, you nee
    
    ##### PIP
    <code>pip install -r requirements.txt</code><br>      
+
+4. If you intend on using the script's Twitter functionality, you need to create a <a href="https://apps.twitter.com/app/new">Twitter application</a> and request its Access Token, then rename <code>twitter_credentials_sample.py</code> to <code>twitter_credentials.py</code> and update the APP_KEY, APP_SECRET, OAUTH_TOKEN and OAUTH_TOKEN_SECRET
 
 ### Usage
 You need to be in your machine's interactive Python shell (if you installed the Anaconda Distribution or Miniconda, this is Anaconda Prompt) in order to execute command lines.
