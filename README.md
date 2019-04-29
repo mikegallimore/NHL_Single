@@ -26,7 +26,7 @@ This script requires Python3 (written with 3.6.5; tested with 3.6.8). If you don
 ### Usage
 You must be within your machine's the command-line interface and need to activate the environment you created.
 
-##### Game Usage
+##### Game
 At minimum, you must indicate two positional arguments, which are the particular season and the 5-digit game number:<br>
 <code>python run_game.py 20182019 20001</code>
 
@@ -46,7 +46,7 @@ So, if you wanted, for example, to use the script without scraping and parsing t
 You can always reference the required and optional arguments in the shell by typing the following:<br>
 <code>python run_game.py -h</code>
 
-##### Schedule Usage
+##### Schedule
 To fetch a season's schedule, either initially or to update (as you will need to do with each playoff round) it, you must indicate the particular season:<br>
 <code>python run_schedule.py 20182019</code>
 
