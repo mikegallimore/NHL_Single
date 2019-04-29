@@ -9,14 +9,17 @@ This script requires Python3 (written with 3.6.5; tested with 3.6.8). If you don
 If you intend on taking advantage of the script's Twitter functionality, you need to create a <a href="https://apps.twitter.com/app/new">Twitter application</a> and request its Access Token.
 
 ### Setup
-1. Clone this Git package
-2. Create an environment with the package dependencies:
-  
-   If you will be using Anaconda / Miniconda as your package and environment manager:<br>
+1. Clone/Download this Git package
+2. Move the package files to wherever you want them stored on your machine
+3. Install the package dependencies:
+   
+   ##### Anaconda / Miniconda (environment.yml)
+   After changing to the directory the package files are stored in:<br>
    <code>conda create -n environment_name -f environment.yml</code><br>
 
-   If you will be using PIP with something else (pipenv, venv, etc.) as your package and environment managers:<br>
-   <code>pip install -r requirements.txt</code><br>
+   ##### PIP (requirements.txt)
+   After changing to the directory the package files are stored in:<br>
+   pipenv: <code>pipenv install</code><br>
       
 ### Usage
 You need to be in your machine's interactive Python shell (if you installed the Anaconda Distribution or Miniconda, this is Anaconda Prompt) in order to execute command lines.
