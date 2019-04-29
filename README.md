@@ -62,9 +62,7 @@ To fetch a season's schedule, either initially or to update (as you will need to
 
 NHL_Single, obviously, only works for a single game, though it is the pilot effort for a larger project that expands the scope across a range of games and seasons.<br>
 
-NHL_Single depends on the availability of files that feed the league's Real-Time Scoring Statistics (RTSS) system. 2007-2008 is the earliest season it might work as designed but it has only been tested, to this point, for regular season and playoff games in:<br>
-- 20172018<br>
-- 20182019<br> 
+NHL_Single depends on the availability of files that feed the league's Real-Time Scoring Statistics (RTSS) system. At this point, it is only compatible dating back to the 2010-2011 season.<br>
 
 Additionally, the league is reportedly introducing new <a href="https://www.nhl.com/news/nhl-plans-to-deploy-puck-and-player-tracking-technology-in-2019-2020/c-304218820">tracking technology</a> for the 2019-2020 season but it is not yet clear how the RTSS system will be impacted.
 
