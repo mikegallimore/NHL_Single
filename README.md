@@ -26,7 +26,8 @@ This script requires Python3 (written with 3.6.5; tested with 3.6.8). If you don
 
 4. If you intend on using the script's Twitter functionality:<br>
    a. Create a <a href="https://apps.twitter.com/app/new">Twitter application</a> and request its Access Token<br>
-   b. Rename <code>twitter_credentials_sample.py</code> to <code>twitter_credentials.py</code> and then input your own APP_KEY, APP_SECRET, OAUTH_TOKEN and OAUTH_TOKEN_SECRET<br>
+   b. Rename <code>twitter_credentials_sample.py</code> to <code>twitter_credentials.py</code><br>
+   c. Input your own APP_KEY, APP_SECRET, OAUTH_TOKEN and OAUTH_TOKEN_SECRET<br>
 
 ### Usage
 You must be within your machine's the command-line interface and need to activate the environment you created.
