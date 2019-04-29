@@ -12,7 +12,7 @@ If you intend on taking advantage of the script's Twitter functionality, you nee
 Clone this Git package and then install its dependencies:
 
 If you have the Anaconda Distribution or Miniconda, create a new environment with all the requirements as follows:<br>
-<code>conda create --enivornment_name --requirements_conda.txt</code><br>
+<code>conda create --name environment_name --file requirements_conda.txt</code><br>
 
 ### Usage
 You need to be in your machine's interactive Python shell (if you installed the Anaconda Distribution or Miniconda, this is Anaconda Prompt) in order to execute command lines.
