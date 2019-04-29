@@ -4,7 +4,7 @@
 This is a script for scraping and parsing the play-by-play, roster and shift files available for an NHL game in order to generate tabular and visualized data.
 
 ### Prerequisites
-This script requires Python (3.0 at minimum, 3.6+ is recommended) in order to run the script. If you don't already have Python on your machine, the simplest remedy is to install the <a href="https://www.anaconda.com/distribution/">Anaconda Distribution</a>. 
+This script requires Python3 (written with 3.6.5; tested with 3.6.8). If you don't already have Python on your machine, the simplest remedy is to install the <a href="https://www.anaconda.com/distribution/">Anaconda Distribution</a>. 
 
 If you intend on taking advantage of the script's Twitter functionality, you need to create a <a href="https://apps.twitter.com/app/new">Twitter application</a> and request its Access Token.
 
@@ -12,10 +12,10 @@ If you intend on taking advantage of the script's Twitter functionality, you nee
 1. Clone this Git package
 2. Create an environment with the package dependencies:
   
-   Anaconda / Miniconda:<br>
+   If you have Anaconda (or, alternatively, <a href="https://docs.conda.io/en/latest/miniconda.html">Miniconda</a>) installed and are using it:<br>
    <code>conda create -n environment_name -f environment.yml</code><br>
 
-   Vanilla Python:<br>
+   If you are using a vanilla Python installation with a different environment manager:<br>
    <code>conda create -n environment_name -f environment.yml</code><br>
       
 ### Usage
