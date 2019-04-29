@@ -1,10 +1,10 @@
 ## NHL_Single
 
 ### Purpose
-This is a script for scraping and parsing the play-by-play, roster and shift files available for an NHL game in order to generate tabular and visualized data.
+Enabling the scraping and parsing the play-by-play, roster and shift files available for an NHL game in order to generate tabular and visualized data.
 
 ### Prerequisites
-This script requires Python3 (written with 3.6.5; tested with 3.6.8). If you don't already have Python on your machine, the simplest remedy is to install the <a href="https://www.anaconda.com/distribution/">Anaconda Distribution</a> or, alternatively, <a href="https://docs.conda.io/en/latest/miniconda.html">Miniconda</a>. 
+At minimum, a vanilla installation of Python3 (code written with 3.6.5; tested with 3.6.8). If you don't already have Python on your machine, the simplest remedy is to install the <a href="https://www.anaconda.com/distribution/">Anaconda Distribution</a> or, alternatively, <a href="https://docs.conda.io/en/latest/miniconda.html">Miniconda</a>. 
 
 ### Setup
 1. Clone/Download the NHL_Single files
@@ -56,4 +56,7 @@ You can always reference the required and optional arguments in the shell by typ
 To fetch a season's schedule, either initially or to update (as you will need to do with each playoff round) it, you must indicate the particular season:<br>
 <code>python run_schedule.py 20182019</code>
 
+### Limitations
+
 ### Acknowledgements
+A lot of people have directly or indirectly helped me learn enough to put this thing together. Be it patiently answering my questions, making their own code publicly available, offering suggestions or simply encouragement, I am grateful for all of the feedback I received and resources that were available. 
