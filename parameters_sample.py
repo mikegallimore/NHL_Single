@@ -4,19 +4,11 @@ Created on Thu Sep 14 20:40:14 2017
 
 @author: @mikegallimore
 """
-import pandas as pd
-
-season_id = '20182019'
-game_id = '21243'
-
-### url roots for game files (JSON)
-livefeed_root = 'http://statsapi.web.nhl.com/api/v1/game/'
-shifts_root = 'http://www.nhl.com/stats/rest/shiftcharts?cayenneExp=gameId='
-ROS_root = 'http://www.nhl.com/scores/htmlreports/' + season_id + '/RO0'
-
-### root file locations
-files_root = '/your/path/NHL_Single/Files/'
-charts_root = '/your/path/NHL_Single/Charts/'
+import os
+  
+### set subfolder paths; check to see if they already exist and, if they don't, create them
+files_root = '/yourpath/Files/'
+charts_root = '/yourpath/Charts/'
 
 charts_players = charts_root + 'Players/'
 
@@ -26,13 +18,31 @@ charts_teams_situation = charts_teams + 'Situation/'
 
 charts_units = charts_root + 'Units/'
 
-### pull schedule info; generate key values
-schedule_csv = files_root + season_id + "_schedule.csv"
+if not os.path.exists(files_root):
+    os.makedirs(files_root)
+    print('Created subfolder ' + files_root)  
+if not os.path.exists(charts_root):
+    os.makedirs(charts_root)
+    print('Created subfolder ' + charts_root)
 
-schedule_df = pd.read_csv(schedule_csv)
-schedule_date = schedule_df[(schedule_df['GAME_ID'] == int(game_id))]
+if not os.path.exists(charts_players):
+    os.makedirs(charts_players)
+    print('Created subfolder ' + charts_players)
 
-date = schedule_date['DATE'].item()
-home = schedule_date['HOME'].item()
-away = schedule_date['AWAY'].item()
-teams = [away, home]
+if not os.path.exists(charts_players):
+    os.makedirs(charts_players)
+    print('Created subfolder ' + charts_players)
+
+if not os.path.exists(charts_teams):
+    os.makedirs(charts_teams)
+    print('Created subfolder ' + charts_teams)
+if not os.path.exists(charts_teams_period):
+    os.makedirs(charts_teams_period)
+    print('Created subfolder ' + charts_teams_period)
+if not os.path.exists(charts_teams_situation):
+    os.makedirs(charts_teams_situation)
+    print('Created subfolder ' + charts_teams_situation)
+
+if not os.path.exists(charts_units):
+    os.makedirs(charts_units)
+    print('Created subfolder ' + charts_units)
