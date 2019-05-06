@@ -4,6 +4,10 @@ Created on Thu Sep 14 21:10:47 2017
 
 @author: @mikegallimore
 """
+import flush_charts
+import flush_files
+flush_charts
+flush_files
 
 import argparse
 

@@ -35,7 +35,7 @@ def parse_ids(season_id, game_id):
             year_start = season_id[0:4]
             year_end = season_id[4:8]
         
-            JSON_schedule_url = 'https://statsapi.web.nhl.com/api/v1/schedule?startDate=' + year_start + '-09-28&endDate=' + year_end + '-06-30'
+            JSON_schedule_url = 'https://statsapi.web.nhl.com/api/v1/schedule?startDate=' + year_start + '-08-30&endDate=' + year_end + '-06-30'
             JSON_schedule_request = requests.get(JSON_schedule_url, timeout=5).text
         
             f = open(files_root + season_id + '_schedule.json', 'w+')
@@ -68,7 +68,7 @@ def parse_ids(season_id, game_id):
                 
                         JSON_game_id = str(JSON_game["gamePk"])[5:]
                         JSON_game_id = int(JSON_game_id)
-                        ### skip any non-regular season games
+
                         if JSON_game_id > 39999:
                             continue
         
@@ -91,7 +91,7 @@ def parse_ids(season_id, game_id):
             ### reload the newly minted .csv file to replace the team names with their tricodes
             schedule_df = pd.read_csv(schedule_csv)
          
-            schedule_df = schedule_df[(schedule_df.GAME_ID > 20000)].sort_values('GAME_ID')
+            schedule_df = schedule_df[(schedule_df.GAME_ID < 40000)].sort_values('GAME_ID')
               
             schedule_df['AWAY'] = schedule_df['AWAY'].replace(dict_teams.NHL)
             schedule_df['HOME'] = schedule_df['HOME'].replace(dict_teams.NHL)
@@ -102,7 +102,7 @@ def parse_ids(season_id, game_id):
             ### reload the newly minted .csv file to replace the team names with their tricodes
             schedule_df = pd.read_csv(schedule_csv, encoding='latin-1')
             
-            schedule_df = schedule_df[(schedule_df.GAME_ID > 20000)].sort_values('GAME_ID')
+            schedule_df = schedule_df[(schedule_df.GAME_ID < 40000)].sort_values('GAME_ID')
             
             schedule_df['AWAY'] = schedule_df['AWAY'].replace(dict_teams.NHL)
             schedule_df['HOME'] = schedule_df['HOME'].replace(dict_teams.NHL)
