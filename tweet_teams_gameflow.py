@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun Mar 25 22:02:10 2018
-
 @author: @mikegallimore
 """
 from twython import Twython

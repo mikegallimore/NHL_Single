@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun Mar 31 21:25:23 2019
-
 @author: @mikegallimore
 """
 ### import and run parsing modules

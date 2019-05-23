@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Jan 15 11:41:23 2018
-
 @author: @mikegallimore
 """
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import parameters

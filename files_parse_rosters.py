@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Feb 16 22:10:14 2018
-
 @author: @mikegallimore
 """
 
@@ -86,7 +84,14 @@ def parse_ids(season_id, game_id):
     
         ### create a dataframe using the newly-created outfile
         rosters_df = pd.read_csv(rosters_out)
-    
+
+        ### replace names for special name cases
+        try:
+            rosters_df.loc[(rosters_df.PLAYER_NAME == 'SEBASTIAN.AHO') & (rosters_df.TEAM == 'CAR'),['PLAYER_NAME']] = 'SEBASTIAN.A.AHO'; rosters_df
+            rosters_df.loc[(rosters_df.PLAYER_NAME == 'SEBASTIAN.AHO') & (rosters_df.TEAM == 'NYI'),['PLAYER_NAME']] = 'SEBASTIAN.J.AHO'; rosters_df
+        except:
+            pass
+        
         ### search for and change known instances of players whose positions are incorrectly classified
         try:
             rosters_df.loc[(rosters_df.PLAYER_NAME == 'LUKE.WITKOWSKI') & (rosters_df.PLAYER_POS != 'D'),['PLAYER_POS']] = 'D'; rosters_df

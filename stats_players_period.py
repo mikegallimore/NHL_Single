@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Sep 14 00:10:44 2017
-
 @author: @mikegallimore
 """
 
@@ -65,7 +63,7 @@ def parse_ids(season_id, game_id):
     with open(stats_individual, 'w', newline = '') as players_individual, open(stats_onice, 'w', newline = '') as players_onice:
        
         individual_out = csv.writer(players_individual)
-        individual_out.writerow(['SEASON', 'GAME_ID', 'DATE', 'LOCATION', 'TEAM', 'NO', 'PLAYER', 'POS', 'STATE', 'PERIOD', 'GP', 'TOI', 'G', 'A', '1_A', 'PTS', '1_PTS', 'ONS', 'US', 'S'])
+        individual_out.writerow(['SEASON', 'GAME_ID', 'DATE', 'LOCATION', 'TEAM', 'NO', 'PLAYER', 'POS', 'STATE', 'PERIOD', 'GP', 'TOI', 'G', 'A', '1_A', 'PTS', '1_PTS', 'ONS', 'US', 'S', 'FO', 'FOW', 'PD', 'PT', 'BK'])
     
         onice_out = csv.writer(players_onice)
         onice_out.writerow(['SEASON', 'GAME_ID', 'DATE', 'LOCATION', 'TEAM', 'NO', 'PLAYER', 'POS', 'STATE', 'PERIOD', 'GP', 'TOI', 'GF', 'GA', 'ONSF', 'ONSA', 'USF', 'USA', 'SF', 'SA', 'GD', 'ONSD', 'USD', 'SD', 'FO'])
@@ -253,11 +251,49 @@ def parse_ids(season_id, game_id):
                     S_PP = pbp_period_df[(pbp_period_df['TEAM'] == team) & (pbp_period_df['EVENT'] == event) & (pbp_period_df[team_state] == 'PP') & (pbp_period_df['PLAYER_A'] == player)].count()[1]
                     S_SH = pbp_period_df[(pbp_period_df['TEAM'] == team) & (pbp_period_df['EVENT'] == event) & (pbp_period_df[team_state] == 'SH') & (pbp_period_df['PLAYER_A'] == player)].count()[1]
               
+
+                    ### faceoffs
+                    event = 'Faceoff'
+                    FO_all = (pbp_period_df[(pbp_period_df['EVENT'] == event) & (pbp_period_df['PLAYER_A'] == player)].count()[1] +
+                                pbp_period_df[(pbp_period_df['EVENT'] == event) & (pbp_period_df['PLAYER_B'] == player)].count()[1])
+                    FO_5v5 = (pbp_period_df[(pbp_period_df['EVENT'] == event) & (pbp_period_df[team_strength] == '5v5') & (pbp_period_df['PLAYER_A'] == player)].count()[1] +
+                                pbp_period_df[(pbp_period_df['EVENT'] == event) & (pbp_period_df[team_strength] == '5v5') & (pbp_period_df['PLAYER_B'] == player)].count()[1])
+                    FO_PP = (pbp_period_df[(pbp_period_df['EVENT'] == event) & (pbp_period_df[team_state] == 'PP') & (pbp_period_df['PLAYER_A'] == player)].count()[1] +
+                                pbp_period_df[(pbp_period_df['EVENT'] == event) & (pbp_period_df[team_state] == 'PP') & (pbp_period_df['PLAYER_B'] == player)].count()[1])
+                    FO_SH = (pbp_period_df[(pbp_period_df['EVENT'] == event) & (pbp_period_df[team_state] == 'SH') & (pbp_period_df['PLAYER_A'] == player)].count()[1] +
+                                pbp_period_df[(pbp_period_df['EVENT'] == event) & (pbp_period_df[team_state] == 'SH') & (pbp_period_df['PLAYER_B'] == player)].count()[1])
+    
+                    FOW_all = pbp_period_df[(pbp_period_df['TEAM'] == team) & (pbp_period_df['EVENT'] == event) & (pbp_period_df['PLAYER_A'] == player)].count()[1]
+                    FOW_5v5 = pbp_period_df[(pbp_period_df['TEAM'] == team) & (pbp_period_df['EVENT'] == event) & (pbp_period_df[team_strength] == '5v5') & (pbp_period_df['PLAYER_A'] == player)].count()[1]
+                    FOW_PP = pbp_period_df[(pbp_period_df['TEAM'] == team) & (pbp_period_df['EVENT'] == event) & (pbp_period_df[team_state] == 'PP') & (pbp_period_df['PLAYER_A'] == player)].count()[1]
+                    FOW_SH = pbp_period_df[(pbp_period_df['TEAM'] == team) & (pbp_period_df['EVENT'] == event) & (pbp_period_df[team_state] == 'SH') & (pbp_period_df['PLAYER_A'] == player)].count()[1]
+    
+    
+                    ### penalties
+                    event = 'Penalty'
+                    PD_all = pbp_period_df[(pbp_period_df['TEAM'] != team) & (pbp_period_df['EVENT'] == event) & (pbp_period_df['PLAYER_B'] == player)].count()[1]
+                    PD_5v5 = pbp_period_df[(pbp_period_df['TEAM'] != team) & (pbp_period_df['EVENT'] == event) & (pbp_period_df[team_strength] == '5v5') & (pbp_period_df['PLAYER_B'] == player)].count()[1]
+                    PD_PP = pbp_period_df[(pbp_period_df['TEAM'] != team) & (pbp_period_df['EVENT'] == event) & (pbp_period_df[team_state] == 'PP') & (pbp_period_df['PLAYER_B'] == player)].count()[1]
+                    PD_SH = pbp_period_df[(pbp_period_df['TEAM'] != team) & (pbp_period_df['EVENT'] == event) & (pbp_period_df[team_state] == 'SH') & (pbp_period_df['PLAYER_B'] == player)].count()[1]
+    
+                    PT_all = pbp_period_df[(pbp_period_df['TEAM'] == team) & (pbp_period_df['EVENT'] == event) & (pbp_period_df['PLAYER_A'] == player)].count()[1]
+                    PT_5v5 = pbp_period_df[(pbp_period_df['TEAM'] == team) & (pbp_period_df['EVENT'] == event) & (pbp_period_df[team_strength] == '5v5') & (pbp_period_df['PLAYER_A'] == player)].count()[1]
+                    PT_PP = pbp_period_df[(pbp_period_df['TEAM'] == team) & (pbp_period_df['EVENT'] == event) & (pbp_period_df[team_state] == 'PP') & (pbp_period_df['PLAYER_A'] == player)].count()[1]
+                    PT_SH = pbp_period_df[(pbp_period_df['TEAM'] == team) & (pbp_period_df['EVENT'] == event) & (pbp_period_df[team_state] == 'SH') & (pbp_period_df['PLAYER_A'] == player)].count()[1]
+
+
+                    ### shot blocks
+                    event = 'Block'
+                    SB_all = pbp_period_df[(pbp_period_df['TEAM'] != team) & (pbp_period_df['EVENT_TYPE'] == event) & (pbp_period_df['PLAYER_B'] == player)].count()[1]
+                    SB_5v5 = pbp_period_df[(pbp_period_df['TEAM'] != team) & (pbp_period_df['EVENT_TYPE'] == event) & (pbp_period_df[team_strength] == '5v5') & (pbp_period_df['PLAYER_B'] == player)].count()[1]
+                    SB_PP = pbp_period_df[(pbp_period_df['TEAM'] != team) & (pbp_period_df['EVENT_TYPE'] == event) & (pbp_period_df[team_state] == 'PP') & (pbp_period_df['PLAYER_B'] == player)].count()[1]
+                    SB_SH = pbp_period_df[(pbp_period_df['TEAM'] != team) & (pbp_period_df['EVENT_TYPE'] == event) & (pbp_period_df[team_state] == 'SH') & (pbp_period_df['PLAYER_B'] == player)].count()[1]
+               
                 
-                    individual_all = (G_all, A_all, A1_all, PTS_all, PTS1_all, ONS_all, US_all, S_all)
-                    individual_5v5 = (G_5v5, A_5v5, A1_5v5, PTS_5v5, PTS1_5v5, ONS_5v5, US_5v5, S_5v5)
-                    individual_PP = (G_PP, A_PP, A1_PP, PTS_PP, PTS1_PP, ONS_PP, US_PP, S_PP)
-                    individual_SH = (G_SH, A_SH, A1_SH, PTS_SH, PTS1_SH, ONS_SH, US_SH, S_SH)  
+                    individual_all = (G_all, A_all, A1_all, PTS_all, PTS1_all, ONS_all, US_all, S_all, FO_all, FOW_all, PD_all, PT_all, SB_all)
+                    individual_5v5 = (G_5v5, A_5v5, A1_5v5, PTS_5v5, PTS1_5v5, ONS_5v5, US_5v5, S_5v5, FO_5v5, FOW_5v5, PD_5v5, PT_5v5, SB_5v5)
+                    individual_PP = (G_PP, A_PP, A1_PP, PTS_PP, PTS1_PP, ONS_PP, US_PP, S_PP, FO_PP, FOW_PP, PD_PP, PT_PP, SB_PP)
+                    individual_SH = (G_SH, A_SH, A1_SH, PTS_SH, PTS1_SH, ONS_SH, US_SH, S_SH, FO_SH, FOW_SH, PD_SH, PT_SH, SB_SH) 
             
             
                     ###

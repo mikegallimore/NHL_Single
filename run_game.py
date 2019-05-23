@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Sep 14 21:10:47 2017
-
 @author: @mikegallimore
 """
 import flush_charts
@@ -50,7 +48,8 @@ if args.parse != 'skip':
     import files_parse_TOI
     files_parse_TOI.parse_ids(args.season_id, args.game_id)
     files_parse_TOI
-    
+
+if args.parse != 'skip' and int(args.season_id) > 20092010:
     import files_parse_merge_pbp
     files_parse_merge_pbp.parse_ids(args.season_id, args.game_id)
     files_parse_merge_pbp
@@ -61,7 +60,8 @@ if args.teams != 'skip':
     import stats_teams
     stats_teams.parse_ids(args.season_id, args.game_id)
     stats_teams
-    
+
+if args.teams != 'skip' and int(args.season_id) > 20092010:
     import chart_teams_shots_gameflow
     chart_teams_shots_gameflow.parse_ids(args.season_id, args.game_id, args.images)
     chart_teams_shots_gameflow
@@ -91,7 +91,8 @@ if args.teams != 'skip' and args.extent == 'full':
     import stats_teams_situation
     stats_teams_situation.parse_ids(args.season_id, args.game_id)
     stats_teams_situation
- 
+
+if args.teams != 'skip' and args.extent == 'full' and int(args.season_id) > 20092010:
     import chart_teams_shots_scatter_period
     chart_teams_shots_scatter_period.parse_ids(args.season_id, args.game_id, args.images)
     chart_teams_shots_scatter_period

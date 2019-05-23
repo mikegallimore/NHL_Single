@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Jan 15 11:41:23 2018
-
 @author: @mikegallimore
 """
-#import json
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib as mpl
@@ -118,7 +116,33 @@ def parse_ids(season_id, game_id, images):
                 top=False,
                 left=False,
                 labelbottom=True)
-    
+
+        ### create a list of x-axis tick values contingent on the max values for shots for and against 
+        SF_max = team_pairings_df['SF']
+        SF_max = SF_max.max()
+        SA_max = team_pairings_df['SA']
+        SA_max *= -1
+        SA_max = SA_max.max()
+
+        if SF_max >= SA_max:
+            x_tickmax = SF_max
+        elif SF_max < SA_max:
+            x_tickmax = SA_max
+
+        if x_tickmax <= 5:
+            x_ticklabels = [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5]
+        if x_tickmax > 5 and x_tickmax <= 10:
+            x_ticklabels = [-10, -8, -6, -4, -2, 0, 2, 4, 6, 8, 10]
+        if x_tickmax > 10 and x_tickmax <= 15:
+            x_ticklabels = [-15, -12, -9, -6, -3, 0, 3, 6, 9, 12, 15]        
+        if x_tickmax > 15 and x_tickmax <= 20:
+            x_ticklabels = [-20, -16, -12, -8, -4, 0, 4, 8, 12, 16, 20]       
+        if x_tickmax > 20 and x_tickmax <= 25:
+            x_ticklabels = [-25, -20, -15, -10, -5, 0, 5, 10, 15, 20, 25]
+        
+        ### use the newly-minted x-ticklabels to ensure the x-axis labels will always display as integers        
+        ax.set_xticks(x_ticklabels, minor=False)
+
         ### remove the borders to each subplot
         ax.spines["top"].set_visible(False)   
         ax.spines["bottom"].set_visible(False)    
@@ -130,11 +154,16 @@ def parse_ids(season_id, game_id, images):
         lines_sm = plt.cm.ScalarMappable(cmap=team_color_map, norm=lines_norm)
         lines_sm.set_array([])
         lines_color_bar = plt.colorbar(lines_sm, ax=ax)
-        lines_color_bar.ax.set_yticklabels(['0', '', '', '' , '', max_pairings_toi])
+        from matplotlib import ticker
+        tick_locator = ticker.MaxNLocator(nbins=4)
+        lines_color_bar.locator = tick_locator
+        lines_color_bar.update_ticks()
+
+        lines_color_bar.ax.set_yticklabels(['0', '', '', '', max_pairings_toi])
         lines_color_bar.set_label('Time On Ice', rotation=270)
     
         ### set the plot title
-        plt.title(date + ' Defense Pairings 5v5 On-Ice Shots\n ' + away + ' @ ' + home + '\n')
+        plt.title(date + ' Pairings 5v5 On-Ice Shots\n ' + away + ' @ ' + home + '\n')
     
     
         ### save the image to file

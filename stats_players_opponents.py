@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Sep 14 00:10:44 2017
-
 @author: @mikegallimore
 """
 
@@ -64,7 +62,7 @@ def parse_ids(season_id, game_id):
     with open(stats_individual, 'w', newline = '') as players_individual, open(stats_onice, 'w', newline = '') as players_onice:
     
         individual_out = csv.writer(players_individual)
-        individual_out.writerow(['SEASON', 'GAME_ID', 'DATE', 'LOCATION', 'TEAM', 'PLAYER', 'OPPONENT', 'STATE', 'GP', 'TOI', 'G', 'A', '1_A', 'PTS', '1_PTS', 'ONS', 'US', 'S'])
+        individual_out.writerow(['SEASON', 'GAME_ID', 'DATE', 'LOCATION', 'TEAM', 'PLAYER', 'OPPONENT', 'STATE', 'GP', 'TOI', 'G', 'A', '1_A', 'PTS', '1_PTS', 'ONS', 'US', 'S', 'FO', 'FOW', 'PD', 'PT', 'BK'])
     
         onice_out = csv.writer(players_onice)
         onice_out.writerow(['SEASON', 'GAME_ID', 'DATE', 'LOCATION', 'TEAM', 'PLAYER', 'OPPONENT', 'STATE', 'GP', 'TOI', 'GF', 'GA', 'ONSF', 'ONSA', 'USF', 'USA', 'SF', 'SA', 'GD', 'ONSD', 'USD', 'SD', 'FO'])
@@ -177,9 +175,29 @@ def parse_ids(season_id, game_id):
                 ### shots
                 event = 'Shot'
                 S_ALL = pbp_df[(pbp_df['TEAM'] == team) & (pbp_df['EVENT'] == event) & (pbp_df['PLAYER_A'] == player) & (pbp_df[teamON].str.contains(player)) & (pbp_df[opponentON].str.contains(opponent))].count()[1]
-    
+
+
+                ### faceoffs
+                event = 'Faceoff'
+                FO_ALL = (pbp_df[(pbp_df['EVENT'] == event) & (pbp_df['PLAYER_A'] == player) & (pbp_df[teamON].str.contains(player)) & (pbp_df[opponentON].str.contains(opponent))].count()[1] +
+                            pbp_df[(pbp_df['EVENT'] == event) & (pbp_df['PLAYER_B'] == player) & (pbp_df[teamON].str.contains(player)) & (pbp_df[opponentON].str.contains(opponent))].count()[1])
+
+                FOW_ALL = pbp_df[(pbp_df['TEAM'] == team) & (pbp_df['EVENT'] == event) & (pbp_df['PLAYER_A'] == player) & (pbp_df[teamON].str.contains(player)) & (pbp_df[opponentON].str.contains(opponent))].count()[1]
+
+
+                ### penalties
+                event = 'Penalty'
+                PD_ALL = pbp_df[(pbp_df['TEAM'] != team) & (pbp_df['EVENT'] == event) & (pbp_df['PLAYER_B'] == player) & (pbp_df[teamON].str.contains(player)) & (pbp_df[opponentON].str.contains(opponent))].count()[1]
+
+                PT_ALL = pbp_df[(pbp_df['TEAM'] == team) & (pbp_df['EVENT'] == event) & (pbp_df['PLAYER_A'] == player) & (pbp_df[teamON].str.contains(player)) & (pbp_df[opponentON].str.contains(opponent))].count()[1]
+
+
+                ### shot blocks
+                event = 'Block'
+                SB_ALL = pbp_df[(pbp_df['TEAM'] != team) & (pbp_df['EVENT_TYPE'] == event) & (pbp_df['PLAYER_B'] == player) & (pbp_df[teamON].str.contains(player)) & (pbp_df[opponentON].str.contains(opponent))].count()[1]
+
                 
-                individual_ALL = (G_ALL, A_ALL, A1_ALL, PTS_ALL, PTS1_ALL, ONS_ALL, US_ALL, S_ALL)
+                individual_ALL = (G_ALL, A_ALL, A1_ALL, PTS_ALL, PTS1_ALL, ONS_ALL, US_ALL, S_ALL, FO_ALL, FOW_ALL, PD_ALL, PT_ALL, SB_ALL)
                 
                 
                 ###
@@ -309,9 +327,29 @@ def parse_ids(season_id, game_id):
                 ### shots
                 event = 'Shot'
                 S_5v5 = pbp_df[(pbp_df['TEAM'] == team) & (pbp_df['EVENT'] == event) & (pbp_df[team_strength] == '5v5') & (pbp_df['PLAYER_A'] == player) & (pbp_df[teamON].str.contains(player)) & (pbp_df[opponentON].str.contains(opponent))].count()[1]
-    
+
+
+                ### faceoffs
+                event = 'Faceoff'
+                FO_5v5 = (pbp_df[(pbp_df['EVENT'] == event) & (pbp_df[team_strength] == '5v5') & (pbp_df['PLAYER_A'] == player) & (pbp_df[teamON].str.contains(player)) & (pbp_df[opponentON].str.contains(opponent))].count()[1] +
+                            pbp_df[(pbp_df['EVENT'] == event) & (pbp_df[team_strength] == '5v5') & (pbp_df['PLAYER_B'] == player) & (pbp_df[teamON].str.contains(player)) & (pbp_df[opponentON].str.contains(opponent))].count()[1])
+
+                FOW_5v5 = pbp_df[(pbp_df['TEAM'] == team) & (pbp_df['EVENT'] == event) & (pbp_df[team_strength] == '5v5') & (pbp_df['PLAYER_A'] == player) & (pbp_df[teamON].str.contains(player)) & (pbp_df[opponentON].str.contains(opponent))].count()[1]
+
+
+                ### penalties
+                event = 'Penalty'
+                PD_5v5 = pbp_df[(pbp_df['TEAM'] != team) & (pbp_df['EVENT'] == event) & (pbp_df[team_strength] == '5v5') & (pbp_df['PLAYER_B'] == player) & (pbp_df[teamON].str.contains(player)) & (pbp_df[opponentON].str.contains(opponent))].count()[1]
+
+                PT_5v5 = pbp_df[(pbp_df['TEAM'] == team) & (pbp_df['EVENT'] == event) & (pbp_df[team_strength] == '5v5') & (pbp_df['PLAYER_A'] == player) & (pbp_df[teamON].str.contains(player)) & (pbp_df[opponentON].str.contains(opponent))].count()[1]
+
+
+                ### shot blocks
+                event = 'Block'
+                SB_5v5 = pbp_df[(pbp_df['TEAM'] != team) & (pbp_df['EVENT_TYPE'] == event) & (pbp_df[team_strength] == '5v5') & (pbp_df['PLAYER_B'] == player) & (pbp_df[teamON].str.contains(player)) & (pbp_df[opponentON].str.contains(opponent))].count()[1]
+ 
                 
-                individual_5v5 = (G_5v5, A_5v5, A1_5v5, PTS_5v5, PTS1_5v5, ONS_5v5, US_5v5, S_5v5)
+                individual_5v5 = (G_5v5, A_5v5, A1_5v5, PTS_5v5, PTS1_5v5, ONS_5v5, US_5v5, S_5v5, FO_5v5, FOW_5v5, PD_5v5, PT_5v5, SB_5v5)
                 
                 
                 ###
@@ -441,9 +479,29 @@ def parse_ids(season_id, game_id):
                 ### shots
                 event = 'Shot'
                 S_PP = pbp_df[(pbp_df['TEAM'] == team) & (pbp_df['EVENT'] == event) & (pbp_df[team_state] == 'PP') & (pbp_df['PLAYER_A'] == player) & (pbp_df[teamON].str.contains(player)) & (pbp_df[opponentON].str.contains(opponent))].count()[1]
+
+
+                ### faceoffs
+                event = 'Faceoff'
+                FO_PP = (pbp_df[(pbp_df['EVENT'] == event) & (pbp_df[team_state] == 'PP') & (pbp_df['PLAYER_A'] == player) & (pbp_df[teamON].str.contains(player)) & (pbp_df[opponentON].str.contains(opponent))].count()[1] +
+                            pbp_df[(pbp_df['EVENT'] == event) & (pbp_df[team_state] == 'PP') & (pbp_df['PLAYER_B'] == player) & (pbp_df[teamON].str.contains(player)) & (pbp_df[opponentON].str.contains(opponent))].count()[1])
+
+                FOW_PP = pbp_df[(pbp_df['TEAM'] == team) & (pbp_df['EVENT'] == event) & (pbp_df[team_state] == 'PP') & (pbp_df['PLAYER_A'] == player) & (pbp_df[teamON].str.contains(player)) & (pbp_df[opponentON].str.contains(opponent))].count()[1]
+
+
+                ### penalties
+                event = 'Penalty'
+                PD_PP = pbp_df[(pbp_df['TEAM'] != team) & (pbp_df['EVENT'] == event) & (pbp_df[team_state] == 'PP') & (pbp_df['PLAYER_B'] == player) & (pbp_df[teamON].str.contains(player)) & (pbp_df[opponentON].str.contains(opponent))].count()[1]
+
+                PT_PP = pbp_df[(pbp_df['TEAM'] == team) & (pbp_df['EVENT'] == event) & (pbp_df[team_state] == 'PP') & (pbp_df['PLAYER_A'] == player) & (pbp_df[teamON].str.contains(player)) & (pbp_df[opponentON].str.contains(opponent))].count()[1]
+
+
+                ### shot blocks
+                event = 'Block'
+                SB_PP = pbp_df[(pbp_df['TEAM'] != team) & (pbp_df['EVENT_TYPE'] == event) & (pbp_df[team_state] == 'PP') & (pbp_df['PLAYER_B'] == player) & (pbp_df[teamON].str.contains(player)) & (pbp_df[opponentON].str.contains(opponent))].count()[1]
     
                 
-                individual_PP = (G_PP, A_PP, A1_PP, PTS_PP, PTS1_PP, ONS_PP, US_PP, S_PP)
+                individual_PP = (G_PP, A_PP, A1_PP, PTS_PP, PTS1_PP, ONS_PP, US_PP, S_PP, FO_PP, FOW_PP, PD_PP, PT_PP, SB_PP)
                 
                 
                 ###
@@ -573,9 +631,29 @@ def parse_ids(season_id, game_id):
                 ### shots
                 event = 'Shot'
                 S_SH = pbp_df[(pbp_df['TEAM'] == team) & (pbp_df['EVENT'] == event) & (pbp_df[team_state] == 'SH') & (pbp_df['PLAYER_A'] == player) & (pbp_df[teamON].str.contains(player)) & (pbp_df[opponentON].str.contains(opponent))].count()[1]
-    
+
+
+                ### faceoffs
+                event = 'Faceoff'
+                FO_SH = (pbp_df[(pbp_df['EVENT'] == event) & (pbp_df[team_state] == 'SH') & (pbp_df['PLAYER_A'] == player) & (pbp_df[teamON].str.contains(player)) & (pbp_df[opponentON].str.contains(opponent))].count()[1] +
+                            pbp_df[(pbp_df['EVENT'] == event) & (pbp_df[team_state] == 'SH') & (pbp_df['PLAYER_B'] == player) & (pbp_df[teamON].str.contains(player)) & (pbp_df[opponentON].str.contains(opponent))].count()[1])
+
+                FOW_SH = pbp_df[(pbp_df['TEAM'] == team) & (pbp_df['EVENT'] == event) & (pbp_df[team_state] == 'SH') & (pbp_df['PLAYER_A'] == player) & (pbp_df[teamON].str.contains(player)) & (pbp_df[opponentON].str.contains(opponent))].count()[1]
+
+
+                ### penalties
+                event = 'Penalty'
+                PD_SH = pbp_df[(pbp_df['TEAM'] != team) & (pbp_df['EVENT'] == event) & (pbp_df[team_state] == 'SH') & (pbp_df['PLAYER_B'] == player) & (pbp_df[teamON].str.contains(player)) & (pbp_df[opponentON].str.contains(opponent))].count()[1]
+
+                PT_SH = pbp_df[(pbp_df['TEAM'] == team) & (pbp_df['EVENT'] == event) & (pbp_df[team_state] == 'SH') & (pbp_df['PLAYER_A'] == player) & (pbp_df[teamON].str.contains(player)) & (pbp_df[opponentON].str.contains(opponent))].count()[1]
+
+
+                ### shot blocks
+                event = 'Block'
+                SB_SH = pbp_df[(pbp_df['TEAM'] != team) & (pbp_df['EVENT_TYPE'] == event) & (pbp_df[team_state] == 'SH') & (pbp_df['PLAYER_B'] == player) & (pbp_df[teamON].str.contains(player)) & (pbp_df[opponentON].str.contains(opponent))].count()[1]
+
                 
-                individual_SH = (G_SH, A_SH, A1_SH, PTS_SH, PTS1_SH, ONS_SH, US_SH, S_SH)
+                individual_SH = (G_SH, A_SH, A1_SH, PTS_SH, PTS1_SH, ONS_SH, US_SH, S_SH, FO_SH, FOW_SH, PD_SH, PT_SH, SB_SH)
                 
                 
                 ###

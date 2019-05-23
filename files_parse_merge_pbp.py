@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Feb 16 22:10:14 2018
-
 @author: @mikegallimore
 """
 
@@ -132,6 +130,49 @@ def parse_ids(season_id, game_id):
     
     ### merge the now-combined play-by-play dataframe with shootout data
     pbp_final = pd.concat([pbp_final, shootout_df])
+    
+    ### replace names for special name cases
+    try:
+        pbp_final.loc[(pbp_final.PLAYER_A == 'SEBASTIAN.AHO') & (pbp_final.TEAM == 'CAR'),['PLAYER_A']] = 'SEBASTIAN.A.AHO'; pbp_final
+        pbp_final.loc[(pbp_final.PLAYER_B == 'SEBASTIAN.AHO') & (pbp_final.TEAM == 'CAR'),['PLAYER_B']] = 'SEBASTIAN.A.AHO'; pbp_final
+        pbp_final.loc[(pbp_final.PLAYER_B == 'SEBASTIAN.AHO') & (pbp_final.TEAM != 'CAR') & (pbp_final.EVENT_TYPE == 'Block'),['PLAYER_B']] = 'SEBASTIAN.A.AHO'; pbp_final
+        pbp_final.loc[(pbp_final.PLAYER_B == 'SEBASTIAN.AHO') & (pbp_final.TEAM == 'CAR'),['PLAYER_B']] = 'SEBASTIAN.A.AHO'; pbp_final
+        pbp_final.loc[(pbp_final.PLAYER_C == 'SEBASTIAN.AHO') & (pbp_final.TEAM == 'CAR'),['PLAYER_C']] = 'SEBASTIAN.A.AHO'; pbp_final
+        pbp_final.loc[(pbp_final.HOMEON_1 == 'SEBASTIAN.AHO') & (pbp_final.HOME == 'CAR'),['HOMEON_1']] = 'SEBASTIAN.A.AHO'; pbp_final
+        pbp_final.loc[(pbp_final.HOMEON_2 == 'SEBASTIAN.AHO') & (pbp_final.HOME == 'CAR'),['HOMEON_2']] = 'SEBASTIAN.A.AHO'; pbp_final
+        pbp_final.loc[(pbp_final.HOMEON_3 == 'SEBASTIAN.AHO') & (pbp_final.HOME == 'CAR'),['HOMEON_3']] = 'SEBASTIAN.A.AHO'; pbp_final
+        pbp_final.loc[(pbp_final.HOMEON_4 == 'SEBASTIAN.AHO') & (pbp_final.HOME == 'CAR'),['HOMEON_4']] = 'SEBASTIAN.A.AHO'; pbp_final
+        pbp_final.loc[(pbp_final.HOMEON_5 == 'SEBASTIAN.AHO') & (pbp_final.HOME == 'CAR'),['HOMEON_5']] = 'SEBASTIAN.A.AHO'; pbp_final
+        pbp_final.loc[(pbp_final.HOMEON_6 == 'SEBASTIAN.AHO') & (pbp_final.HOME == 'CAR'),['HOMEON_6']] = 'SEBASTIAN.A.AHO'; pbp_final
+        pbp_final.loc[(pbp_final.AWAYON_1 == 'SEBASTIAN.AHO') & (pbp_final.AWAY == 'CAR'),['AWAYON_1']] = 'SEBASTIAN.A.AHO'; pbp_final
+        pbp_final.loc[(pbp_final.AWAYON_2 == 'SEBASTIAN.AHO') & (pbp_final.AWAY == 'CAR'),['AWAYON_2']] = 'SEBASTIAN.A.AHO'; pbp_final
+        pbp_final.loc[(pbp_final.AWAYON_3 == 'SEBASTIAN.AHO') & (pbp_final.AWAY == 'CAR'),['AWAYON_3']] = 'SEBASTIAN.A.AHO'; pbp_final
+        pbp_final.loc[(pbp_final.AWAYON_4 == 'SEBASTIAN.AHO') & (pbp_final.AWAY == 'CAR'),['AWAYON_4']] = 'SEBASTIAN.A.AHO'; pbp_final
+        pbp_final.loc[(pbp_final.AWAYON_5 == 'SEBASTIAN.AHO') & (pbp_final.AWAY == 'CAR'),['AWAYON_5']] = 'SEBASTIAN.A.AHO'; pbp_final
+        pbp_final.loc[(pbp_final.AWAYON_6 == 'SEBASTIAN.AHO') & (pbp_final.AWAY == 'CAR'),['AWAYON_6']] = 'SEBASTIAN.A.AHO'; pbp_final
+    except:
+        pass
+    
+    try:
+        pbp_final.loc[(pbp_final.PLAYER_A == 'SEBASTIAN.AHO') & (pbp_final.TEAM == 'NYI'),['PLAYER_A']] = 'SEBASTIAN.J.AHO'; pbp_final
+        pbp_final.loc[(pbp_final.PLAYER_B == 'SEBASTIAN.AHO') & (pbp_final.TEAM == 'NYI'),['PLAYER_B']] = 'SEBASTIAN.J.AHO'; pbp_final
+        pbp_final.loc[(pbp_final.PLAYER_B == 'SEBASTIAN.AHO') & (pbp_final.TEAM != 'NYI') & (pbp_final.EVENT_TYPE == 'Block'),['PLAYER_B']] = 'SEBASTIAN.J.AHO'; pbp_final
+        pbp_final.loc[(pbp_final.PLAYER_B == 'SEBASTIAN.AHO') & (pbp_final.TEAM == 'NYI'),['PLAYER_B']] = 'SEBASTIAN.J.AHO'; pbp_final
+        pbp_final.loc[(pbp_final.PLAYER_C == 'SEBASTIAN.AHO') & (pbp_final.TEAM == 'NYI'),['PLAYER_C']] = 'SEBASTIAN.J.AHO'; pbp_final
+        pbp_final.loc[(pbp_final.HOMEON_1 == 'SEBASTIAN.AHO') & (pbp_final.HOME == 'NYI'),['HOMEON_1']] = 'SEBASTIAN.J.AHO'; pbp_final
+        pbp_final.loc[(pbp_final.HOMEON_2 == 'SEBASTIAN.AHO') & (pbp_final.HOME == 'NYI'),['HOMEON_2']] = 'SEBASTIAN.J.AHO'; pbp_final
+        pbp_final.loc[(pbp_final.HOMEON_3 == 'SEBASTIAN.AHO') & (pbp_final.HOME == 'NYI'),['HOMEON_3']] = 'SEBASTIAN.J.AHO'; pbp_final
+        pbp_final.loc[(pbp_final.HOMEON_4 == 'SEBASTIAN.AHO') & (pbp_final.HOME == 'NYI'),['HOMEON_4']] = 'SEBASTIAN.J.AHO'; pbp_final
+        pbp_final.loc[(pbp_final.HOMEON_5 == 'SEBASTIAN.AHO') & (pbp_final.HOME == 'NYI'),['HOMEON_5']] = 'SEBASTIAN.J.AHO'; pbp_final
+        pbp_final.loc[(pbp_final.HOMEON_6 == 'SEBASTIAN.AHO') & (pbp_final.HOME == 'NYI'),['HOMEON_6']] = 'SEBASTIAN.J.AHO'; pbp_final
+        pbp_final.loc[(pbp_final.AWAYON_1 == 'SEBASTIAN.AHO') & (pbp_final.AWAY == 'NYI'),['AWAYON_1']] = 'SEBASTIAN.J.AHO'; pbp_final
+        pbp_final.loc[(pbp_final.AWAYON_2 == 'SEBASTIAN.AHO') & (pbp_final.AWAY == 'NYI'),['AWAYON_2']] = 'SEBASTIAN.J.AHO'; pbp_final
+        pbp_final.loc[(pbp_final.AWAYON_3 == 'SEBASTIAN.AHO') & (pbp_final.AWAY == 'NYI'),['AWAYON_3']] = 'SEBASTIAN.J.AHO'; pbp_final
+        pbp_final.loc[(pbp_final.AWAYON_4 == 'SEBASTIAN.AHO') & (pbp_final.AWAY == 'NYI'),['AWAYON_4']] = 'SEBASTIAN.J.AHO'; pbp_final
+        pbp_final.loc[(pbp_final.AWAYON_5 == 'SEBASTIAN.AHO') & (pbp_final.AWAY == 'NYI'),['AWAYON_5']] = 'SEBASTIAN.J.AHO'; pbp_final
+        pbp_final.loc[(pbp_final.AWAYON_6 == 'SEBASTIAN.AHO') & (pbp_final.AWAY == 'NYI'),['AWAYON_6']] = 'SEBASTIAN.J.AHO'; pbp_final
+    except:
+        pass
     
     ### write the file to csv, without an index column
     pbp_final.to_csv(pbp_parsed, index=False)

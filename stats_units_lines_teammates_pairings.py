@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Sep 14 00:10:44 2017
-
 @author: @mikegallimore
 """
 
@@ -62,10 +60,10 @@ def parse_ids(season_id, game_id):
     with open(stats_individual, 'w', newline = '') as players_individual, open(stats_onice, 'w', newline = '') as players_onice:
     
         individual_out = csv.writer(players_individual)
-        individual_out.writerow(['SEASON', 'GAME_ID', 'DATE', 'LOCATION', 'TEAM', 'FORWARD_1', 'FORWARD_2', 'FORWARD_3', 'LINE', 'OPPOSING_DEFENDER_1', 'OPPOSING_DEFENDER_2', 'MATCHUP', 'STATE', 'GP', 'TOI', 'G', 'A', '1_A', 'PTS', '1_PTS', 'ONS', 'US', 'S'])
+        individual_out.writerow(['SEASON', 'GAME_ID', 'DATE', 'LOCATION', 'TEAM', 'FORWARD_1', 'FORWARD_2', 'FORWARD_3', 'LINE', 'DEFENDER_1', 'DEFENDER_2', 'PAIRING', 'STATE', 'GP', 'TOI', 'G', 'A', '1_A', 'PTS', '1_PTS', 'ONS', 'US', 'S'])
     
         onice_out = csv.writer(players_onice)
-        onice_out.writerow(['SEASON', 'GAME_ID', 'DATE', 'LOCATION', 'TEAM', 'FORWARD_1', 'FORWARD_2', 'FORWARD_3', 'LINE', 'OPPOSING_DEFENDER_1', 'OPPOSING_DEFENDER_2', 'MATCHUP', 'STATE', 'GP', 'TOI', 'GF', 'GA', 'ONSF', 'ONSA', 'USF', 'USA', 'SF', 'SA', 'GD', 'ONSD', 'USD', 'SD', 'FO'])
+        onice_out.writerow(['SEASON', 'GAME_ID', 'DATE', 'LOCATION', 'TEAM', 'FORWARD_1', 'FORWARD_2', 'FORWARD_3', 'LINE', 'DEFENDER_1', 'DEFENDER_2', 'PAIRING', 'STATE', 'GP', 'TOI', 'GF', 'GA', 'ONSF', 'ONSA', 'USF', 'USA', 'SF', 'SA', 'GD', 'ONSD', 'USD', 'SD', 'FO'])
     
         ### access the game's roster file in order to create team-specific dicts and lists
         rosters_csv = files_root + 'rosters.csv'

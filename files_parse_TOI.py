@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Feb 16 22:10:14 2018
-
 @author: @mikegallimore
 """
 

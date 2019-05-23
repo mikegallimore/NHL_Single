@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Sep 14 00:10:44 2017
-
 @author: @mikegallimore
 """
 import csv
