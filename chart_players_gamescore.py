@@ -231,9 +231,9 @@ def parse_ids(season_id, game_id, images):
         
         ### save the image to file
         if team == away:
-            plt.savefig(charts_players + '_gamescores_away.png', bbox_inches='tight', pad_inches=0.2)
+            plt.savefig(charts_players + 'gamescores_away.png', bbox_inches='tight', pad_inches=0.2)
         elif team == home:
-            plt.savefig(charts_players + '_gamescores_home.png', bbox_inches='tight', pad_inches=0.2)    
+            plt.savefig(charts_players + 'gamescores_home.png', bbox_inches='tight', pad_inches=0.2)    
         
         ### show the current figure
         if images == 'show':

@@ -106,12 +106,20 @@ if args.players != 'skip':
     import stats_players
     stats_players.parse_ids(args.season_id, args.game_id)
     stats_players
-    
+
+    import chart_players_gamescore
+    chart_players_gamescore.parse_ids(args.season_id, args.game_id, args.images)
+    chart_players_gamescore
+
     import chart_players_onice_shots
     chart_players_onice_shots.parse_ids(args.season_id, args.game_id, args.images)
     chart_players_onice_shots
 
 if args.players != 'skip' and args.tweet != 'no': 
+    import tweet_players_gamescore
+    tweet_players_gamescore.parse_ids(args.season_id, args.game_id)
+    tweet_players_gamescore
+    
     import tweet_players_onice_shots
     tweet_players_onice_shots.parse_ids(args.season_id, args.game_id)
     tweet_players_onice_shots
