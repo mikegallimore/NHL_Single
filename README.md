@@ -61,9 +61,9 @@ To fetch a season's schedule manually, you must indicate the particular season:<
 
 ### Limitations
 
-NHL_Single, obviously, only works for a single game, though it is the pilot effort for a larger project that expands the scope across a range of games and seasons.<br>
+NHL_Single, as its name implies, only processes one game at a time. With the release of v2.0--which extended compatibility back to the 20062007 season--the next major change will be to enable fetching and parsing a range of games within a season.<br>
 
-NHL_Single depends on the availability of files that feed the league's Real-Time Scoring Statistics (RTSS) system. At this point, it is only compatible dating back to the 2010-2011 season.<br>
+NHL_Single depends on the availability of files that feed the league's Real-Time Scoring Statistics (RTSS) system. At this point, it is  compatible from the 2006-2007 season through the 2010-2011 season.<br>
 
 Additionally, the league is reportedly introducing new <a href="https://www.nhl.com/news/nhl-plans-to-deploy-puck-and-player-tracking-technology-in-2019-2020/c-304218820">tracking technology</a> for the 2019-2020 season but it is not yet clear how the RTSS system will be impacted.
 
