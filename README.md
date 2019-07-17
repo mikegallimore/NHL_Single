@@ -55,7 +55,7 @@ You can always reference the required and optional arguments in the shell by typ
 <code>python run_game.py -h</code>
 
 ##### Schedule
-To fetch a season's schedule, either initially or to update (as you will need to do with each playoff round) it, you must indicate the particular season:<br>
+To fetch a season's schedule manually, you must indicate the particular season:<br>
 <code>python run_schedule.py 20182019</code>
 
 ### Limitations
