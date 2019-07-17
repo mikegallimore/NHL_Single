@@ -198,7 +198,8 @@ def parse_ids(season_id, game_id, images):
             x_tickmax = x_lines_tickmax
         elif x_lines_tickmax < x_pairings_tickmax:
             x_tickmax = x_pairings_tickmax
-
+        
+        x_ticklabels = []
         if x_tickmax <= 5:
             x_ticklabels = [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5]
         if x_tickmax > 5 and x_tickmax <= 10:

@@ -9,7 +9,7 @@ import parameters
 import pandas as pd
 import numpy as np
 
-def parse_ids(season_id, game_id):
+def parse_ids(season_id, game_id, load_pbp):
 
     ### pull common variables from the parameters file
     files_root = parameters.files_root
@@ -49,7 +49,7 @@ def parse_ids(season_id, game_id):
     
         if current_period == 1 and current_time_remaining != 'END':
             current_seconds_gone = 1200 - ((time_remaining_min * 60) + time_remaining_sec)
-        elif current_period ==1 and current_time_remaining == 'END':
+        elif current_period == 1 and current_time_remaining == 'END':
             current_seconds_gone = 1200        
         if current_period == 2 and current_time_remaining != 'END':
             current_seconds_gone = 2400 - ((time_remaining_min * 60) + time_remaining_sec)
@@ -88,7 +88,7 @@ def parse_ids(season_id, game_id):
                 
         hTOI = home_shifts_df.values.tolist()
         vTOI = away_shifts_df.values.tolist()
-    
+           
         ### read in the rosters file as a dataframe; separate home from away rosters; generate goalie lists
         rosters_df = pd.read_csv(rosters_parsed)
             
@@ -97,7 +97,7 @@ def parse_ids(season_id, game_id):
     
         away_roster_df = rosters_df[(rosters_df.LOCATION == 'Away') & (rosters_df.PLAYER_POS == 'G')]
         away_goalies = away_roster_df['PLAYER_NAME'].tolist()
-        
+       
         ### start a counter for goals scored by each team
         home_goals = int(0)
         away_goals = int(0)
@@ -109,12 +109,12 @@ def parse_ids(season_id, game_id):
         for row in hTOI:
             second = shiftStart = int(row[9])
             shiftEnd = int(row[10])
-                    
+                        
             while second <= shiftEnd:
                 playersON_rows[second][2] += row[6] + ':'
                 playersON_rows[second][3] += str(row[5]) + ':'
                 second += 1
-                
+
         for row in vTOI:
             second = shiftStart = int(row[9])
             shiftEnd = int(row[10])
@@ -123,7 +123,7 @@ def parse_ids(season_id, game_id):
                 playersON_rows[second][4] += row[6] + ':'
                 playersON_rows[second][5] += str(row[5]) + ':'
                 second += 1
-               
+             
         ### iterate through all seconds, assign strength states, and remove times after game end
         for i in range(len(playersON_rows)):
                     
@@ -147,7 +147,7 @@ def parse_ids(season_id, game_id):
                         
             home_players = playersON_rows[i][2].split(':')
             away_players = playersON_rows[i][4].split(':')
-                        
+            
             ### get on-ice player counts; use the counts to determine each team's strength they are playing under
             home_skaters = 0
             home_goalie = 0
@@ -292,19 +292,49 @@ def parse_ids(season_id, game_id):
                 team_states = [playersON_rows[i][8], playersON_rows[i][9]]
                 goals_info = [playersON_rows[i][10], playersON_rows[i][11], playersON_rows[i][12], playersON_rows[i][13], playersON_rows[i][14], playersON_rows[i][15]]
     
-                homeON = playersON_rows[i][2].split(':')
-    
+                homeON = playersON_rows[i][2].split(':') 
                 ### add empty strings for game states where teams have fewer than 6 players in order to prevent incorrect placement
                 if len(homeON) == 5:
                     homeON.append('')
                 if len(homeON) == 4:
                     homeON.append('')
                     homeON.append('')
-    
+                if len(homeON) == 3:
+                    homeON.append('')
+                    homeON.append('')
+                    homeON.append('')                    
+                if len(homeON) == 2:
+                    homeON.append('')
+                    homeON.append('')
+                    homeON.append('')
+                    homeON.append('')
+                if len(homeON) == 1:
+                    homeON.append('')
+                    homeON.append('')
+                    homeON.append('')
+                    homeON.append('')
+                    homeON.append('')
+                    
                 awayON = playersON_rows[i][4].split(':')
                 if len(awayON) == 5:
                     awayON.append('')
                 if len(awayON) == 4:
+                    awayON.append('')
+                    awayON.append('')
+                if len(awayON) == 3:
+                    awayON.append('')
+                    awayON.append('')
+                    awayON.append('')                    
+                if len(awayON) == 2:
+                    awayON.append('')
+                    awayON.append('')
+                    awayON.append('')
+                    awayON.append('')
+                if len(awayON) == 1:
+                    awayON.append('')
+                    awayON.append('')
+                    awayON.append('')
+                    awayON.append('')
                     awayON.append('')
                     awayON.append('')
                                   
@@ -406,8 +436,10 @@ def parse_ids(season_id, game_id):
         pass
     
     ### change NaN values to empty strings
+    TOI_df['HOMEON_4'].replace(np.nan, '', inplace=True)
     TOI_df['HOMEON_5'].replace(np.nan, '', inplace=True)
     TOI_df['HOMEON_6'].replace(np.nan, '', inplace=True)
+    TOI_df['AWAYON_4'].replace(np.nan, '', inplace=True)    
     TOI_df['AWAYON_5'].replace(np.nan, '', inplace=True)
     TOI_df['AWAYON_6'].replace(np.nan, '', inplace=True)
     
@@ -509,8 +541,7 @@ def parse_ids(season_id, game_id):
         TOI_df.loc[(TOI_df.EVENT == 'Goal'),['AWAYON_4']] = TOI_df['PREV_AWAYON_4']; TOI_df
         TOI_df.loc[(TOI_df.EVENT == 'Goal'),['AWAYON_5']] = TOI_df['PREV_AWAYON_5']; TOI_df
         TOI_df.loc[(TOI_df.EVENT == 'Goal'),['AWAYON_6']] = TOI_df['PREV_AWAYON_6']; TOI_df
-    
-        
+            
         ### ensure that for the second after a goal, the following second's on-ice players will be returned
         TOI_df.loc[(TOI_df.PREV_EVENT == 'Goal'),['HOMEON_1']] = TOI_df['NEXT_HOMEON_1']; TOI_df
         TOI_df.loc[(TOI_df.PREV_EVENT == 'Goal'),['HOMEON_2']] = TOI_df['NEXT_HOMEON_2']; TOI_df
@@ -773,7 +804,7 @@ def parse_ids(season_id, game_id):
     TOI_df.loc[(TOI_df.SECONDS_GONE > 3600) & (TOI_df.AWAY_STATE == 'EV') & (TOI_df.AWAY_STRENGTH == '3v3') & (TOI_df.AWAYON_5 != ''),['AWAYON_5']] = TOI_df['PREV_AWAYON_5']; TOI_df
     TOI_df.loc[(TOI_df.SECONDS_GONE > 3600) & (TOI_df.AWAY_STATE == 'EV') & (TOI_df.AWAY_STRENGTH == '3v3') & (TOI_df.AWAYON_5 != ''),['AWAYON_6']] = TOI_df['PREV_AWAYON_6']; TOI_df
     
-    ### add a row for th initial faceoff at 0 seconds gone
+    ### add a row for the initial faceoff at 0 seconds gone
     TOI_df.loc[-1] = [season_id, game_id, date, home, away, 0, '5v5', '5v5', 'EV', 'EV', '', '', 0, 0, 'TIED', 'TIED', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
     TOI_df.index = TOI_df.index + 1
     TOI_df = TOI_df.sort_index()
@@ -816,9 +847,159 @@ def parse_ids(season_id, game_id):
     
     if current_time_remaining != 'Final':
         TOI_df = TOI_df[(TOI_df['SECONDS_GONE'] <= current_seconds_gone)]
+
+    ### write the file to csv, without an index column
+    TOI_df.to_csv(TOI_outfile, index=False)   
+    
+    ###
+    ### SPECIAL ADDITIONAL ADJUSTMENTS FOR 20062007
+    ###
+    
+    if int(season_id) == 20062007:
+        ### reload the TOI matrix to address erroneously-identified special teams play due to inaccuracies in shift start/stop times
+        TOI_df = pd.read_csv(TOI_outfile)
+        
+        ### load the play-by-play in order to set up dataframes for each team's penalties
+        pbp_df = pd.read_csv(files_root + 'pbp.csv')
+        
+        if load_pbp != 'true':
+            ### purge the rows the that follow the NUL values by saving to a new, temporary file
+            pbp_df.to_csv(files_root + 'pbp_temp.csv', index=False)
+
+            ### remove the source pbp file to make way for the temp to converted to the same filename
+            import os
+            os.remove(files_root + 'pbp.csv')                
+
+            ### load the temp pbp file, save it as the main pbp and then remove the temp file
+            pbp_df = pd.read_csv(files_root + 'pbp_temp.csv')
+            pbp_df.to_csv(files_root + 'pbp.csv', index=False)
+            os.remove(files_root + 'pbp_temp.csv')
+            
+            ### reload the play-by-play; ensure there are no stray values in the seconds_gone column
+            pbp_df = pd.read_csv(files_root + 'pbp.csv')
+            pbp_df[pd.to_numeric(pbp_df.SECONDS_GONE, errors='coerce').notnull()]
+            pbp_df = pbp_df[(pbp_df['PERIOD'] != 0)]
+            pbp_df.loc[(pbp_df.PERIOD == 5),['SECONDS_GONE']] = 3901; pbp_df
+            try:
+                pbp_df = pbp_df[(pbp_df['SECONDS_GONE'] != '$')]
+            except:
+                pass
+
+            pbp_df['SECONDS_GONE']=pbp_df['SECONDS_GONE'].astype(int)
+            
+            pbp_df.to_csv(files_root + 'pbp.csv', index=False)
+
+        ### add int columns for penalty counts to the TOI dataframe
+        TOI_df['HOME_PENALTY'] = 0
+        TOI_df['AWAY_PENALTY'] = 0
+        
+        away_penalties_df = pbp_df.copy()
+        away_penalties_df['MAX_ENDPOINT'] = int()
+        
+        away_penalties_df = away_penalties_df[(away_penalties_df['EVENT'] == 'Penalty') & (away_penalties_df['TEAM'] == away)]
+        away_penalties_df = away_penalties_df.drop(columns=['SEASON', 'GAME_ID', 'DATE', 'HOME', 'AWAY', 'GAME_TYPE', 'HOME_RESULT', 'AWAY_RESULT', 'PERIOD', 'TIME_LEFT', 'TIME_GONE', 'HOME_GOALS', 'AWAY_GOALS', 'HOME_SITUATION', 'AWAY_SITUATION', 'HOME_SCOREDIFF', 'AWAY_SCOREDIFF', 'HOME_STRENGTH', 'AWAY_STRENGTH', 'HOME_STATE', 'AWAY_STATE', 'EVENT_DETAIL', 'HOME_ZONE', 'AWAY_ZONE', 'TEAM', 'PLAYER_A', 'PLAYER_B', 'PLAYER_C', 'HOMEON_1', 'HOMEON_2', 'HOMEON_3', 'HOMEON_4', 'HOMEON_5', 'HOMEON_6', 'AWAYON_1', 'AWAYON_2', 'AWAYON_3', 'AWAYON_4', 'AWAYON_5', 'AWAYON_6'])   
+        away_penalties_df.loc[(away_penalties_df.EVENT_TYPE == 'Minor'), ['MAX_ENDPOINT']] = away_penalties_df['SECONDS_GONE'] + 120; away_penalties_df
+        away_penalties_df.loc[(away_penalties_df.EVENT_TYPE == 'Major'), ['MAX_ENDPOINT']] = away_penalties_df['SECONDS_GONE'] + 300; away_penalties_df
+        away_penalties_df['RANGE'] = [list(range(int(i), int(j+1))) for i, j in away_penalties_df[['SECONDS_GONE', 'MAX_ENDPOINT']].values]
+        away_penalties_list = away_penalties_df['RANGE'].tolist()
+        for i in away_penalties_list:
+            for j in i:
+                TOI_df.loc[(TOI_df.SECONDS_GONE == j),['AWAY_PENALTY']] += 1; TOI_df
+    
+        home_penalties_df = pbp_df.copy()
+        home_penalties_df['MAX_ENDPOINT'] = int()
+        home_penalties_df = home_penalties_df[(home_penalties_df['EVENT'] == 'Penalty') & (home_penalties_df['TEAM'] == home)]
+        home_penalties_df = home_penalties_df.drop(columns=['SEASON', 'GAME_ID', 'DATE', 'HOME', 'AWAY', 'GAME_TYPE', 'HOME_RESULT', 'AWAY_RESULT', 'PERIOD', 'TIME_LEFT', 'TIME_GONE', 'HOME_GOALS', 'AWAY_GOALS', 'HOME_SITUATION', 'AWAY_SITUATION', 'HOME_SCOREDIFF', 'AWAY_SCOREDIFF', 'HOME_STRENGTH', 'AWAY_STRENGTH', 'HOME_STATE', 'AWAY_STATE', 'EVENT_DETAIL', 'HOME_ZONE', 'AWAY_ZONE', 'TEAM', 'PLAYER_A', 'PLAYER_B', 'PLAYER_C', 'HOMEON_1', 'HOMEON_2', 'HOMEON_3', 'HOMEON_4', 'HOMEON_5', 'HOMEON_6', 'AWAYON_1', 'AWAYON_2', 'AWAYON_3', 'AWAYON_4', 'AWAYON_5', 'AWAYON_6'])   
+        home_penalties_df.loc[(home_penalties_df.EVENT_TYPE == 'Minor'), ['MAX_ENDPOINT']] = home_penalties_df['SECONDS_GONE'] + 120; home_penalties_df
+        home_penalties_df.loc[(home_penalties_df.EVENT_TYPE == 'Major'), ['MAX_ENDPOINT']] = home_penalties_df['SECONDS_GONE'] + 300; home_penalties_df
+        home_penalties_df['RANGE'] = [list(range(int(i), int(j+1))) for i, j in home_penalties_df[['SECONDS_GONE', 'MAX_ENDPOINT']].values]
+        home_penalties_list = home_penalties_df['RANGE'].tolist()
+        for i in home_penalties_list:
+            for j in i:
+                TOI_df.loc[(TOI_df.SECONDS_GONE == j),['HOME_PENALTY']] += 1; TOI_df
+                          
+        TOI_df.loc[(TOI_df.SECONDS_GONE <= 3600) & (TOI_df.HOME_PENALTY == 0) & (TOI_df.AWAY_PENALTY == 0) & (TOI_df.HOME_STATE != 'EV') & (TOI_df.HOME_STATE != 'EN') & (TOI_df.AWAY_STATE != 'EV') & (TOI_df.AWAY_STATE != 'EN'),['HOME_STRENGTH']] = '5v5'; TOI_df
+        TOI_df.loc[(TOI_df.SECONDS_GONE <= 3600) & (TOI_df.HOME_PENALTY == 0) & (TOI_df.AWAY_PENALTY == 0) & (TOI_df.HOME_STATE != 'EV') & (TOI_df.HOME_STATE != 'EN') & (TOI_df.AWAY_STATE != 'EV') & (TOI_df.AWAY_STATE != 'EN'),['AWAY_STRENGTH']] = '5v5'; TOI_df
+        TOI_df.loc[(TOI_df.SECONDS_GONE <= 3600) & (TOI_df.HOME_PENALTY == 0) & (TOI_df.AWAY_PENALTY == 0) & (TOI_df.HOME_STATE != 'EV') & (TOI_df.HOME_STATE != 'EN') & (TOI_df.AWAY_STATE != 'EV') & (TOI_df.AWAY_STATE != 'EN'),['HOME_STATE']] = 'EV'; TOI_df
+        TOI_df.loc[(TOI_df.SECONDS_GONE <= 3600) & (TOI_df.HOME_PENALTY == 0) & (TOI_df.AWAY_PENALTY == 0) & (TOI_df.HOME_STATE == 'EV') & (TOI_df.HOME_STATE != 'EN') & (TOI_df.AWAY_STATE != 'EV') & (TOI_df.AWAY_STATE != 'EN'),['AWAY_STATE']] = 'EV'; TOI_df
+    
+        TOI_df.loc[(TOI_df.SECONDS_GONE > 3600) & (TOI_df.HOME_PENALTY == 0) & (TOI_df.AWAY_PENALTY == 0) & (TOI_df.HOME_STATE != 'EV') & (TOI_df.HOME_STATE != 'EN') & (TOI_df.AWAY_STATE != 'EV') & (TOI_df.AWAY_STATE != 'EN'),['HOME_STRENGTH']] = '4v4'; TOI_df
+        TOI_df.loc[(TOI_df.SECONDS_GONE > 3600) & (TOI_df.HOME_PENALTY == 0) & (TOI_df.AWAY_PENALTY == 0) & (TOI_df.HOME_STATE != 'EV') & (TOI_df.HOME_STATE != 'EN') & (TOI_df.AWAY_STATE != 'EV') & (TOI_df.AWAY_STATE != 'EN'),['AWAY_STRENGTH']] = '4v4'; TOI_df
+        TOI_df.loc[(TOI_df.SECONDS_GONE > 3600) & (TOI_df.HOME_PENALTY == 0) & (TOI_df.AWAY_PENALTY == 0) & (TOI_df.HOME_STATE != 'EV') & (TOI_df.HOME_STATE != 'EN') & (TOI_df.AWAY_STATE != 'EV') & (TOI_df.AWAY_STATE != 'EN'),['HOME_STATE']] = 'EV'; TOI_df
+        TOI_df.loc[(TOI_df.SECONDS_GONE > 3600) & (TOI_df.HOME_PENALTY == 0) & (TOI_df.AWAY_PENALTY == 0) & (TOI_df.HOME_STATE == 'EV') & (TOI_df.HOME_STATE != 'EN') & (TOI_df.AWAY_STATE != 'EV') & (TOI_df.AWAY_STATE != 'EN'),['AWAY_STATE']] = 'EV'; TOI_df
+    
+        TOI_df.loc[(TOI_df.SECONDS_GONE > 3600) & (TOI_df.HOME_PENALTY == 0) & (TOI_df.AWAY_PENALTY == 0) & (TOI_df.HOME_STATE == 'EV') & (TOI_df.HOME_STRENGTH != '4v4') & (TOI_df.AWAY_STATE == 'EV') & (TOI_df.AWAY_STRENGTH != '4v4'),['HOME_STRENGTH']] = '4v4'; TOI_df
+        TOI_df.loc[(TOI_df.SECONDS_GONE > 3600) & (TOI_df.HOME_PENALTY == 0) & (TOI_df.AWAY_PENALTY == 0) & (TOI_df.HOME_STATE == 'EV') & (TOI_df.HOME_STRENGTH == '4v4') & (TOI_df.AWAY_STATE == 'EV') & (TOI_df.AWAY_STRENGTH != '4v4'),['AWAY_STRENGTH']] = '4v4'; TOI_df
+    
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 1) & (TOI_df.AWAY_PENALTY == 0) & (TOI_df.HOME_STATE != 'SH') & (TOI_df.AWAY_STATE != 'PP'),['HOME_STRENGTH']] = '4v5'; TOI_df
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 1) & (TOI_df.AWAY_PENALTY == 0) & (TOI_df.HOME_STATE != 'SH') & (TOI_df.AWAY_STATE != 'PP'),['AWAY_STRENGTH']] = '5v4'; TOI_df
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 1) & (TOI_df.AWAY_PENALTY == 0) & (TOI_df.HOME_STATE != 'SH') & (TOI_df.AWAY_STATE != 'PP'),['HOME_STATE']] = 'SH'; TOI_df
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 1) & (TOI_df.AWAY_PENALTY == 0) & (TOI_df.HOME_STATE == 'SH') & (TOI_df.AWAY_STATE != 'PP'),['AWAY_STATE']] = 'PP'; TOI_df
+    
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 2) & (TOI_df.AWAY_PENALTY == 0) & (TOI_df.HOME_STATE != 'SH') & (TOI_df.AWAY_STATE != 'PP'),['HOME_STRENGTH']] = '3v5'; TOI_df
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 2) & (TOI_df.AWAY_PENALTY == 0) & (TOI_df.HOME_STATE != 'SH') & (TOI_df.AWAY_STATE != 'PP'),['AWAY_STRENGTH']] = '5v3'; TOI_df
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 2) & (TOI_df.AWAY_PENALTY == 0) & (TOI_df.HOME_STATE != 'SH') & (TOI_df.AWAY_STATE != 'PP'),['HOME_STATE']] = 'SH'; TOI_df
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 2) & (TOI_df.AWAY_PENALTY == 0) & (TOI_df.HOME_STATE == 'SH') & (TOI_df.AWAY_STATE != 'PP'),['AWAY_STATE']] = 'PP'; TOI_df
+    
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 2) & (TOI_df.AWAY_PENALTY == 1) & (TOI_df.HOME_STATE != 'SH') & (TOI_df.AWAY_STATE != 'PP'),['HOME_STRENGTH']] = '3v4'; TOI_df
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 2) & (TOI_df.AWAY_PENALTY == 1) & (TOI_df.HOME_STATE != 'SH') & (TOI_df.AWAY_STATE != 'PP'),['AWAY_STRENGTH']] = '4v3'; TOI_df
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 2) & (TOI_df.AWAY_PENALTY == 1) & (TOI_df.HOME_STATE != 'SH') & (TOI_df.AWAY_STATE != 'PP'),['HOME_STATE']] = 'SH'; TOI_df
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 2) & (TOI_df.AWAY_PENALTY == 1) & (TOI_df.HOME_STATE == 'SH') & (TOI_df.AWAY_STATE != 'PP'),['AWAY_STATE']] = 'PP'; TOI_df
+    
+        TOI_df.loc[(TOI_df.SECONDS_GONE < 3600) & (TOI_df.HOME_PENALTY == 1) & (TOI_df.AWAY_PENALTY == 0) & (TOI_df.HOME_STATE == 'SH') & (TOI_df.HOME_STRENGTH != '4v5') & (TOI_df.AWAY_STATE == 'PP') & (TOI_df.AWAY_STRENGTH != '5v4'),['HOME_STRENGTH']] = '4v5'; TOI_df
+        TOI_df.loc[(TOI_df.SECONDS_GONE < 3600) & (TOI_df.HOME_PENALTY == 1) & (TOI_df.AWAY_PENALTY == 0) & (TOI_df.HOME_STATE == 'SH') & (TOI_df.HOME_STRENGTH == '4v5') & (TOI_df.AWAY_STATE == 'PP') & (TOI_df.AWAY_STRENGTH != '5v4'),['AWAY_STRENGTH']] = '5v4'; TOI_df
+        TOI_df.loc[(TOI_df.SECONDS_GONE >= 3600) & (TOI_df.HOME_PENALTY == 1) & (TOI_df.AWAY_PENALTY == 0) & (TOI_df.HOME_STATE == 'SH') & (TOI_df.HOME_STRENGTH != '3v4') & (TOI_df.AWAY_STATE == 'PP') & (TOI_df.AWAY_STRENGTH != '4v3'),['HOME_STRENGTH']] = '3v4'; TOI_df
+        TOI_df.loc[(TOI_df.SECONDS_GONE >= 3600) & (TOI_df.HOME_PENALTY == 1) & (TOI_df.AWAY_PENALTY == 0) & (TOI_df.HOME_STATE == 'SH') & (TOI_df.HOME_STRENGTH == '3v4') & (TOI_df.AWAY_STATE == 'PP') & (TOI_df.AWAY_STRENGTH != '4v3'),['AWAY_STRENGTH']] = '4v3'; TOI_df
+    
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 2) & (TOI_df.AWAY_PENALTY == 0) & (TOI_df.HOME_STATE == 'SH') & (TOI_df.HOME_STRENGTH != '3v5') & (TOI_df.AWAY_STATE == 'PP') & (TOI_df.AWAY_STRENGTH != '5v3'),['HOME_STRENGTH']] = '3v5'; TOI_df
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 2) & (TOI_df.AWAY_PENALTY == 0) & (TOI_df.HOME_STATE == 'SH') & (TOI_df.HOME_STRENGTH == '3v5') & (TOI_df.AWAY_STATE == 'PP') & (TOI_df.AWAY_STRENGTH != '5v3'),['AWAY_STRENGTH']] = '5v3'; TOI_df
+    
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 2) & (TOI_df.AWAY_PENALTY == 1) & (TOI_df.HOME_STATE == 'SH') & (TOI_df.HOME_STRENGTH != '3v4') & (TOI_df.AWAY_STATE == 'PP') & (TOI_df.AWAY_STRENGTH != '4v3'),['HOME_STRENGTH']] = '3v4'; TOI_df
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 2) & (TOI_df.AWAY_PENALTY == 1) & (TOI_df.HOME_STATE == 'SH') & (TOI_df.HOME_STRENGTH == '3v4') & (TOI_df.AWAY_STATE == 'PP') & (TOI_df.AWAY_STRENGTH != '4v3'),['AWAY_STRENGTH']] = '4v3'; TOI_df
+    
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 1) & (TOI_df.AWAY_PENALTY == 0) & (TOI_df.HOMEON_6.notnull()),['HOME_STRENGTH']] = '5v5'; TOI_df
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 1) & (TOI_df.AWAY_PENALTY == 0) & (TOI_df.HOMEON_6.notnull()),['AWAY_STRENGTH']] = '5v5'; TOI_df
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 1) & (TOI_df.AWAY_PENALTY == 0) & (TOI_df.HOMEON_6.notnull()),['HOME_STATE']] = 'EV'; TOI_df
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 1) & (TOI_df.AWAY_PENALTY == 0) & (TOI_df.HOMEON_6.notnull()),['AWAY_STATE']] = 'EV'; TOI_df
+    
+    
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 0) & (TOI_df.AWAY_PENALTY == 1) & (TOI_df.HOME_STATE != 'PP') & (TOI_df.AWAY_STATE != 'SH'),['HOME_STRENGTH']] = '5v4'; TOI_df
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 0) & (TOI_df.AWAY_PENALTY == 1) & (TOI_df.HOME_STATE != 'PP') & (TOI_df.AWAY_STATE != 'SH'),['AWAY_STRENGTH']] = '4v5'; TOI_df
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 0) & (TOI_df.AWAY_PENALTY == 1) & (TOI_df.HOME_STATE != 'PP') & (TOI_df.AWAY_STATE != 'SH'),['HOME_STATE']] = 'PP'; TOI_df
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 0) & (TOI_df.AWAY_PENALTY == 1) & (TOI_df.HOME_STATE == 'PP') & (TOI_df.AWAY_STATE != 'SH'),['AWAY_STATE']] = 'SH'; TOI_df
+    
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 0) & (TOI_df.AWAY_PENALTY == 2) & (TOI_df.HOME_STATE != 'PP') & (TOI_df.AWAY_STATE != 'SH'),['HOME_STRENGTH']] = '5v3'; TOI_df
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 0) & (TOI_df.AWAY_PENALTY == 2) & (TOI_df.HOME_STATE != 'PP') & (TOI_df.AWAY_STATE != 'SH'),['AWAY_STRENGTH']] = '3v5'; TOI_df
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 0) & (TOI_df.AWAY_PENALTY == 2) & (TOI_df.HOME_STATE != 'PP') & (TOI_df.AWAY_STATE != 'SH'),['HOME_STATE']] = 'PP'; TOI_df
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 0) & (TOI_df.AWAY_PENALTY == 2) & (TOI_df.HOME_STATE == 'PP') & (TOI_df.AWAY_STATE != 'SH'),['AWAY_STATE']] = 'SH'; TOI_df
+    
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 1) & (TOI_df.AWAY_PENALTY == 2) & (TOI_df.HOME_STATE != 'PP') & (TOI_df.AWAY_STATE != 'SH'),['HOME_STRENGTH']] = '4v3'; TOI_df
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 1) & (TOI_df.AWAY_PENALTY == 2) & (TOI_df.HOME_STATE != 'PP') & (TOI_df.AWAY_STATE != 'SH'),['AWAY_STRENGTH']] = '3v4'; TOI_df
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 1) & (TOI_df.AWAY_PENALTY == 2) & (TOI_df.HOME_STATE != 'PP') & (TOI_df.AWAY_STATE != 'SH'),['HOME_STATE']] = 'PP'; TOI_df
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 1) & (TOI_df.AWAY_PENALTY == 2) & (TOI_df.HOME_STATE == 'PP') & (TOI_df.AWAY_STATE != 'SH'),['AWAY_STATE']] = 'SH'; TOI_df
+    
+        TOI_df.loc[(TOI_df.SECONDS_GONE < 3600) & (TOI_df.HOME_PENALTY == 0) & (TOI_df.AWAY_PENALTY == 1) & (TOI_df.HOME_STATE == 'PP') & (TOI_df.HOME_STRENGTH != '5v4') & (TOI_df.AWAY_STATE == 'SH') & (TOI_df.AWAY_STRENGTH != '4v5'),['HOME_STRENGTH']] = '5v4'; TOI_df
+        TOI_df.loc[(TOI_df.SECONDS_GONE < 3600) & (TOI_df.HOME_PENALTY == 0) & (TOI_df.AWAY_PENALTY == 1) & (TOI_df.HOME_STATE == 'PP') & (TOI_df.HOME_STRENGTH == '5v4') & (TOI_df.AWAY_STATE == 'SH') & (TOI_df.AWAY_STRENGTH != '4v5'),['AWAY_STRENGTH']] = '4v5'; TOI_df
+        TOI_df.loc[(TOI_df.SECONDS_GONE >= 3600) & (TOI_df.HOME_PENALTY == 0) & (TOI_df.AWAY_PENALTY == 1) & (TOI_df.HOME_STATE == 'PP') & (TOI_df.HOME_STRENGTH != '4v3') & (TOI_df.AWAY_STATE == 'SH') & (TOI_df.AWAY_STRENGTH != '3v4'),['HOME_STRENGTH']] = '4v3'; TOI_df
+        TOI_df.loc[(TOI_df.SECONDS_GONE >= 3600) & (TOI_df.HOME_PENALTY == 0) & (TOI_df.AWAY_PENALTY == 1) & (TOI_df.HOME_STATE == 'PP') & (TOI_df.HOME_STRENGTH == '4v3') & (TOI_df.AWAY_STATE == 'SH') & (TOI_df.AWAY_STRENGTH != '3v4'),['AWAY_STRENGTH']] = '3v4'; TOI_df
+    
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 0) & (TOI_df.AWAY_PENALTY == 2) & (TOI_df.HOME_STATE == 'PP') & (TOI_df.HOME_STRENGTH != '5v3') & (TOI_df.AWAY_STATE == 'SH') & (TOI_df.AWAY_STRENGTH != '3v5'),['HOME_STRENGTH']] = '5v3'; TOI_df
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 0) & (TOI_df.AWAY_PENALTY == 2) & (TOI_df.HOME_STATE == 'PP') & (TOI_df.HOME_STRENGTH == '5v3') & (TOI_df.AWAY_STATE == 'SH') & (TOI_df.AWAY_STRENGTH != '3v5'),['AWAY_STRENGTH']] = '3v5'; TOI_df
+    
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 1) & (TOI_df.AWAY_PENALTY == 2) & (TOI_df.HOME_STATE == 'PP') & (TOI_df.HOME_STRENGTH != '4v3') & (TOI_df.AWAY_STATE == 'SH') & (TOI_df.AWAY_STRENGTH != '3v4'),['HOME_STRENGTH']] = '4v3'; TOI_df
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 1) & (TOI_df.AWAY_PENALTY == 2) & (TOI_df.HOME_STATE == 'PP') & (TOI_df.HOME_STRENGTH == '4v3') & (TOI_df.AWAY_STATE == 'SH') & (TOI_df.AWAY_STRENGTH != '3v4'),['AWAY_STRENGTH']] = '3v4'; TOI_df
+    
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 0) & (TOI_df.AWAY_PENALTY == 1) & (TOI_df.AWAYON_6.notnull()),['HOME_STRENGTH']] = '5v5'; TOI_df
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 0) & (TOI_df.AWAY_PENALTY == 1) & (TOI_df.AWAYON_6.notnull()),['AWAY_STRENGTH']] = '5v5'; TOI_df
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 0) & (TOI_df.AWAY_PENALTY == 1) & (TOI_df.AWAYON_6.notnull()),['HOME_STATE']] = 'EV'; TOI_df
+        TOI_df.loc[(TOI_df.HOME_PENALTY == 0) & (TOI_df.AWAY_PENALTY == 1) & (TOI_df.AWAYON_6.notnull()),['AWAY_STATE']] = 'EV'; TOI_df
+     
+    ### fix the goaldiff for any goals that are the last event in the play-by-play    
+    TOI_df.loc[(TOI_df.EVENT == 'Goal') & (TOI_df.HOME_SITUATION == 'TIED') & (TOI_df.AWAY_SITUATION == 'TIED') & (TOI_df.HOME_GOALS > TOI_df.AWAY_GOALS),['AWAY_GOALS']] = TOI_df['HOME_GOALS'] - 1; TOI_df
+    TOI_df.loc[(TOI_df.EVENT == 'Goal') & (TOI_df.HOME_SITUATION == 'TIED') & (TOI_df.AWAY_SITUATION == 'TIED') & (TOI_df.HOME_GOALS < TOI_df.AWAY_GOALS),['AWAY_GOALS']] = TOI_df['AWAY_GOALS'] - 1; TOI_df
     
     ### write the file to csv, without an index column
-    TOI_df.to_csv(TOI_outfile, index = False)
+    TOI_df.to_csv(TOI_outfile, index=False)   
     
     
     print('Finished parsing NHL TOI matrix from the shifts .csv for ' + season_id + ' ' + game_id)

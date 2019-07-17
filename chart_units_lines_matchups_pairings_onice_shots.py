@@ -100,11 +100,14 @@ def parse_ids(season_id, game_id, images):
         team_line3_matchups_pairings_df['RANK'] = team_line3_matchups_pairings_df['TOI'].rank(method='first')
         team_line3_matchups_pairings_df['RANK'] -= 1
 
-        team_line4_matchups_pairings_df = team_lines_matchups_pairings_df.copy()
-        team_line4_matchups_pairings_df = team_line4_matchups_pairings_df[(team_line4_matchups_pairings_df['LINE'] == team_lines_list[0])]
-        team_line4_matchups_pairings_df.sort_values(by=['TOI'], inplace=True)
-        team_line4_matchups_pairings_df['RANK'] = team_line4_matchups_pairings_df['TOI'].rank(method='first')
-        team_line4_matchups_pairings_df['RANK'] -= 1
+        try:
+            team_line4_matchups_pairings_df = team_lines_matchups_pairings_df.copy()
+            team_line4_matchups_pairings_df = team_line4_matchups_pairings_df[(team_line4_matchups_pairings_df['LINE'] == team_lines_list[0])]
+            team_line4_matchups_pairings_df.sort_values(by=['TOI'], inplace=True)
+            team_line4_matchups_pairings_df['RANK'] = team_line4_matchups_pairings_df['TOI'].rank(method='first')
+            team_line4_matchups_pairings_df['RANK'] -= 1
+        except:
+            pass
 
         ### create more lines dataframe with just the time on ice column; set a max value; scale each line's time on ice relative to the max  
         line1_matchups_pairings_toi = team_line1_matchups_pairings_df['TOI']
@@ -119,9 +122,12 @@ def parse_ids(season_id, game_id, images):
         max_line3_matchups_pairings_toi = max(line3_matchups_pairings_toi)    
         line3_matchups_pairings_toi_color = line3_matchups_pairings_toi / float(max(line3_matchups_pairings_toi))
 
-        line4_matchups_pairings_toi = team_line4_matchups_pairings_df['TOI']
-        max_line4_matchups_pairings_toi = max(line4_matchups_pairings_toi)    
-        line4_matchups_pairings_toi_color = line4_matchups_pairings_toi / float(max(line4_matchups_pairings_toi))
+        try:
+            line4_matchups_pairings_toi = team_line4_matchups_pairings_df['TOI']
+            max_line4_matchups_pairings_toi = max(line4_matchups_pairings_toi)    
+            line4_matchups_pairings_toi_color = line4_matchups_pairings_toi / float(max(line4_matchups_pairings_toi))
+        except:
+            pass
     
         ### connect team and opponent color map colors to each line's scaled time on ice 
         line1_matchups_pairings_toi_color_map_for = team_color_map(line1_matchups_pairings_toi_color)
@@ -133,8 +139,11 @@ def parse_ids(season_id, game_id, images):
         line3_matchups_pairings_toi_color_map_for = team_color_map(line3_matchups_pairings_toi_color)
         line3_matchups_pairings_toi_color_map_against = opponent_color_map(line3_matchups_pairings_toi_color)
 
-        line4_matchups_pairings_toi_color_map_for = team_color_map(line4_matchups_pairings_toi_color)
-        line4_matchups_pairings_toi_color_map_against = opponent_color_map(line4_matchups_pairings_toi_color)
+        try:
+            line4_matchups_pairings_toi_color_map_for = team_color_map(line4_matchups_pairings_toi_color)
+            line4_matchups_pairings_toi_color_map_against = opponent_color_map(line4_matchups_pairings_toi_color)
+        except:
+            pass
 
         ### create a figure with two subplots sharing the y-axis
         fig, axarr = plt.subplots(4, sharex=True)
@@ -328,13 +337,16 @@ def parse_ids(season_id, game_id, images):
         line3_color_bar.ax.set_yticklabels(['0', '', max_line3_matchups_pairings_toi], fontsize=10)
         line3_color_bar.set_label('TOI', rotation=270, fontsize=10)
 
-        line4_norm = mpl.colors.Normalize(vmin=0,vmax=1)
-        line4_sm = plt.cm.ScalarMappable(cmap=team_color_map, norm=line4_norm)
-        line4_sm.set_array([])
-        line4_color_bar = plt.colorbar(line4_sm, ax=axarr[3])
-        line4_color_bar.ax.set_yticklabels(['0', '', max_line4_matchups_pairings_toi], fontsize=10)
-        line4_color_bar.set_label('TOI', rotation=270, fontsize=10)
-   
+        try:
+            line4_norm = mpl.colors.Normalize(vmin=0,vmax=1)
+            line4_sm = plt.cm.ScalarMappable(cmap=team_color_map, norm=line4_norm)
+            line4_sm.set_array([])
+            line4_color_bar = plt.colorbar(line4_sm, ax=axarr[3])
+            line4_color_bar.ax.set_yticklabels(['0', '', max_line4_matchups_pairings_toi], fontsize=10)
+            line4_color_bar.set_label('TOI', rotation=270, fontsize=10)
+        except:
+            pass
+        
         ### save the image to file
         if team == away:
             plt.savefig(charts_units + 'onice_shots_away_lines_matchups_pairings.png', bbox_inches='tight', pad_inches=0.2)

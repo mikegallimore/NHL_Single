@@ -479,4 +479,4 @@ def parse_ids(season_id, game_id):
                     print('Processing ' + team + ' on-ice player stats for ' + team_line_lastname + ' against ' + opponent_pair_lastname)
     
                    
-    print('Finished generating line vs. line stats for ' + season_id + ' ' + game_id)
+    print('Finished generating line vs. pairing stats for ' + season_id + ' ' + game_id)

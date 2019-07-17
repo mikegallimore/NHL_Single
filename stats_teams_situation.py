@@ -41,7 +41,7 @@ def parse_ids(season_id, game_id):
     with open(stats_teams_period, 'w', newline = '') as teams_stats:
     
         teams_out = csv.writer(teams_stats)   
-        teams_out.writerow(['SEASON', 'GAME_ID', 'DATE', 'LOCATION', 'TEAM', 'STATE', 'PERIOD', 'GP', 'TOI', 'GF', 'GA', 'ONSF', 'ONSA', 'USF', 'USA', 'SF', 'SA', 'FO', 'FOW', 'PENA', 'PENF', 'HF', 'HA', 'TF', 'TA', 'GD', 'ONSD', 'USD', 'SD'])
+        teams_out.writerow(['SEASON', 'GAME_ID', 'DATE', 'LOCATION', 'TEAM', 'STATE', 'SITUATION', 'GP', 'TOI', 'GF', 'GA', 'ONSF', 'ONSA', 'USF', 'USA', 'SF', 'SA', 'FO', 'FOW', 'PENA', 'PENF', 'HF', 'HA', 'TF', 'TA', 'GD', 'ONSD', 'USD', 'SD'])
         
         ### begin looping by game situation   
         for situation in situations:

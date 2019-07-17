@@ -31,10 +31,12 @@ def parse_ids(season_id, game_id, images):
     
     ### create a dataframe object that reads in the play-by-file info; invert the X and Y coordinates
     pbp_df = pd.read_csv(pbp_file)
-    pbp_df['X_1'] *= -1
-    pbp_df['Y_1'] *= -1
-    pbp_df['X_2'] *= -1
-    pbp_df['Y_2'] *= -1
+
+    if int(season_id) >= 20102011:    
+        pbp_df['X_1'] *= -1
+        pbp_df['Y_1'] *= -1
+        pbp_df['X_2'] *= -1
+        pbp_df['Y_2'] *= -1
     
     ### choose colors for each team and the legend; set them in a list
     away_color = '#e60000'

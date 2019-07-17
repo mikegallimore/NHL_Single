@@ -192,6 +192,7 @@ def parse_ids(season_id, game_id, images):
         max_list = [F_max, D_max, G_max]
 
         x_tickmax = max(max_list)
+        x_ticklabels = []
 
         if x_tickmax <= 0.5:
             x_ticklabels = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5]
@@ -205,7 +206,11 @@ def parse_ids(season_id, game_id, images):
             x_ticklabels = [0.0, 0.5, 1.0, 1.5, 2.0, 2.5]
         if x_tickmax > 2.5 and x_tickmax <= 3.0:
             x_ticklabels = [0.0, 0.6, 1.2, 1.8, 2.4, 3.0]
-        
+        if x_tickmax > 3.0 and x_tickmax <= 3.5:
+            x_ticklabels = [0.0, 0.7, 1.4, 2.1, 2.8, 3.5]
+        if x_tickmax > 3.5 and x_tickmax <= 4.0:
+            x_ticklabels = [0.0, 0.8, 1.6, 2.4, 3.2, 4.0]
+            
         ### use the newly-minted x-ticklabels to ensure the x-axis labels will always display as integers        
         axarr[0].set_xticks(x_ticklabels, minor=False)
         axarr[1].set_xticks(x_ticklabels, minor=False)
@@ -243,7 +248,7 @@ def parse_ids(season_id, game_id, images):
         plt.close(fig)
         
         
-        print('Plotting ' + team + ' gamescores for players.')   
-            
-            
+        print('Plotting ' + team + ' gamescores for players.')
+        
+
     print('Finished plotting player gamescores.')

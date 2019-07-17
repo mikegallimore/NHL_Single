@@ -8,6 +8,7 @@ import json
 import csv
 import pandas as pd
 import parameters
+from pathlib import Path
 import dict_teams
 
 def parse_ids(season_id):
@@ -100,5 +101,22 @@ def parse_ids(season_id):
         schedule_df['HOME'] = schedule_df['HOME'].replace(dict_teams.NHL)
               
         schedule_df.to_csv(schedule_csv, index = False)
-        
+
+
     print('Finished parsing the NHL schedule for ' + season_id)
+    
+    
+    schedules_path = Path(files_root).glob('*_schedule.csv')
+
+    header_saved = False
+    with open('schedule.csv', 'w', newline='') as fileout:
+        for filename in schedules_path:
+            with open(str(filename)) as filein:
+                header = next(filein)
+                if not header_saved:
+                    fileout.write(header)
+                    header_saved = True
+                for line in filein:
+                    fileout.write(line)
+                    
+    print('Finished binding the schedules since 20062007.')
