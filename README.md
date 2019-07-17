@@ -42,7 +42,7 @@ There are optional arguments available for you to tack onto the basic structure 
 <code>--extent full</code><br>
 <code>--fetch skip</code><br>
 <code>--images show</code><br>
-<code>--load_pbp</code> (only relevant for the 20062007 season)<br>
+<code>--load_pbp</code> (only relevant for the 20062007 season; see the 'Limitations' section below for further explanation)<br>
 <code>--parse skip</code><br>
 <code>--players skip</code><br>
 <code>--teams skip</code><br>
