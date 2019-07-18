@@ -54,7 +54,7 @@ To re-run a game without bothering to fetch and parse the game files again plus 
 To generate all of the team, player and unit tables and charts possible, as well as have the charts display on your screen as they're made:<br>
 <code>python run_game.py 20182019 20001 --scope full --images show</code>
 
-You can always reference the required and optional arguments in the shell by typing the following:<br>
+Reference the required and optional arguments in the shell by typing the following:<br>
 <code>python run_game.py -h</code>
 
 ##### Schedule
@@ -71,8 +71,10 @@ This optional command-line argument is an inelegant solution to a persistent pro
 
 After much trial and all error, there is no means for automating the removal of the NUL bytes. Thus the necessity, at present, for manually doing so--which is easy enough in Excel with a macro but obviously tedious--in order to get a complete play-by-play file as output.
 
-To spare any potential user the drudgery, <a href="https://www.dropbox.com/home/20062007_pbp">this Dropbox folder</a> contains purged 20062007 play-by-play files that that users can download and, by using the optional 'load_pbp' command-line argument, continue its processing without having to forego any loss of events:<br>
+To spare any potential user the drudgery, <a href="https://www.dropbox.com/home/20062007_pbp">this Dropbox folder</a> contains purged 20062007 play-by-play files users should download before using the optional 'load_pbp' command-line argument as shown below:<br>
 <code>python run_game.py 20062007 20001 --load_pbp true </code>
+
+
 
 ### 2019-2020 Notice
 
