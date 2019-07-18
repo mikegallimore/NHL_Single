@@ -1,7 +1,6 @@
 ## NHL_Single
 
-### Purpose
-Enabling the scraping and parsing the play-by-play, roster and shift files available for an NHL game in order to generate tabular and visualized data.
+A tool for scraping and parsing the available source files for any NHL game, beginning with the 20062007 season, in order to generate tabular and visualized data.
 
 ### Prerequisites
 At minimum, a vanilla installation of Python3 (code written with 3.6.5; tested with 3.6.8). If you don't already have Python on your machine, the simplest remedy is to install the <a href="https://www.anaconda.com/distribution/">Anaconda Distribution</a> or, alternatively, <a href="https://docs.conda.io/en/latest/miniconda.html">Miniconda</a>. 
@@ -63,9 +62,10 @@ To fetch a season's schedule manually, you must indicate the particular season:<
 
 NHL_Single, as its name implies, only processes one game at a time. With the release of v2.0--which extended compatibility back to the 20062007 season--the next major change will be to enable fetching and parsing a range of games within a season.<br>
 
-NHL_Single depends on the availability of files that feed the league's Real-Time Scoring Statistics (RTSS) system. At this point, it is  compatible from the 2006-2007 season through the 2010-2011 season.<br>
 
-Additionally, the league is reportedly introducing new <a href="https://www.nhl.com/news/nhl-plans-to-deploy-puck-and-player-tracking-technology-in-2019-2020/c-304218820">tracking technology</a> for the 2019-2020 season but it is not yet clear how the RTSS system will be impacted.
+#### 2019-2020 and beyond
+
+The NHL is reportedly introducing new <a href="https://www.nhl.com/news/nhl-plans-to-deploy-puck-and-player-tracking-technology-in-2019-2020/c-304218820">tracking technology</a> for the 2019-2020 season but it is not yet clear how the RTSS system will be impacted.
 
 ### Acknowledgements
 A lot of people have, in varying ways (be it by patiently answering questions, making their own code available for consultation, offering suggestions or simply encouragement), helped me learn enough to put this thing together. I am grateful for all of the feedback I received and the resources that were available. Thank you.
