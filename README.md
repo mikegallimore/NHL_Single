@@ -64,11 +64,11 @@ NHL_Single, as its name implies, only processes one game at a time. With the rel
 
 ##### 20062007 and the optional 'load_pbp' command-line argument
 
-'load_pbp' is an inelegant solution to a persistent problem exclusive to the 20062007 season: NUL bytes somehow wind up in the play-by-play data, stopping any further processing of the rows that follow their insertion. If you care for further elaboration, hit me up on Twitter (@mikegallimore) but the result, simply put, is loss of some events in the output.
+'load_pbp' is an inelegant solution to a persistent problem exclusive to the 20062007 season: NUL bytes somehow wind up in the play-by-play data, stopping any further processing of the rows that follow their insertion. If you care for further elaboration, hit me up <a href="https://twitter.com/mikegallimore/">on Twitter</a> but the result, simply put, is loss of some events in the output.
 
 After much trial and all error, there is no means for automating the removal of the NUL bytes. Thus the necessity, at present, for manually doing so--which is easy enough in Excel with a macro but obviously tedious--in order to get a complete play-by-play file as output.
 
-To spare any potential user the drudgery, <a href="https://apps.twitter.com/app/new">this Dropbox folder</a> contains purged 20062007 play-by-play files that that users can download and, by using the optional 'load_pbp' command-line argument, continue its processing without having to forego any loss of events.
+To spare any potential user the drudgery, <a href="https://www.dropbox.com/home/20062007_pbp">this Dropbox folder</a> contains purged 20062007 play-by-play files that that users can download and, by using the optional 'load_pbp' command-line argument, continue its processing without having to forego any loss of events.
 
 ### 2019-2020 Notice
 
