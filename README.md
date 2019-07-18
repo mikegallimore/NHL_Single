@@ -40,7 +40,7 @@ At minimum, you must indicate two positional arguments, which are the particular
 There are optional arguments available for you to tack onto the basic structure as well:<br>
 <code>--fetch</code> set to 'skip'<br>
 <code>--images</code> set to 'show'<br>
-<code>--load_pbp</code> set to 'true' (as explained in the 'Limitations' section below, for the 20062007 season only)<br>
+<code>--load_pbp</code> set to 'true' (use, as explained in the 'Limitations' section below, for 20062007 only)<br>
 <code>--parse</code> set to 'skip'<br>
 <code>--players</code> set to 'skip'<br>
 <code>--scope</code> set to 'full'<br>
