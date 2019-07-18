@@ -1610,9 +1610,9 @@ def parse_ids(season_id, game_id, load_pbp):
                     ### remove instances where the goalie was recorded as being pulled (recoded as 'Empty-Net' in the event column)
                     pbp_df = pbp_df[(pbp_df['EVENT_TYPE'] != 'Empty-Net')]
 
-                    ### return, for previously unprocessed rows only, the home goals or away goals to whatever the value was prior to when whichever team scores
-                    pbp_df.loc[(pbp_df.EVENT_TYPE == 'Goal') & (pbp_df.TEAM == home), ['HOME_GOALS']] = pbp_df['HOME_GOALS'] - 1; pbp_df
-                    pbp_df.loc[(pbp_df.EVENT_TYPE == 'Goal') & (pbp_df.TEAM == away), ['AWAY_GOALS']] = pbp_df['AWAY_GOALS'] - 1; pbp_df
+                    ### return, for previously unprocessed rows (prior to the shootout) only, the home goals or away goals to whatever the value was prior to when whichever team scores
+                    pbp_df.loc[(pbp_df.PERIOD != 5) & (pbp_df.EVENT_TYPE == 'Goal') & (pbp_df.TEAM == home), ['HOME_GOALS']] = pbp_df['HOME_GOALS'] - 1; pbp_df
+                    pbp_df.loc[(pbp_df.PERIOD != 5) & (pbp_df.EVENT_TYPE == 'Goal') & (pbp_df.TEAM == away), ['AWAY_GOALS']] = pbp_df['AWAY_GOALS'] - 1; pbp_df
     
                     ### make a separate dataframe containing just the time remaining and on-ice information for goals already processed
                     old_goals_df = pbp_df[(pbp_df['EVENT_TYPE'] == 'Goal') & (pbp_df['SECONDS_GONE'] != '$') & (pbp_df['HOMEON_1'] != '$')]
@@ -1639,6 +1639,11 @@ def parse_ids(season_id, game_id, load_pbp):
                     goals_df = pd.concat([old_goals_df, new_goals_df], sort=True)
                     goals_df = goals_df.drop(columns=['SEASON', 'GAME_ID', 'DATE', 'HOME', 'AWAY', 'GAME_TYPE', 'HOME_RESULT', 'AWAY_RESULT', 'SECONDS_GONE', 'TIME_GONE', 'HOME_GOALS', 'AWAY_GOALS', 'HOME_SITUATION', 'AWAY_SITUATION', 'HOME_SCOREDIFF', 'AWAY_SCOREDIFF', 'HOME_STRENGTH', 'AWAY_STRENGTH', 'HOME_STATE', 'AWAY_STATE', 'HOME_STATE_DETAIL', 'AWAY_STATE_DETAIL', 'EVENT', 'EVENT_TYPE', 'EVENT_DETAIL', 'HOME_ZONE', 'AWAY_ZONE', 'TEAM', 'PLAYER_A', 'PLAYER_B', 'PLAYER_C'])
 
+                    ### create a separate dataframe for any shootout events
+                    shootout_df = pbp_df.copy()
+                    shootout_df = shootout_df[(shootout_df['PERIOD'] == 5)]
+                    shootout_df.loc[(shootout_df.SECONDS_GONE == '$'),['SECONDS_GONE']] = 3901; shootout_df
+
                     ### remove the rows following goals that only contained the home and away on-ice players; add the home and away on-ice players for goals from the goals dataframe   
                     pbp_df = pbp_df[(pbp_df['PERIOD'] < 5) & (pbp_df['PERIOD'] != 0)]
 
@@ -1660,8 +1665,11 @@ def parse_ids(season_id, game_id, load_pbp):
                     pbp_df.loc[(pbp_df.EVENT_TYPE != 'Goal') & (pbp_df.AWAYON_5 != '$'),['AWAYON_5']] = '$'; pbp_df
                     pbp_df.loc[(pbp_df.EVENT_TYPE != 'Goal') & (pbp_df.AWAYON_6 != '$'),['AWAYON_6']] = '$'; pbp_df
 
+                    ### tacl any shootout events back onto the end of the play-by-play dataframe
+                    pbp_df = pd.concat([pbp_df, shootout_df], sort=False)
+
                     ### save the adjusted csv file
-                    pbp_df.to_csv(pbp_temp, index = False) 
+                    pbp_df.to_csv(pbp_temp, index=False) 
 
         if load_pbp == 'true':
             ### remove the raw play-by-play file and replace it with the temporary, processed play-by-play file and then remove the temporary file
@@ -1676,34 +1684,6 @@ def parse_ids(season_id, game_id, load_pbp):
 
         print('Finished parsing NHL play-by-play from .HTM for ' + season_id + ' ' + game_id)
 
-
-        '''
-        ###
-        ### TEMPORARILY INCLUDE WHILE AGGREGATING SEMI-PROCESSED PLAY-BY-PLAY FILES FOR 20062007
-        ###
-        from pathlib import Path
-        
-        files_20062007 = parameters.files_20062007
-        
-        pbp_20062007 = Path(files_20062007).glob('*_pbp.csv')
-        
-        header_saved = False
-        with open(files_root + season_id + '_pbp_master.csv', 'w', newline='') as fileout:
-            for filename in pbp_20062007:
-                with open(str(filename)) as filein:
-                    header = next(filein)
-                    if not header_saved:
-                        fileout.write(header)
-                        header_saved = True
-                    for line in filein:
-                        fileout.write(line)
-                        
-                        
-        print('Finished binding the 20062007 play-by-play copies.')
-        ###
-        ###
-        ###
-        '''
         
     ###
     ### ESPN PLAY-BY-PLAY (XML) 

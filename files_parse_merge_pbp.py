@@ -198,20 +198,6 @@ def parse_ids(season_id, game_id, load_pbp):
         homeROS_list = homeROS_df['PLAYER_NAME'].tolist()
 
         ### clean up instances where home players are listed in away player on-ice columns
-        '''
-        for player in homeROS_list:
-            pbp_final.loc[(pbp_final.AWAYON_4 == player), ['HOMEON_4']] = pbp_final['AWAYON_4']; pbp_final
-            pbp_final.loc[(pbp_final.AWAYON_4 == player), ['AWAYON_4']] = ''; pbp_final            
-        for player in homeROS_list:
-            pbp_final.loc[(pbp_final.AWAYON_5 == player), ['HOMEON_5']] = pbp_final['AWAYON_5']; pbp_final
-            pbp_final.loc[(pbp_final.AWAYON_5 == player), ['AWAYON_5']] = ''; pbp_final
-        for player in homeROS_list:            
-            pbp_final.loc[(pbp_final.AWAYON_6 == player), ['HOMEON_6']] = pbp_final['AWAYON_6']; pbp_final
-            pbp_final.loc[(pbp_final.AWAYON_6 == player), ['AWAYON_6']] = ''; pbp_final
-
-        pbp_final.loc[(pbp_final.HOMEON_4.isnull()) & (pbp_final.HOMEON_5.notnull()), ['HOMEON_4']] = pbp_final['HOMEON_5']; pbp_final
-        '''
-
         for player in homeROS_list:
             pbp_final.loc[(pbp_final.AWAYON_6 == player), ['HOMEON_6']] = pbp_final['HOMEON_5']; pbp_final
         for player in homeROS_list:
@@ -347,7 +333,6 @@ def parse_ids(season_id, game_id, load_pbp):
      
         ### load the main and ESPN play-by-play files into pandas
         pbp_df = pd.read_csv(pbp_parsed)
-#        pbp_df = pd.read_csv(pbp_parsed, error_bad_lines=False)
 
         ESPN_df = pd.read_csv(ESPN_parsed)
         
@@ -637,24 +622,25 @@ def parse_ids(season_id, game_id, load_pbp):
             pbp_df = pbp_df.replace('$', '')
 
             pbp_df = pbp_df[(pbp_df['EVENT_TYPE'] != 'Empty-Net')]
-            if load_pbp != 'true':
+            if load_pbp != 'true':              
+                ### correct any instances where the season_id might be missing
                 pbp_df.loc[(pbp_df.SEASON.isnull()),['SEASON']] = season_id; pbp_df
-                pbp_df.loc[(pbp_df.PERIOD == 5) & (pbp_df.TEAM == home),['HOME_STRENGTH']] = '1v0'; pbp_df
-                pbp_df.loc[(pbp_df.PERIOD == 5) & (pbp_df.TEAM == home),['AWAY_STRENGTH']] = '0v1'; pbp_df
-                pbp_df.loc[(pbp_df.PERIOD == 5) & (pbp_df.TEAM == home),['HOMEON_1']] = pbp_df['PLAYER_A']; pbp_df                
-                pbp_df.loc[(pbp_df.PERIOD == 5) & (pbp_df.TEAM == away),['HOME_STRENGTH']] = '0v1'; pbp_df
-                pbp_df.loc[(pbp_df.PERIOD == 5) & (pbp_df.TEAM == away),['AWAY_STRENGTH']] = '1v0'; pbp_df
-                pbp_df.loc[(pbp_df.PERIOD == 5) & (pbp_df.TEAM == home),['AWAYON_1']] = pbp_df['PLAYER_A']; pbp_df                
-                pbp_df.loc[(pbp_df.PERIOD == 5),['HOME_STATE']] = 'SO'; pbp_df
-                pbp_df.loc[(pbp_df.PERIOD == 5),['AWAY_STATE']] = 'SO'; pbp_df                
-
-                ### change the value of seconds gone for shootout events from 3901 to blank
-                pbp_df.loc[(pbp_df.PERIOD == 5),['SECONDS_GONE']] = ''; pbp_df
 
             ### remove the penalty count columns for each team
             pbp_df = pbp_df.drop(columns=['HOME_PENALTY', 'AWAY_PENALTY'])
 
         if pbp_df['PERIOD'].max() == 5:
+            ### change the value of seconds gone for shootout events from 3901 to blank
+            pbp_df.loc[(pbp_df.PERIOD == 5),['SECONDS_GONE']] = ''; pbp_df
+
+            ### make the strengths and states for each team reflect the shootout
+            pbp_df.loc[(pbp_df.PERIOD == 5) & (pbp_df.TEAM == home),['HOME_STRENGTH']] = '1v0'; pbp_df
+            pbp_df.loc[(pbp_df.PERIOD == 5) & (pbp_df.TEAM == home),['AWAY_STRENGTH']] = '0v1'; pbp_df
+            pbp_df.loc[(pbp_df.PERIOD == 5) & (pbp_df.TEAM == away),['HOME_STRENGTH']] = '0v1'; pbp_df
+            pbp_df.loc[(pbp_df.PERIOD == 5) & (pbp_df.TEAM == away),['AWAY_STRENGTH']] = '1v0'; pbp_df
+            pbp_df.loc[(pbp_df.PERIOD == 5),['HOME_STATE']] = 'SO'; pbp_df
+            pbp_df.loc[(pbp_df.PERIOD == 5),['AWAY_STATE']] = 'SO'; pbp_df 
+
             ### ensure the player taking a shootout attempt is recorded as the sole on-ice participant for the shooter's team
             pbp_df.loc[(pbp_df.PERIOD == 5) & (pbp_df.TEAM == away),['AWAYON_1']] = pbp_df['PLAYER_A']; pbp_df
             pbp_df.loc[(pbp_df.PERIOD == 5) & (pbp_df.TEAM == away),['AWAYON_2']] = ''; pbp_df
