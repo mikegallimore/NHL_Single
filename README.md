@@ -77,4 +77,4 @@ To spare any potential user the drudgery, <a href="https://www.dropbox.com/home/
 <code>python run_game.py 20062007 20001 --load_pbp true </code>
 
 ### Acknowledgements
-A lot of people have, in varying ways (be it by patiently answering questions, making their own code available for consultation, offering suggestions or simply encouragement), helped me learn enough to put this thing together. I am grateful for all of the feedback I received and the resources that were available. Thank you.
+A lot of people have, in varying ways (be it by patiently answering questions, making their own code available for consultation, offering suggestions or simply encouragement), helped me learn enough to put this thing together. I am grateful for all of the feedback received and resources made available. Thanks to you all.
