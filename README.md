@@ -48,13 +48,13 @@ There are optional arguments available for you to tack onto the basic structure 
 <code>--tweet no</code><br>
 <code>--units skip</code><br>
 
-For the most expedient approach to using the tool for a game, you'd enter:
+For the most expedient approach to using the tool for a game, you'd enter:<br>
 <code>python run_game.py 20182019 20001</code>
 
 Perhaps you want to re-run a game without bothering to fetch and parse the game files again and also want to avoid tweeting out generated visualizations. You'd enter:<br>
 <code>python run_game.py 20182019 20001 --fetch skip --parse skip --tweet no</code>
 
-Or, maybe you want to generate all of the team, player and unit tables and charts possible, as well as have the charts display on your screen as they're made. If so, you'd enter:
+Or, maybe you want to generate all of the team, player and unit tables and charts possible, as well as have the charts display on your screen as they're made. If so, you'd enter:<br>
 <code>python run_game.py 20182019 20001 --scope full --images show</code>
 
 You can always reference the required and optional arguments in the shell by typing the following:<br>
