@@ -8,7 +8,7 @@ At minimum, a vanilla installation of Python3 (code written with 3.6.5; tested w
 ### Setup
 1. Clone/Download the NHL_Single files
 2. Move the folder containing the NHL_Single files wherever you want them stored on your machine
-3. Using your machine's interactive Python shell (i.e. command line interface; for Anaconda or Miniconda, this is Anaconda Prompt):<br>
+3. Using your machine's interactive Python shell (i.e. command-line interface; for Anaconda or Miniconda, this is Anaconda Prompt):<br>
    a. Change the working directory to the NHL_Single folder<br>
    b. Create a new environment<br>
    c. Install dependencies<br>
@@ -62,10 +62,15 @@ To fetch a season's schedule manually, you must indicate the particular season:<
 
 NHL_Single, as its name implies, only processes one game at a time. With the release of v2.0--which extended compatibility back to the 20062007 season--the next major change will be to enable fetching and parsing a range of games within a season.<br>
 
+##### 'load_pbp'
 
-#### 2019-2020 and beyond
+This optional command-line argument is an inelegant solution to a persistent problem exclusive to the 20062007 season: NUL bytes somehow wind up in the play-by-play data, stopping any further processing of the rows that follow the insertion of the NUL bytes. The result, simply put, is loss of some events in the output. After much trial and all error, there is no means for automating the removal of the NUL bytes. Thus the necessity, if completeness in your data collection is important, for manually doing so, which is easy enough in Excel with a macro but obviously tedious.
 
-The NHL is reportedly introducing new <a href="https://www.nhl.com/news/nhl-plans-to-deploy-puck-and-player-tracking-technology-in-2019-2020/c-304218820">tracking technology</a> for the 2019-2020 season but it is not yet clear how the RTSS system will be impacted.
+To spare any potential user the drudgery, <a href="https://apps.twitter.com/app/new">this Dropbox folder</a> contains purged 20062007 play-by-play files that that users can download and, by using the optional 'load_pbp' command-line argument, continue its processing without having to forego any loss of events.
+
+### 2019-2020 Notice
+
+This tool may or may not work for next season's games; the league is reportedly introducing new <a href="https://www.nhl.com/news/nhl-plans-to-deploy-puck-and-player-tracking-technology-in-2019-2020/c-304218820">tracking technology</a> for the 2019-2020 season but it is not yet clear how the RTSS system will be impacted.
 
 ### Acknowledgements
 A lot of people have, in varying ways (be it by patiently answering questions, making their own code available for consultation, offering suggestions or simply encouragement), helped me learn enough to put this thing together. I am grateful for all of the feedback I received and the resources that were available. Thank you.
