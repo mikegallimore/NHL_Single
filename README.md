@@ -65,7 +65,7 @@ To fetch a season's schedule manually, indicate the particular season as demonst
 
 NHL_Single, as its name implies, only processes one game at a time. With the release of v2.0--which extended compatibility back to the 20062007 season--the next major change will be to enable fetching and parsing a range of games within a season.<br>
 
-##### 20062007 and the optional 'load_pbp' command-line argument
+##### The Optional <code>load_pbp'</code> Command-Line Argument
 
 The argument is an inelegant solution to a persistent problem exclusive to the 20062007 season arising from the complexity of parsing this season's unique play-by-play formatting: NUL bytes somehow wind up in the play-by-play data, stopping any further processing of the rows that follow their insertion. If you care for further elaboration, hit me up <a href="https://twitter.com/mikegallimore/">on Twitter</a> but the result, simply put, is the loss of some events in the play-by-play output.
 
