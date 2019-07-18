@@ -74,11 +74,9 @@ After much trial and all error, there is no means for automating the removal of 
 To spare any potential user the drudgery, <a href="https://www.dropbox.com/home/20062007_pbp">this Dropbox folder</a> contains purged 20062007 play-by-play files users should download before using the optional 'load_pbp' command-line argument as shown below:<br>
 <code>python run_game.py 20062007 20001 --load_pbp true </code>
 
+###### 2019-2020 Compatibility
 
-
-### 2019-2020 Notice
-
-This tool may or may not work for next season's games; the league is reportedly introducing new <a href="https://www.nhl.com/news/nhl-plans-to-deploy-puck-and-player-tracking-technology-in-2019-2020/c-304218820">tracking technology</a> for the 2019-2020 season but it is not yet clear how the RTSS system will be impacted.
+The league is reportedly introducing new <a href="https://www.nhl.com/news/nhl-plans-to-deploy-puck-and-player-tracking-technology-in-2019-2020/c-304218820">tracking technology</a> for the 2019-2020 season but it is not yet clear how the RTSS system will be impacted, if at all.
 
 ### Acknowledgements
 A lot of people have, in varying ways (be it by patiently answering questions, making their own code available for consultation, offering suggestions or simply encouragement), helped me learn enough to put this thing together. I am grateful for all of the feedback I received and the resources that were available. Thank you.
