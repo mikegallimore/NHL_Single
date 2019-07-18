@@ -58,7 +58,7 @@ Reference the required and optional arguments in the shell by typing the followi
 <code>python run_game.py -h</code>
 
 ##### Schedule
-To fetch a season's schedule manually, you must indicate the particular season:<br>
+To fetch a season's schedule manually, indicate the particular season as demonstrated below:<br>
 <code>python run_schedule.py 20182019</code>
 
 ### Limitations
