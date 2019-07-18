@@ -39,14 +39,14 @@ At minimum, you must indicate two positional arguments, which are the particular
 
 There are optional arguments available for you to tack onto the basic structure as well:<br>
 <code>--fetch</code> set to 'skip'<br>
-<code>--images</code> ('show')<br>
-<code>--load_pbp true</code> (only relevant for the 20062007 season; see the 'Limitations' section below for further explanation)<br>
-<code>--parse skip</code><br>
-<code>--players skip</code><br>
-<code>--scope full</code><br>
-<code>--teams skip</code><br>
-<code>--tweet no</code><br>
-<code>--units skip</code><br>
+<code>--images</code> set to 'show'<br>
+<code>--load_pbp</code> set to 'true' (as explained in the 'Limitations' section below, for the 20062007 season only)<br>
+<code>--parse</code> set to 'skip'<br>
+<code>--players</code> set to 'skip'<br>
+<code>--scope</code> set to 'full'<br>
+<code>--teams</code> set to 'skip'<br>
+<code>--tweet</code> set to 'no'<br>
+<code>--units</code> set to 'skip'<br>
 
 To, say, re-run a game without bothering to fetch and parse the game files again and also without tweeting any generated charts, you'd enter:<br>
 <code>python run_game.py 20182019 20001 --fetch skip --parse skip --tweet no</code>
