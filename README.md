@@ -1,9 +1,8 @@
 ## NHL_Single
-
 A tool for scraping and parsing the available source files for any NHL game, beginning with the 20062007 season, in order to generate tabular and visualized data.
 
 ### Prerequisites
-At minimum, a vanilla installation of Python3 (code written with 3.6.5; tested with 3.6.8). If you don't already have Python on your machine, the simplest remedy is to install the <a href="https://www.anaconda.com/distribution/">Anaconda Distribution</a> or, alternatively, <a href="https://docs.conda.io/en/latest/miniconda.html">Miniconda</a>. 
+At minimum, a vanilla installation of Python3 (code written with 3.6.5; tested with 3.6.8). If you don't already have Python on your machine, the simplest remedy is to install the <a href="https://www.anaconda.com/distribution/">Anaconda Distribution</a> or, alternatively, <a href="https://docs.conda.io/en/latest/miniconda.html">Miniconda</a>.
 
 ### Setup
 1. Clone/Download the NHL_Single files
@@ -40,7 +39,7 @@ At minimum, you must indicate two positional arguments, which are the particular
 There are optional arguments available for you to tack onto the basic structure as well:<br>
 <code>--fetch</code> set to 'skip'<br>
 <code>--images</code> set to 'show'<br>
-<code>--load_pbp</code> set to 'true' (use, as explained in the 'Limitations' section below, for 20062007 only)<br>
+<code>--load_pbp</code> set to 'true' (pertains to, as explained in the 'Notes' section below, 20062007 only)<br>
 <code>--parse</code> set to 'skip'<br>
 <code>--players</code> set to 'skip'<br>
 <code>--scope</code> set to 'full'<br>
@@ -61,15 +60,18 @@ Reference the required and optional arguments in the shell by typing the followi
 To fetch a season's schedule manually, indicate the particular season as demonstrated below:<br>
 <code>python run_schedule.py 20182019</code>
 
-### Limitations
+### Notes
 
+##### What's Next?
 NHL_Single, as its name implies, only processes one game at a time. With the release of v2.0--which extended compatibility back to the 20062007 season--the next major change will be to enable fetching and parsing a range of games within a season.<br>
 
-##### The Optional <code>load_pbp'</code> Command-Line Argument
+##### Compatability
+This tool was developed and tested within Windows. It may (or may not!) play nice with other operating systems, for which testing in and feedback is most welcome!
 
-The argument is an inelegant solution to a persistent problem exclusive to the 20062007 season arising from the complexity of parsing this season's unique play-by-play formatting: NUL bytes somehow wind up in the play-by-play data, stopping any further processing of the rows that follow their insertion. If you care for further elaboration, hit me up <a href="https://twitter.com/mikegallimore/">on Twitter</a> but the result, simply put, is the loss of some events in the play-by-play output.
+##### The Optional 'load_pbp' Command-Line Argument
+An inelegant solution to a persistent problem exclusive to the 20062007 season arising from the complexity of parsing this season's unique play-by-play formatting: NUL bytes somehow wind up in the play-by-play data, stopping any further processing of the rows that follow their insertion. If you care for further elaboration, hit me up <a href="https://twitter.com/mikegallimore/">on Twitter</a> but the result, simply put, is the loss of some events in the play-by-play output.
 
-After much trial and all error, there is no means for automating the removal of the NUL bytes. Thus the necessity, at present, for manually doing so--which is easy enough in Excel with a macro but obviously tedious--in order to get a complete play-by-play file as output.
+After much trial and all error, NHL_Single lacks a means for automating the removal of the NUL bytes. Thus the necessity, at present, for manually doing so--which is easy enough in Excel with a macro but obviously tedious--in order to get a complete play-by-play file as output.
 
 To spare any potential user the drudgery, <a href="https://www.dropbox.com/home/20062007_pbp">this Dropbox folder</a> contains purged 20062007 play-by-play files users should download before using the optional 'load_pbp' command-line argument as shown below:<br>
 <code>python run_game.py 20062007 20001 --load_pbp true </code>
