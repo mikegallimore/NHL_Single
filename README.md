@@ -38,9 +38,9 @@ At minimum, you must indicate two positional arguments, which are the particular
 <code>python run_game.py 20182019 20001</code>
 
 There are optional arguments available for you to tack onto the basic structure as well:<br>
-<code>--fetch skip</code><br>
-<code>--images show</code><br>
-<code>--load_pbp</code> (only relevant for the 20062007 season; see the 'Limitations' section below for further explanation)<br>
+<code>--fetch</code> set to 'skip'<br>
+<code>--images</code> ('show')<br>
+<code>--load_pbp true</code> (only relevant for the 20062007 season; see the 'Limitations' section below for further explanation)<br>
 <code>--parse skip</code><br>
 <code>--players skip</code><br>
 <code>--scope full</code><br>
@@ -48,10 +48,7 @@ There are optional arguments available for you to tack onto the basic structure 
 <code>--tweet no</code><br>
 <code>--units skip</code><br>
 
-For the most expedient approach to using the tool for a game, you'd enter:<br>
-<code>python run_game.py 20182019 20001</code>
-
-Perhaps you want to re-run a game without bothering to fetch and parse the game files again and also want to avoid tweeting out generated visualizations. You'd enter:<br>
+To, say, re-run a game without bothering to fetch and parse the game files again and also without tweeting any generated charts, you'd enter:<br>
 <code>python run_game.py 20182019 20001 --fetch skip --parse skip --tweet no</code>
 
 Or, maybe you want to generate all of the team, player and unit tables and charts possible, as well as have the charts display on your screen as they're made. If so, you'd enter:<br>
