@@ -65,18 +65,14 @@ To fetch a season's schedule manually, you must indicate the particular season:<
 
 NHL_Single, as its name implies, only processes one game at a time. With the release of v2.0--which extended compatibility back to the 20062007 season--the next major change will be to enable fetching and parsing a range of games within a season.<br>
 
-##### 20062007 and 'load_pbp'
+##### 20062007 and the optional 'load_pbp' command-line argument
 
-This optional command-line argument is an inelegant solution to a persistent problem exclusive to the 20062007 season: NUL bytes somehow wind up in the play-by-play data, stopping any further processing of the rows that follow their insertion. If you care for further elaboration, hit me up <a href="https://twitter.com/mikegallimore/">on Twitter</a> but the result, simply put, is loss of some events in the output.
+The argument is an inelegant solution to a persistent problem exclusive to the 20062007 season arising from the complexity of parsing this season's unique play-by-play formatting: NUL bytes somehow wind up in the play-by-play data, stopping any further processing of the rows that follow their insertion. If you care for further elaboration, hit me up <a href="https://twitter.com/mikegallimore/">on Twitter</a> but the result, simply put, is the loss of some events in the play-by-play output.
 
 After much trial and all error, there is no means for automating the removal of the NUL bytes. Thus the necessity, at present, for manually doing so--which is easy enough in Excel with a macro but obviously tedious--in order to get a complete play-by-play file as output.
 
 To spare any potential user the drudgery, <a href="https://www.dropbox.com/home/20062007_pbp">this Dropbox folder</a> contains purged 20062007 play-by-play files users should download before using the optional 'load_pbp' command-line argument as shown below:<br>
 <code>python run_game.py 20062007 20001 --load_pbp true </code>
-
-###### 2019-2020 Compatibility
-
-The league is reportedly introducing new <a href="https://www.nhl.com/news/nhl-plans-to-deploy-puck-and-player-tracking-technology-in-2019-2020/c-304218820">tracking technology</a> for the 2019-2020 season but it is not yet clear how the RTSS system will be impacted, if at all.
 
 ### Acknowledgements
 A lot of people have, in varying ways (be it by patiently answering questions, making their own code available for consultation, offering suggestions or simply encouragement), helped me learn enough to put this thing together. I am grateful for all of the feedback I received and the resources that were available. Thank you.
