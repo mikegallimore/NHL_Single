@@ -73,33 +73,33 @@ def parse_ids(season_id, game_id):
         media_ids.append(response['media_id_string'])
     
     if period == 1 and status != 'END':
-        twitter.update_status(status= away + ' @ ' + home + ' shot maps through ' + regulation_time_gone + ' of the 1st Period:', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (' + regulation_time_gone + ' into the 1st Period) shot maps:', media_ids=media_ids)
     elif period == 1 and status == 'END':
-        twitter.update_status(status= away + ' @ ' + home + ' shot maps through the 1st Period:', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (End of 1st Period) shot maps:', media_ids=media_ids)
     
     if period == 2 and status != 'END':
-        twitter.update_status(status= away + ' @ ' + home + ' shot maps through ' + regulation_time_gone + ' of the 2nd Period:', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (' + regulation_time_gone + ' into the 2nd Period) shot maps:', media_ids=media_ids)
     elif period == 2 and status == 'END':
-        twitter.update_status(status= away + ' @ ' + home + ' shot maps through the 2nd Period:', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (End of 2nd Period) shot maps:', media_ids=media_ids)
     
     if period == 3 and status != 'END' and status != 'Final':
-        twitter.update_status(status= away + ' @ ' + home + ' shot maps through ' + regulation_time_gone + ' of the 3rd Period:', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (' + regulation_time_gone + ' into the 3rd Period) shot maps:', media_ids=media_ids)
     elif period == 3 and status == 'END':
-        twitter.update_status(status= away + ' @ ' + home + ' shot maps through the 3rd Period:', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (End of 3rd Period) shot maps:', media_ids=media_ids)
     elif period == 3 and status == 'Final':
-        twitter.update_status(status= away + ' @ ' + home + ' shot maps (FINAL):', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (Final) shot maps:', media_ids=media_ids)
     
     if period == 4 and status != 'END' and status != 'Final':
-        twitter.update_status(status= away + ' @ ' + home + ' shot maps through ' + ot_time_gone + ' of Overtime:', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (' + ot_time_gone + ' into Overtime) shot maps:', media_ids=media_ids)
     elif period == 4 and status == 'END':
-        twitter.update_status(status= away + ' @ ' + home + ' shot maps through Overtime:', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (End of Overtime) shot maps:', media_ids=media_ids)
     elif period == 4 and status == 'Final':
-        twitter.update_status(status= away + ' @ ' + home + ' shot maps (FINAL):', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (Final) shot maps:', media_ids=media_ids)
     
     if period == 5 and status != 'Final':
-        twitter.update_status(status= away + ' @ ' + home + ' unit 5v5 on-ice shots through Overtime:', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (End of Overtime) shot maps:', media_ids=media_ids)
     elif period == 5 and status == 'Final':
-        twitter.update_status(status= away + ' @ ' + home + ' unit 5v5 on-ice shots (FINAL):', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (Final) shot maps:', media_ids=media_ids)
     
         
-    print('Tweeted the scatter plot shot maps by game state.')
+    print('Tweeted the scatter plot shot maps.')

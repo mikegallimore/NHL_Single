@@ -36,15 +36,15 @@ def parse_ids(season_id, game_id, load_pbp):
     if int(season_id) >= 20102011:
         
         ### load the main and livefeed play-by-play files into pandas
-        pbp_df = pd.read_csv(pbp_parsed)
+        pbp_df = pd.read_csv(pbp_parsed, error_bad_lines=False)
         livefeed_df = pd.read_csv(livefeed_parsed)
         
         ### drop extraneous columns from the livefeed play-by-play dataframe; save the adjustments to file
-        livefeed_df = livefeed_df.drop(columns=['SEASON', 'GAME_ID', 'DATE', 'HOME', 'AWAY', 'GAME_TYPE', 'HOME_RESULT', 'AWAY_RESULT', 'PERIOD', 'TIME_LEFT', 'TIME_GONE', 'HOME_GOALS', 'AWAY_GOALS', 'HOME_SITUATION', 'AWAY_SITUATION', 'EVENT', 'EVENT_TYPE', 'EVENT_DETAIL', 'TEAM', 'PLAYER_A', 'PLAYER_B', 'PLAYER_C'])
+        livefeed_df = livefeed_df.drop(columns=['SEASON', 'GAME_ID', 'DATE', 'HOME', 'AWAY', 'GAME_TYPE', 'HOME_RESULT', 'AWAY_RESULT', 'PERIOD', 'TIME_LEFT', 'TIME_GONE', 'HOME_GOALS', 'AWAY_GOALS', 'HOME_SITUATION', 'AWAY_SITUATION', 'EVENT_TYPE', 'EVENT_DETAIL', 'TEAM', 'PLAYER_A', 'PLAYER_B', 'PLAYER_C'])
         livefeed_df.to_csv(livefeed_parsed, index=False)
         
         ### join the contents of both play-by-play files
-        pbp_df = pd.merge(pbp_df, livefeed_df, on='SECONDS_GONE', how='left')
+        pbp_df = pd.merge(pbp_df, livefeed_df, on=['SECONDS_GONE', 'EVENT'], how='left')
         
         ### rearrange the presentation of the X and Y columns from the end to roughly the middle of this merged play-by-play dataframe
         move_zones_XY = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,41,42,26,27,28,43,44,45,46,29,30,31,32,33,34,35,36,37,38,39,40]
@@ -321,6 +321,37 @@ def parse_ids(season_id, game_id, load_pbp):
         ### make sure all rows have the proper season and game ids
         pbp_final.loc[(pbp_final.SEASON != int(season_id)), ['SEASON']] = season_id; pbp_final
         pbp_final.loc[(pbp_final.GAME_ID != int(game_id)), ['GAME_ID']] = game_id; pbp_final
+        
+        ### replace names for special name cases
+        if home == 'CAR':
+            pbp_final.loc[(pbp_final.HOMEON_1 == 'SEBASTIAN.AHO'),['HOMEON_1']] = 'SEBASTIAN.A.AHO'; pbp_final
+            pbp_final.loc[(pbp_final.HOMEON_2 == 'SEBASTIAN.AHO'),['HOMEON_2']] = 'SEBASTIAN.A.AHO'; pbp_final
+            pbp_final.loc[(pbp_final.HOMEON_3 == 'SEBASTIAN.AHO'),['HOMEON_3']] = 'SEBASTIAN.A.AHO'; pbp_final
+            pbp_final.loc[(pbp_final.HOMEON_4 == 'SEBASTIAN.AHO'),['HOMEON_4']] = 'SEBASTIAN.A.AHO'; pbp_final
+            pbp_final.loc[(pbp_final.HOMEON_5 == 'SEBASTIAN.AHO'),['HOMEON_5']] = 'SEBASTIAN.A.AHO'; pbp_final
+            pbp_final.loc[(pbp_final.HOMEON_6 == 'SEBASTIAN.AHO'),['HOMEON_6']] = 'SEBASTIAN.A.AHO'; pbp_final
+        elif away == 'CAR':
+            pbp_final.loc[(pbp_final.AWAYON_1 == 'SEBASTIAN.AHO'),['AWAYON_1']] = 'SEBASTIAN.A.AHO'; pbp_final
+            pbp_final.loc[(pbp_final.AWAYON_2 == 'SEBASTIAN.AHO'),['AWAYON_2']] = 'SEBASTIAN.A.AHO'; pbp_final
+            pbp_final.loc[(pbp_final.AWAYON_3 == 'SEBASTIAN.AHO'),['AWAYON_3']] = 'SEBASTIAN.A.AHO'; pbp_final
+            pbp_final.loc[(pbp_final.AWAYON_4 == 'SEBASTIAN.AHO'),['AWAYON_4']] = 'SEBASTIAN.A.AHO'; pbp_final
+            pbp_final.loc[(pbp_final.AWAYON_5 == 'SEBASTIAN.AHO'),['AWAYON_5']] = 'SEBASTIAN.A.AHO'; pbp_final
+            pbp_final.loc[(pbp_final.AWAYON_6 == 'SEBASTIAN.AHO'),['AWAYON_6']] = 'SEBASTIAN.A.AHO'; pbp_final            
+
+        if home == 'NYI':
+            pbp_final.loc[(pbp_final.HOMEON_1 == 'SEBASTIAN.AHO'),['HOMEON_1']] = 'SEBASTIAN.J.AHO'; pbp_final
+            pbp_final.loc[(pbp_final.HOMEON_2 == 'SEBASTIAN.AHO'),['HOMEON_2']] = 'SEBASTIAN.J.AHO'; pbp_final
+            pbp_final.loc[(pbp_final.HOMEON_3 == 'SEBASTIAN.AHO'),['HOMEON_3']] = 'SEBASTIAN.J.AHO'; pbp_final
+            pbp_final.loc[(pbp_final.HOMEON_4 == 'SEBASTIAN.AHO'),['HOMEON_4']] = 'SEBASTIAN.J.AHO'; pbp_final
+            pbp_final.loc[(pbp_final.HOMEON_5 == 'SEBASTIAN.AHO'),['HOMEON_5']] = 'SEBASTIAN.J.AHO'; pbp_final
+            pbp_final.loc[(pbp_final.HOMEON_6 == 'SEBASTIAN.AHO'),['HOMEON_6']] = 'SEBASTIAN.J.AHO'; pbp_final
+        elif away == 'NYI':
+            pbp_final.loc[(pbp_final.AWAYON_1 == 'SEBASTIAN.AHO'),['AWAYON_1']] = 'SEBASTIAN.J.AHO'; pbp_final
+            pbp_final.loc[(pbp_final.AWAYON_2 == 'SEBASTIAN.AHO'),['AWAYON_2']] = 'SEBASTIAN.J.AHO'; pbp_final
+            pbp_final.loc[(pbp_final.AWAYON_3 == 'SEBASTIAN.AHO'),['AWAYON_3']] = 'SEBASTIAN.J.AHO'; pbp_final
+            pbp_final.loc[(pbp_final.AWAYON_4 == 'SEBASTIAN.AHO'),['AWAYON_4']] = 'SEBASTIAN.J.AHO'; pbp_final
+            pbp_final.loc[(pbp_final.AWAYON_5 == 'SEBASTIAN.AHO'),['AWAYON_5']] = 'SEBASTIAN.J.AHO'; pbp_final
+            pbp_final.loc[(pbp_final.AWAYON_6 == 'SEBASTIAN.AHO'),['AWAYON_6']] = 'SEBASTIAN.J.AHO'; pbp_final   
         
         ### write the file to csv, without an index column
         pbp_final.to_csv(pbp_parsed, index=False)

@@ -114,18 +114,20 @@ def parse_ids(season_id, game_id, load_pbp):
             
                 home_table = pbpSoup.find('table', id='Home')
                 home_goals_row = home_table.find('td', attrs={'style':'font-size: 40px;font-weight:bold'})
+                home_goals = int()
                 for row in home_goals_row:
                     home_goals = row
             
                 away_table = pbpSoup.find('table', id='Visitor')
                 away_goals_row = away_table.find('td', attrs={'style':'font-size: 40px;font-weight:bold'})
+                away_goals = int()
                 for row in away_goals_row:
                     away_goals = row
             
                 ### determine the home and away result
                 home_result = str()
                 away_result = str()
-            
+
                 if int(home_goals) > int(away_goals):
                     home_result = 'Win'
                     away_result = 'Loss'
@@ -135,9 +137,11 @@ def parse_ids(season_id, game_id, load_pbp):
             
                 home_goals = int(0)
                 away_goals = int(0)
-            
-                event_rows = pbpSoup.find_all('tr', attrs={'class':'evenColor'})
-            
+                          
+                ### 'zebra' striping of odd and even rows began in 2019 preseason
+#                event_rows = pbpSoup.find_all('tr', attrs={'class':'evenColor'})
+                event_rows = pbpSoup.find_all('tr', class_=['evenColor', 'oddColor'])
+           
                 ### loop through the event rows
                 for row in range(len(event_rows)):
                     get_rows = event_rows[row]
@@ -147,8 +151,8 @@ def parse_ids(season_id, game_id, load_pbp):
             
                     time = get_tds[3].get_text()
                     time_index = time.find(':')
-                    time_left = time[time_index+3:]
-                    time_gone = time[:time_index+3]
+                    time_left = time[time_index+3:].replace('-', '')
+                    time_gone = time[:time_index+3].replace('-', '')
                
                     convert_to_seconds = time_gone.split(':')
                     convert_minutes = int(convert_to_seconds[0]) * 60
@@ -188,7 +192,7 @@ def parse_ids(season_id, game_id, load_pbp):
                     if event == 'TAKE':
                         event = 'Takeaway'
 
-                    if event == 'GEND' or event == 'GOFF':
+                    if event == 'GEND' or event == 'GOFF' or event == 'DELPEN':
                         continue
 
                     if seconds_gone == 0 and event == 'Stoppage':
@@ -208,7 +212,7 @@ def parse_ids(season_id, game_id, load_pbp):
                     ### change all references to a shot type in events to 'shot'
                     if event == 'BLOCK' or event == 'GOAL' or event == 'MISS' or event == 'SHOT':
                         event = 'Shot'
-            
+                                       
                     ### pull the description text
                     description = get_tds[5].get_text()
             
@@ -860,7 +864,7 @@ def parse_ids(season_id, game_id, load_pbp):
                     for player in homeG:
                         pbp_df.loc[(pbp_df.AWAYON_2 == player) & (pbp_df.PERIOD == 5), ['HOMEON_1']] = player; pbp_df
                         pbp_df.loc[(pbp_df.AWAYON_2 == player) & (pbp_df.PERIOD == 5), ['AWAYON_2']] = ''; pbp_df
-                                
+                
                 ### save the adjusted csv file
                 pbp_df.to_csv(pbp_outfile, index=False)
                 
@@ -1715,17 +1719,23 @@ def parse_ids(season_id, game_id, load_pbp):
             ESPN_soup = BeautifulSoup(get_ESPN_scoreboard, 'html.parser')
    
             ESPN_teams_divs = ESPN_soup.find_all('div', {'class': 'ScoreCell__TeamName ScoreCell__TeamName--shortDisplayName truncate db'})
+
             ESPN_teams = [i.get_text() for i in ESPN_teams_divs]
             ESPN_teams = [ESPN_teams[i:i+2] for i in range(0, len(ESPN_teams), 2)]
-            
+          
             ESPN_teams_df = pd.DataFrame(ESPN_teams, columns=['AWAY', 'HOME'])
 
-            ESPN_ids_links = ESPN_soup.find_all('a', {'class': 'btn mb4 w-100 btn--alt btn--sm'}, href=True)
+            ESPN_ids_links = ESPN_soup.find_all('a', {'class': 'AnchorLink Button Button--sm Button--anchorLink Button--alt mb4 w-100'}, href=True)
+
             ESPN_ids = [i['href'] for i in ESPN_ids_links]
+
             ESPN_ids = [ESPN_ids[i:i+2] for i in range(0, len(ESPN_ids), 2)]
             ESPN_ids = [i[0].rsplit('/', 1)[1] for i in ESPN_ids]
 
-            ESPN_ids_df = pd.DataFrame(ESPN_ids, columns=['ESPN_ID'])          
+            ESPN_ids_unique=[]
+            [ESPN_ids_unique.append(i) for i in ESPN_ids if i not in ESPN_ids_unique]
+
+            ESPN_ids_df = pd.DataFrame(ESPN_ids_unique, columns=['ESPN_ID'])          
            
             ESPN_ids_df = pd.concat([ESPN_ids_df, ESPN_teams_df], axis=1)
             if int(season_id) >= 20142015:
@@ -1737,7 +1747,7 @@ def parse_ids(season_id, game_id, load_pbp):
             elif int(season_id) < 20112012:
                 ESPN_ids_df['HOME'] = ESPN_ids_df['HOME'].replace(dict_teams.MONIKERS_DICT_WPG2ATL)
                 ESPN_ids_df['AWAY'] = ESPN_ids_df['AWAY'].replace(dict_teams.MONIKERS_DICT_WPG2ATL)
-            
+                       
             ESPN_id_df = ESPN_ids_df.copy()
             ESPN_id_df = ESPN_id_df[(ESPN_id_df['HOME'] == home) & (ESPN_id_df['AWAY'] == away)]
             try:
@@ -1766,7 +1776,7 @@ def parse_ids(season_id, game_id, load_pbp):
                     ESPN_id_yearcode = '30'
                     
                 ESPN_id = ESPN_id_yearcode + date.split('/')[0] + date.split('/')[1] + '0' + ESPN_id_locationcode
-             
+           
             ### part 2: retrieve ESPN's play-by-play (XML) data using ESPN_id; scrub potential illegal characters (https://bugs.python.org/issue5166)
             try:
                 ESPN_url = 'http://www.espn.com/nhl/gamecast/data/masterFeed?lang=en&isAll=true&gameId=' + str(ESPN_id)

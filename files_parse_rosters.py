@@ -9,7 +9,7 @@ import pandas as pd
 import parameters
 import dict_names
 
-def parse_ids(season_id, game_id):
+def parse_ids(season_id, game_id, switch_F2D, switch_D2F):
 
     ### pull common variables from the parameters file   
     files_root = parameters.files_root
@@ -137,7 +137,14 @@ def parse_ids(season_id, game_id):
     
     ### search for and change known instances of players whose positions are incorrectly classified
     try:
-        rosters_df.loc[(rosters_df.PLAYER_NAME == 'LUKE.WITKOWSKI') & (rosters_df.PLAYER_POS != 'D'),['PLAYER_POS']] = 'D'; rosters_df
+        if switch_F2D == 'Luke_Witkowski':
+            rosters_df.loc[(rosters_df.PLAYER_NAME == 'LUKE.WITKOWSKI') & (rosters_df.PLAYER_POS != 'D'),['PLAYER_POS']] = 'D'; rosters_df
+    except:
+        pass
+
+    try:
+        if switch_D2F == 'Luke_Witkowski':
+            rosters_df.loc[(rosters_df.PLAYER_NAME == 'LUKE.WITKOWSKI') & (rosters_df.PLAYER_POS == 'D'),['PLAYER_POS']] = 'F'; rosters_df
     except:
         pass
 

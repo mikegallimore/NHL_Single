@@ -36,6 +36,8 @@ def parse_ids(season_id, game_id):
     
     shots_gameflow = open(charts_teams + 'shots_gameflow.png', 'rb')
     shots_gameflow_5v5 = open(charts_teams + 'shots_gameflow_5v5.png', 'rb')
+    shots_gameflow_xg = open(charts_teams + 'shots_gameflow_xg.png', 'rb')
+    shots_gameflow_xg_5v5 = open(charts_teams + 'shots_gameflow_xg_5v5.png', 'rb')
     
     with open(livefeed_file) as livefeed_json:
         livefeed_data = json.load(livefeed_json)
@@ -62,7 +64,7 @@ def parse_ids(season_id, game_id):
         except:
             pass
     
-    images = [shots_gameflow, shots_gameflow_5v5]
+    images = [shots_gameflow, shots_gameflow_5v5, shots_gameflow_xg, shots_gameflow_xg_5v5]
     
     media_ids = []
     
@@ -71,33 +73,33 @@ def parse_ids(season_id, game_id):
         media_ids.append(response['media_id_string'])
     
     if period == 1 and status != 'END':
-        twitter.update_status(status= away + ' @ ' + home + ' gameflow through ' + regulation_time_gone + ' of the 1st Period:', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (' + regulation_time_gone + ' into the 1st Period) GameFlow for shots, xG:', media_ids=media_ids)
     elif period == 1 and status == 'END':
-        twitter.update_status(status= away + ' @ ' + home + ' gameflow through the 1st Period:', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (End of 1st Period) GameFlow for shots, xG:', media_ids=media_ids)
     
     if period == 2 and status != 'END':
-        twitter.update_status(status= away + ' @ ' + home + ' gameflow through ' + regulation_time_gone + ' of the 2nd Period:', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (' + regulation_time_gone + ' into the 2nd Period) GameFlow for shots, xG:', media_ids=media_ids)
     elif period == 2 and status == 'END':
-        twitter.update_status(status= away + ' @ ' + home + ' gameflow through the 2nd Period:', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (End of 2nd Period) GameFlow for shots, xG:', media_ids=media_ids)
     
     if period == 3 and status != 'END' and status != 'Final':
-        twitter.update_status(status= away + ' @ ' + home + ' gameflow through ' + regulation_time_gone + ' of the 3rd Period:', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (' + regulation_time_gone + ' into the 3rd Period) GameFlow for shots, xG:', media_ids=media_ids)
     elif period == 3 and status == 'END':
-        twitter.update_status(status= away + ' @ ' + home + ' gameflow through the 3rd Period:', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (End of 3rd Period) GameFlow for shots, xG:', media_ids=media_ids)
     elif period == 3 and status == 'Final':
-        twitter.update_status(status= away + ' @ ' + home + ' gameflow (FINAL):', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (Final) GameFlow for shots, xG:', media_ids=media_ids)
     
     if period == 4 and status != 'END' and status != 'Final':
-        twitter.update_status(status= away + ' @ ' + home + ' gameflow through ' + ot_time_gone + ' of Overtime:', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (' + ot_time_gone + ' into Overtime) GameFlow for shots, xG:', media_ids=media_ids)
     elif period == 4 and status == 'END':
-        twitter.update_status(status= away + ' @ ' + home + ' gameflow through Overtime:', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (End of Overtime) GameFlow for shots, xG:', media_ids=media_ids)
     elif period == 4 and status == 'Final':
-        twitter.update_status(status= away + ' @ ' + home + ' gameflow (FINAL):', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (Final) GameFlow for shots, xG:', media_ids=media_ids)
     
     if period == 5 and status != 'Final':
-        twitter.update_status(status= away + ' @ ' + home + ' unit 5v5 on-ice shots through Overtime:', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (End of Overtime) GameFlow for shots, xG:', media_ids=media_ids)
     elif period == 5 and status == 'Final':
-        twitter.update_status(status= away + ' @ ' + home + ' unit 5v5 on-ice shots (FINAL):', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (Final) GameFlow for shots, xG:', media_ids=media_ids)
     
         
-    print('Tweeted the gameflow by game state.')
+    print('Tweeted GameFlow charts.')

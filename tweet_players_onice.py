@@ -11,7 +11,7 @@ import twitter_credentials
 def parse_ids(season_id, game_id):
 
     ### pull common variables from the parameters file
-    charts_units = parameters.charts_units
+    charts_players_onice = parameters.charts_players_onice
     files_root = parameters.files_root
 
     ### generate date and team information
@@ -34,8 +34,11 @@ def parse_ids(season_id, game_id):
     
     twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
     
-    units_onice_shots_away = open(charts_units + 'onice_shots_away.png', 'rb')
-    units_onice_shots_home = open(charts_units + 'onice_shots_home.png', 'rb')
+    skaters_onice_shots_away = open(charts_players_onice + 'skaters_onice_shots_away.png', 'rb')
+    skaters_onice_shots_home = open(charts_players_onice + 'skaters_onice_shots_home.png', 'rb')
+
+    skaters_onice_xg_away = open(charts_players_onice + 'skaters_onice_xg_away.png', 'rb')
+    skaters_onice_xg_home = open(charts_players_onice + 'skaters_onice_xg_home.png', 'rb')
     
     with open(livefeed_file) as livefeed_json:
         livefeed_data = json.load(livefeed_json)
@@ -62,7 +65,7 @@ def parse_ids(season_id, game_id):
         except:
             pass
     
-    images = [units_onice_shots_away, units_onice_shots_home]
+    images = [skaters_onice_shots_away, skaters_onice_shots_home, skaters_onice_xg_away, skaters_onice_xg_home]
     
     media_ids = []
     
@@ -71,33 +74,33 @@ def parse_ids(season_id, game_id):
         media_ids.append(response['media_id_string'])
     
     if period == 1 and status != 'END':
-        twitter.update_status(status= away + ' @ ' + home + ' unit 5v5 on-ice shots through ' + regulation_time_gone + ' of the 1st Period:', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (' + regulation_time_gone + ' into the 1st Period) on-ice shots, xG for skaters:', media_ids=media_ids)
     elif period == 1 and status == 'END':
-        twitter.update_status(status= away + ' @ ' + home + ' unit 5v5 on-ice shots through the 1st Period:', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (End of 1st Period) on-ice shots, xG for skaters:', media_ids=media_ids)
         
     if period == 2 and status != 'END':
-        twitter.update_status(status= away + ' @ ' + home + ' unit 5v5 on-ice shots through ' + regulation_time_gone + ' of the 2nd Period:', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (' + regulation_time_gone + ' into the 2nd Period) on-ice shots, xG for skaters:', media_ids=media_ids)
     elif period == 2 and status == 'END':
-        twitter.update_status(status= away + ' @ ' + home + ' unit 5v5 on-ice shots through the 2nd Period:', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (End of 2nd Period) on-ice shots, xG for skaters:', media_ids=media_ids)
         
     if period == 3 and status != 'END' and status != 'Final':
-        twitter.update_status(status= away + ' @ ' + home + ' unit 5v5 on-ice shots through ' + regulation_time_gone + ' of the 3rd Period:', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (' + regulation_time_gone + ' into the 3rd Period) on-ice shots, xG for skaters:', media_ids=media_ids)
     elif period == 3 and status == 'END':
-        twitter.update_status(status= away + ' @ ' + home + ' unit 5v5 on-ice shots through the 3rd Period:', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (End of 3rd Period) on-ice shots, xG for skaters:', media_ids=media_ids)
     elif period == 3 and status == 'Final':
-        twitter.update_status(status= away + ' @ ' + home + ' unit 5v5 on-ice shots (FINAL):', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (Final) on-ice shots, xG for skaters:', media_ids=media_ids)
     
     if period == 4 and status != 'END' and status != 'Final':
-        twitter.update_status(status= away + ' @ ' + home + ' unit 5v5 on-ice shots through ' + ot_time_gone + ' of Overtime:', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (' + ot_time_gone + ' into Overtime) on-ice shots, xG for skaters:', media_ids=media_ids)
     elif period == 4 and status == 'END':
-        twitter.update_status(status= away + ' @ ' + home + ' unit 5v5 on-ice shots through Overtime:', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (End of Overtime) on-ice shots, xG for skaters:', media_ids=media_ids)
     elif period == 4 and status == 'Final':
-        twitter.update_status(status= away + ' @ ' + home + ' unit 5v5 on-ice shots (FINAL):', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (Final) on-ice shots, xG for skaters:', media_ids=media_ids)
     
     if period == 5 and status != 'Final':
-        twitter.update_status(status= away + ' @ ' + home + ' unit 5v5 on-ice shots through Overtime:', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (End of Overtime) on-ice shots, xG for skaters:', media_ids=media_ids)
     elif period == 5 and status == 'Final':
-        twitter.update_status(status= away + ' @ ' + home + ' unit 5v5 on-ice shots (FINAL):', media_ids=media_ids)
+        twitter.update_status(status= away + ' @ ' + home + ' (Final) on-ice shots, xG for skaters:', media_ids=media_ids)
        
         
-    print('Tweeted unit 5v5 on-ice shots.')
+    print('Tweeted on-ice shots, xG for skaters.')

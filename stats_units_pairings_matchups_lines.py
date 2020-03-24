@@ -5,15 +5,16 @@
 
 import csv
 import pandas as pd
+import numpy as np
 import itertools as it
 import parameters
 
 def parse_ids(season_id, game_id):
 
-    ### pull common variables from the parameters file
+    # pull common variables from the parameters file
     files_root = parameters.files_root
 
-    ### generate date and team information
+    # generate date and team information
     schedule_csv = files_root + season_id + "_schedule.csv"
 
     schedule_df = pd.read_csv(schedule_csv)
@@ -24,13 +25,13 @@ def parse_ids(season_id, game_id):
     away = schedule_date['AWAY'].item()
     teams = [away, home]
 
-    ### establish file locations and destinations
+    # establish file locations and destinations
     TOI_matrix = files_root + 'TOI_matrix.csv'
     pbp = files_root + 'pbp.csv'
     stats_individual = files_root + 'stats_units_pairings_individual_matchups_lines.csv'
     stats_onice = files_root + 'stats_units_pairings_onice_matchups_lines.csv'
     
-    ### create a dataframe for extracting TOI info; add a column with all of the on-ice players for expedited searching; derive the last on-ice second recorded
+    # create a dataframe for extracting TOI info; add a column with all of the on-ice players for expedited searching; derive the last on-ice second recorded
     TOI_df = pd.read_csv(TOI_matrix).fillna("NaN")
     
     TOI_df['HOMEON_5'].fillna('NaN', inplace = True)
@@ -41,31 +42,29 @@ def parse_ids(season_id, game_id):
     
     TOI_df['HOMEON'] = TOI_df['HOMEON_1'] + ', ' + TOI_df['HOMEON_2'] + ', ' + TOI_df['HOMEON_3'] + ', ' + TOI_df['HOMEON_4'] + ', ' + TOI_df['HOMEON_5'] + ', ' + TOI_df['HOMEON_6']
     TOI_df['AWAYON'] = TOI_df['AWAYON_1'] + ', ' + TOI_df['AWAYON_2'] + ', ' + TOI_df['AWAYON_3'] + ', ' + TOI_df['AWAYON_4'] + ', ' + TOI_df['AWAYON_5'] + ', ' + TOI_df['AWAYON_6']
+       
+    # create a dataframe for extracting play-by-play info; add a column with all of the on-ice players for expedited searching
+    pbp_df_start = pd.read_csv(pbp)
     
-    toi_max = TOI_df['SECONDS_GONE'].max()
+    pbp_df_start['HOMEON_5'].fillna('NaN', inplace = True)
+    pbp_df_start['HOMEON_6'].fillna('NaN', inplace = True)
     
-    ### create a dataframe for extracting play-by-play info; add a column with all of the on-ice players for expedited searching
-    pbp_df = pd.read_csv(pbp)
+    pbp_df_start['AWAYON_5'].fillna('NaN', inplace = True)
+    pbp_df_start['AWAYON_6'].fillna('NaN', inplace = True)
     
-    pbp_df['HOMEON_5'].fillna('NaN', inplace = True)
-    pbp_df['HOMEON_6'].fillna('NaN', inplace = True)
+    pbp_df_start['HOMEON'] = pbp_df_start['HOMEON_1'] + ', ' + pbp_df_start['HOMEON_2'] + ', ' + pbp_df_start['HOMEON_3'] + ', ' + pbp_df_start['HOMEON_4'] + ', ' + pbp_df_start['HOMEON_5'] + ', ' + pbp_df_start['HOMEON_6']
+    pbp_df_start['AWAYON'] = pbp_df_start['AWAYON_1'] + ', ' + pbp_df_start['AWAYON_2'] + ', ' + pbp_df_start['AWAYON_3'] + ', ' + pbp_df_start['AWAYON_4'] + ', ' + pbp_df_start['AWAYON_5'] + ', ' + pbp_df_start['AWAYON_6']
     
-    pbp_df['AWAYON_5'].fillna('NaN', inplace = True)
-    pbp_df['AWAYON_6'].fillna('NaN', inplace = True)
-    
-    pbp_df['HOMEON'] = pbp_df['HOMEON_1'] + ', ' + pbp_df['HOMEON_2'] + ', ' + pbp_df['HOMEON_3'] + ', ' + pbp_df['HOMEON_4'] + ', ' + pbp_df['HOMEON_5'] + ', ' + pbp_df['HOMEON_6']
-    pbp_df['AWAYON'] = pbp_df['AWAYON_1'] + ', ' + pbp_df['AWAYON_2'] + ', ' + pbp_df['AWAYON_3'] + ', ' + pbp_df['AWAYON_4'] + ', ' + pbp_df['AWAYON_5'] + ', ' + pbp_df['AWAYON_6']
-    
-    ### trigger the csv files that will be written; write column titles to a header row 
+    # trigger the csv files that will be written; write column titles to a header row 
     with open(stats_individual, 'w', newline = '') as players_individual, open(stats_onice, 'w', newline = '') as players_onice:
     
         individual_out = csv.writer(players_individual)
-        individual_out.writerow(['SEASON', 'GAME_ID', 'DATE', 'LOCATION', 'TEAM', 'DEFENDER_1', 'DEFENDER_2', 'PAIRING', 'OPPOSING_FORWARD_1', 'OPPOSING_FORWARD_2', 'OPPOSING_FORWARD_3', 'MATCHUP', 'STATE', 'GP', 'TOI', 'G', 'A', '1_A', 'PTS', '1_PTS', 'ONS', 'US', 'S'])
+        individual_out.writerow(['SEASON', 'GAME_ID', 'DATE', 'LOCATION', 'TEAM', 'DEFENDER_1', 'DEFENDER_2', 'PAIRING', 'OPPOSING_FORWARD_1', 'OPPOSING_FORWARD_2', 'OPPOSING_FORWARD_3', 'MATCHUP', 'STATE', 'GP', 'TOI', 'G', 'xG', 'A', '1_A', 'PTS', '1_PTS', 'ONS', 'US', 'S'])
     
         onice_out = csv.writer(players_onice)
-        onice_out.writerow(['SEASON', 'GAME_ID', 'DATE', 'LOCATION', 'TEAM', 'DEFENDER_1', 'DEFENDER_2', 'PAIRING', 'OPPOSING_FORWARD_1', 'OPPOSING_FORWARD_2', 'OPPOSING_FORWARD_3', 'MATCHUP', 'STATE', 'GP', 'TOI', 'GF', 'GA', 'ONSF', 'ONSA', 'USF', 'USA', 'SF', 'SA', 'GD', 'ONSD', 'USD', 'SD', 'FO'])
+        onice_out.writerow(['SEASON', 'GAME_ID', 'DATE', 'LOCATION', 'TEAM', 'DEFENDER_1', 'DEFENDER_2', 'PAIRING', 'OPPOSING_FORWARD_1', 'OPPOSING_FORWARD_2', 'OPPOSING_FORWARD_3', 'MATCHUP', 'STATE', 'GP', 'TOI', 'GF', 'GA', 'xGF', 'xGA', 'ONSF', 'ONSA', 'USF', 'USA', 'SF', 'SA', 'GD', 'xGD', 'ONSD', 'USD', 'SD', 'FO'])
     
-        ### access the game's roster file in order to create team-specific dicts and lists
+        # access the game's roster file in order to create team-specific dicts and lists
         rosters_csv = files_root + 'rosters.csv'
         rosters_df = pd.read_csv(rosters_csv)
         rosters_table = rosters_df[['TEAM','PLAYER_NO', 'PLAYER_NAME', 'PLAYER_POS', 'PLAYER_POS_DETAIL']]
@@ -84,7 +83,7 @@ def parse_ids(season_id, game_id):
         awayD_df = awayROS_df[(awayROS_df['PLAYER_POS'] == 'D')]
         awayD_list = awayD_df['PLAYER_NAME'].tolist()
     
-        ### begin looping by team
+        # begin looping by team
         for team in teams:
     
             if team == away:
@@ -115,7 +114,7 @@ def parse_ids(season_id, game_id):
                 opponentON = opponent_text + 'ON'
                 opponent_lines = list(it.combinations(awayF_list, 3))
     
-            ### add a loop for defense pairs
+            # add a loop for defense pairs
             for t_pairing in team_pairings:
     
                 team_defender_1 = t_pairing[0]
@@ -127,9 +126,9 @@ def parse_ids(season_id, game_id):
                 team_pairing = team_defender_1 + '-' + team_defender_2
                 team_pairing_lastname = team_defender_1_lastname + '-' + team_defender_2_lastname
     
-                ###
-                ### TEAM PAIRING TIME ON ICE CHECK
-                ###
+                #
+                # TEAM PAIRING TIME ON ICE CHECK
+                #
     
                 team_toi_5v5_first = (TOI_df[(TOI_df[team_strength] == '5v5') &
                                         (TOI_df[teamON].str.contains(team_defender_1)) &
@@ -141,7 +140,7 @@ def parse_ids(season_id, game_id):
                 if team_toi_5v5 < 2:
                     continue
     
-                ### add a final loop for forward lines
+                # add a final loop for forward lines
                 for o_line in opponent_lines:
     
                     opponent_forward_1 = o_line[0]
@@ -156,9 +155,9 @@ def parse_ids(season_id, game_id):
                     opponent_line = opponent_forward_1 + '-' + opponent_forward_2 + '-' + opponent_forward_3
                     opponent_line_lastname = opponent_forward_1_lastname + '-' + opponent_forward_2_lastname + '-' + opponent_forward_3_lastname
     
-                    ###
-                    ### OPPONENT LINE TIME ON ICE CHECK
-                    ###
+                    #
+                    # OPPONENT LINE TIME ON ICE CHECK
+                    #
     
                     opponent_toi_5v5_first = (TOI_df[(TOI_df[team_strength] == '5v5') &
                                             (TOI_df[opponentON].str.contains(opponent_forward_1)) &
@@ -170,7 +169,8 @@ def parse_ids(season_id, game_id):
     
                     if opponent_toi_5v5 < 2:
                         continue
-    
+
+
                     ###
                     ### TIME ON ICE
                     ###
@@ -192,12 +192,25 @@ def parse_ids(season_id, game_id):
                     ###
                     ### PLAY-BY-PLAY
                     ###
+
+                    pbp_df = pbp_df_start.copy()
+                    pbp_df = (pbp_df[(pbp_df[team_strength] == '5v5') &
+                                     (pbp_df[teamON].str.contains(team_defender_1)) &
+                                     (pbp_df[teamON].str.contains(team_defender_2)) & 
+                                     (pbp_df[opponentON].str.contains(opponent_forward_1)) &
+                                     (pbp_df[opponentON].str.contains(opponent_forward_2)) &
+                                     (pbp_df[opponentON].str.contains(opponent_forward_3))]
+                                     )                   
+
+                    #
+                    # INDIVIDUAL
+                    #
     
-                    ###
-                    ### INDIVIDUAL
-                    ###
-    
-                    ### goals, assists and primary assists
+                    #
+                    # shot-based metrics
+                    #
+
+                    # goals, assists and primary assists
                     event = 'Goal'
                     G_5v5 = (pbp_df[(pbp_df['TEAM'] == team) & (pbp_df['EVENT_TYPE'] == event) & (pbp_df[team_strength] == '5v5') &
                             (pbp_df['PLAYER_A'] == team_defender_1) &
@@ -213,7 +226,6 @@ def parse_ids(season_id, game_id):
                             (pbp_df[opponentON].str.contains(opponent_forward_2)) &
                             (pbp_df[opponentON].str.contains(opponent_forward_3))].count()[1]
                             )
-    
     
                     try:
                         A1_5v5 = (pbp_df[(pbp_df['TEAM'] == team) & (pbp_df['EVENT_TYPE'] == event) & (pbp_df[team_strength] == '5v5') &
@@ -253,14 +265,12 @@ def parse_ids(season_id, game_id):
     
                     A_5v5 = A1_5v5 + A2_5v5
     
-    
-                    ### points and primary points
+                    # points and primary points
                     PTS_5v5 = G_5v5 + A_5v5
     
                     PTS1_5v5 = G_5v5 + A1_5v5
     
-    
-                    ### on-net (saved) shots
+                    # on-net shots (shots that scored or were saved)
                     event = 'Save'
                     ONS_5v5 = G_5v5 + (pbp_df[(pbp_df['TEAM'] == team) & (pbp_df['EVENT_TYPE'] == event) & (pbp_df[team_strength] == '5v5') &
                                         (pbp_df['PLAYER_A'] == team_defender_1) &
@@ -276,9 +286,8 @@ def parse_ids(season_id, game_id):
                                         (pbp_df[opponentON].str.contains(opponent_forward_2)) &
                                         (pbp_df[opponentON].str.contains(opponent_forward_3))].count()[1]
                                         )
-    
-    
-                    ### unblocked shots
+                    
+                    # unblocked shots (shots that scored, were saved or missed)
                     event = 'Miss'
                     US_5v5 = ONS_5v5 + (pbp_df[(pbp_df['TEAM'] == team) & (pbp_df['EVENT_TYPE'] == event) & (pbp_df[team_strength] == '5v5') &
                                         (pbp_df['PLAYER_A'] == team_defender_1) &
@@ -295,7 +304,7 @@ def parse_ids(season_id, game_id):
                                         (pbp_df[opponentON].str.contains(opponent_forward_3))].count()[1]
                                         )
     
-                    ### shots
+                    # shots (shots that scored, were saved, missed or were blocked)
                     event = 'Shot'
                     S_5v5 = (pbp_df[(pbp_df['TEAM'] == team) & (pbp_df['EVENT'] == event) & (pbp_df[team_strength] == '5v5') &
                                         (pbp_df['PLAYER_A'] == team_defender_1) &
@@ -312,15 +321,34 @@ def parse_ids(season_id, game_id):
                                         (pbp_df[opponentON].str.contains(opponent_forward_3))].count()[1]
                                         )
     
+                    # expected goals
+                    xG_5v5 = (round(np.where((pbp_df['TEAM'] == team) & (pbp_df['EVENT'] == 'Shot') & (pbp_df['EVENT_TYPE'] != 'Block') & (pbp_df[team_strength] == '5v5') &
+                                             (pbp_df['PLAYER_A'] == team_defender_1) & 
+                                             (pbp_df[teamON].str.contains(team_defender_2)) &
+                                             (pbp_df[opponentON].str.contains(opponent_forward_1)) &
+                                             (pbp_df[opponentON].str.contains(opponent_forward_2)) &
+                                             (pbp_df[opponentON].str.contains(opponent_forward_3)), pbp_df['xG'], 0).sum() +
+                                    
+                                    np.where((pbp_df['TEAM'] == team) & (pbp_df['EVENT'] == 'Shot') & (pbp_df['EVENT_TYPE'] != 'Block') & (pbp_df[team_strength] == '5v5') &
+                                             (pbp_df['PLAYER_A'] == team_defender_2) & 
+                                             (pbp_df[teamON].str.contains(team_defender_1)) &
+                                             (pbp_df[opponentON].str.contains(opponent_forward_1)) &
+                                             (pbp_df[opponentON].str.contains(opponent_forward_2)) &
+                                             (pbp_df[opponentON].str.contains(opponent_forward_3)), pbp_df['xG'], 0).sum(), 2)
+                                            )
     
-                    individual_5v5 = (G_5v5, A_5v5, A1_5v5, PTS_5v5, PTS1_5v5, ONS_5v5, US_5v5, S_5v5)
+                    # arrange individual pairing data to record    
+                    individual_5v5 = (G_5v5, xG_5v5, A_5v5, A1_5v5, PTS_5v5, PTS1_5v5, ONS_5v5, US_5v5, S_5v5)
     
-    
-                    ###
-                    ### ON-ICE
-                    ###
-    
-                    ### goals for and against
+                    #
+                    # ON-ICE
+                    #
+
+                    #
+                    # shot-based metrics
+                    #
+
+                    # goals (shots that scored) for and against
                     event = 'Goal'
                     GF_5v5 = (pbp_df[(pbp_df['TEAM'] == team) & (pbp_df['EVENT_TYPE'] == event) & (pbp_df[team_strength] == '5v5') &
                             (pbp_df[teamON].str.contains(team_defender_1)) &
@@ -340,8 +368,7 @@ def parse_ids(season_id, game_id):
     
                     GD_5v5 = GF_5v5 - GA_5v5
     
-    
-                    ### on-net (saved) shots for and against
+                    # on-net shots (shots that scored or were saved) for and against
                     event = 'Save'
                     ONSF_5v5 = GF_5v5 + (pbp_df[(pbp_df['TEAM'] == team) & (pbp_df['EVENT_TYPE'] == event) & (pbp_df[team_strength] == '5v5') &
                                         (pbp_df[teamON].str.contains(team_defender_1)) &
@@ -360,9 +387,8 @@ def parse_ids(season_id, game_id):
                                         )
     
                     ONSD_5v5 = ONSF_5v5 - ONSA_5v5
-    
-    
-                    ### unblocked shots for and against
+
+                    # unblocked shots (shots that scored, were saved or missed) for and against
                     event = 'Miss'
                     USF_5v5 = ONSF_5v5 + (pbp_df[(pbp_df['TEAM'] == team) & (pbp_df['EVENT_TYPE'] == event) & (pbp_df[team_strength] == '5v5') &
                                         (pbp_df[teamON].str.contains(team_defender_1)) &
@@ -381,9 +407,8 @@ def parse_ids(season_id, game_id):
                                         )
     
                     USD_5v5 = USF_5v5 - USA_5v5
-    
-    
-                    ### shots for and against
+
+                    # shots (shots that scored, were saved, missed or were blocked) for and against
                     event = 'Shot'
                     SF_5v5 = (pbp_df[(pbp_df['TEAM'] == team) & (pbp_df['EVENT'] == event) & (pbp_df[team_strength] == '5v5') &
                             (pbp_df[teamON].str.contains(team_defender_1)) &
@@ -402,9 +427,31 @@ def parse_ids(season_id, game_id):
                             )
     
                     SD_5v5 = SF_5v5 - SA_5v5
-    
-    
-                    ### faceoffs
+
+                    # expected goals for and against
+                    xGF_5v5 = (round(np.where((pbp_df['TEAM'] == team) & (pbp_df['EVENT'] == 'Shot')  & (pbp_df[team_strength] == '5v5') & (pbp_df['EVENT_TYPE'] != 'Block') & 
+                                             (pbp_df[teamON].str.contains(team_defender_1)) & 
+                                             (pbp_df[teamON].str.contains(team_defender_2)) &
+                                             (pbp_df[opponentON].str.contains(opponent_forward_1)) &
+                                             (pbp_df[opponentON].str.contains(opponent_forward_2)) &
+                                             (pbp_df[opponentON].str.contains(opponent_forward_3)), pbp_df['xG'], 0).sum(), 2)
+                                )
+
+                    xGA_5v5 = (round(np.where((pbp_df['TEAM'] != team) & (pbp_df['EVENT'] == 'Shot')  & (pbp_df[team_strength] == '5v5') & (pbp_df['EVENT_TYPE'] != 'Block') & 
+                                             (pbp_df[teamON].str.contains(team_defender_1)) & 
+                                             (pbp_df[teamON].str.contains(team_defender_2)) &
+                                             (pbp_df[opponentON].str.contains(opponent_forward_1)) &
+                                             (pbp_df[opponentON].str.contains(opponent_forward_2)) &
+                                             (pbp_df[opponentON].str.contains(opponent_forward_3)), pbp_df['xG'], 0).sum(), 2)
+                                )
+                    
+                    xGD_5v5 = xGF_5v5 - xGA_5v5                                
+                    
+                    #
+                    # non-shot or defending metrics
+                    #
+                    
+                    # faceoffs
                     event = 'Faceoff'
                     FO_5v5 = (pbp_df[(pbp_df['EVENT'] == event) & (pbp_df[team_strength] == '5v5') &
                             (pbp_df[teamON].str.contains(team_defender_1)) &
@@ -414,25 +461,30 @@ def parse_ids(season_id, game_id):
                             (pbp_df[opponentON].str.contains(opponent_forward_3))].count()[1]
                             )
     
-    
-                    onice_5v5 = (GF_5v5, GA_5v5, ONSF_5v5, ONSA_5v5, USF_5v5, USA_5v5, SF_5v5, SA_5v5, GD_5v5, ONSD_5v5, USD_5v5, SD_5v5, FO_5v5)
-    
-    
-                    ### begin writing to file
+                    # arrange on-ice pairing data to record
+                    onice_5v5 = (GF_5v5, GA_5v5, xGF_5v5, xGA_5v5, ONSF_5v5, ONSA_5v5, USF_5v5, USA_5v5, SF_5v5, SA_5v5, GD_5v5, xGD_5v5, ONSD_5v5, USD_5v5, SD_5v5, FO_5v5)
+
+
+                    ###
+                    ### WRITE TO FILE
+                    ###
+                    
                     if team == away:
                         team_text = 'Away'
                     elif team == home:
                         team_text = 'Home'
     
-                    ### write out individual pairing matchup data
+                    # write out individual pairing matchup data
                     individual_out.writerow((season_id, game_id, date, team_text, team, team_defender_1, team_defender_2, team_pairing_lastname, opponent_forward_1, opponent_forward_2, opponent_forward_3, opponent_line_lastname, '5v5', '1', toi_5v5) + individual_5v5)
-    
+                    
+                    # status update
                     print('Processing ' + team + ' individual stats for ' + team_pairing_lastname + ' against ' + opponent_line_lastname)
     
-                    ### write out on-ice pairing matchup data
+                    # write out on-ice pairing matchup data
                     onice_out.writerow((season_id, game_id, date, team_text, team, team_defender_1, team_defender_2, team_pairing_lastname, opponent_forward_1, opponent_forward_2, opponent_forward_3, opponent_line_lastname, '5v5', '1', toi_5v5) + onice_5v5)
-    
+                    
+                    # status update
                     print('Processing ' + team + ' on-ice player stats for ' + team_pairing_lastname + ' against ' + opponent_line_lastname)
     
-    
+    # status update
     print('Finished generating pairing vs. line stats for ' + season_id + ' ' + game_id)
