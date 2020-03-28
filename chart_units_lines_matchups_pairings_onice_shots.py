@@ -36,6 +36,8 @@ def parse_ids(season_id, game_id, images):
     lines_df = pd.read_csv(lines_file)
 
     lines_matchups_pairings_df = pd.read_csv(lines_matchups_pairings_file)
+
+    max_toi = lines_matchups_pairings_df['TOI'].max()  
  
     # choose colors for each team; set them in a list; generate a custom colormap for each team
     away_color = dict_team_colors.team_color_1st[away]
@@ -93,6 +95,9 @@ def parse_ids(season_id, game_id, images):
         # remove zeros from the goals for and against columns       
         team_lines_matchups_pairings_df['GF'] = team_lines_matchups_pairings_df['GF'].replace(0, np.NaN)       
         team_lines_matchups_pairings_df['GA'] = team_lines_matchups_pairings_df['GA'].replace(0, np.NaN)
+
+        # remove zeros from the differential column       
+        team_lines_matchups_pairings_df['SD'] = team_lines_matchups_pairings_df['SD'].replace(0, np.NaN)       
         
         # make shots against negative values
         team_lines_matchups_pairings_df['GA'] *= -1
@@ -188,21 +193,21 @@ def parse_ids(season_id, game_id, images):
 
         # create more lines dataframes with just the time on ice column; set a max value; scale each line's time on ice relative to the max  
         line1_matchups_pairings_toi = team_line1_matchups_pairings_df['TOI']
-        max_line1_matchups_pairings_toi = max(line1_matchups_pairings_toi)    
-        line1_matchups_pairings_toi_color = line1_matchups_pairings_toi / float(max(line1_matchups_pairings_toi))
+        max_line1_matchups_pairings_toi = line1_matchups_pairings_toi.max()   
+        line1_matchups_pairings_toi_color = line1_matchups_pairings_toi / float(max_line1_matchups_pairings_toi)
 
         line2_matchups_pairings_toi = team_line2_matchups_pairings_df['TOI']
-        max_line2_matchups_pairings_toi = max(line2_matchups_pairings_toi)    
-        line2_matchups_pairings_toi_color = line2_matchups_pairings_toi / float(max(line2_matchups_pairings_toi))
+        max_line2_matchups_pairings_toi = line2_matchups_pairings_toi.max()     
+        line2_matchups_pairings_toi_color = line2_matchups_pairings_toi / float(max_line2_matchups_pairings_toi)
 
         line3_matchups_pairings_toi = team_line3_matchups_pairings_df['TOI']
-        max_line3_matchups_pairings_toi = max(line3_matchups_pairings_toi)    
-        line3_matchups_pairings_toi_color = line3_matchups_pairings_toi / float(max(line3_matchups_pairings_toi))
+        max_line3_matchups_pairings_toi = line3_matchups_pairings_toi.max()      
+        line3_matchups_pairings_toi_color = line3_matchups_pairings_toi / float(max_line3_matchups_pairings_toi)
 
         try:
             line4_matchups_pairings_toi = team_line4_matchups_pairings_df['TOI']
-            max_line4_matchups_pairings_toi = max(line4_matchups_pairings_toi)    
-            line4_matchups_pairings_toi_color = line4_matchups_pairings_toi / float(max(line4_matchups_pairings_toi))
+            max_line4_matchups_pairings_toi = line4_matchups_pairings_toi.max()      
+            line4_matchups_pairings_toi_color = line4_matchups_pairings_toi / float(max_line4_matchups_pairings_toi)
         except:
             pass
     
@@ -390,10 +395,10 @@ def parse_ids(season_id, game_id, images):
         ax_line4_toi.set_ylabel('')
     
         # set vertical indicators for break-even shot differential
-        ax_line1_shots.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, zorder=0, linestyle=':', color='black')
-        ax_line2_shots.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, zorder=0, linestyle=':', color='black')
-        ax_line3_shots.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, zorder=0, linestyle=':', color='black')
-        ax_line4_shots.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, zorder=0, linestyle=':', color='black')
+        ax_line1_shots.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, linestyle=':', color='black')
+        ax_line2_shots.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, linestyle=':', color='black')
+        ax_line3_shots.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, linestyle=':', color='black')
+        ax_line4_shots.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, linestyle=':', color='black')
     
         # change the tick parameters
         ax_line1_shots.tick_params(
@@ -514,7 +519,7 @@ def parse_ids(season_id, game_id, images):
         if S_tickmax > 20 and S_tickmax <= 25:
             S_ticklabels = [-25, -20, -15, -10, -5, 0, 5, 10, 15, 20, 25]
 
-        toi_tickmax = max_lines_toi
+        toi_tickmax = max_toi
 
         toi_ticklabels = []
         if toi_tickmax <= 2:

@@ -36,6 +36,8 @@ def parse_ids(season_id, game_id, images):
     pairings_df = pd.read_csv(pairings_file)
 
     pairings_matchups_pairings_df = pd.read_csv(pairings_matchups_pairings_file)
+
+    max_toi = pairings_matchups_pairings_df['TOI'].max()  
  
     # choose colors for each team; set them in a list; generate a custom colormap for each team
     away_color = dict_team_colors.team_color_1st[away]
@@ -90,9 +92,8 @@ def parse_ids(season_id, game_id, images):
 
         max_pairings_toi = team_pairings_matchups_pairings_df['TOI'].max()
 
-        # remove zeros from the goals for and against columns       
-        team_pairings_matchups_pairings_df['xGF'] = team_pairings_matchups_pairings_df['xGF'].replace(0, np.NaN)       
-        team_pairings_matchups_pairings_df['xGA'] = team_pairings_matchups_pairings_df['xGA'].replace(0, np.NaN)
+        # remove zeros from the differential column       
+        team_pairings_matchups_pairings_df['xGD'] = team_pairings_matchups_pairings_df['xGD'].replace(0, np.NaN)       
         
         # make expected goals against negative values 
         team_pairings_matchups_pairings_df['xGA'] *= -1
@@ -163,22 +164,22 @@ def parse_ids(season_id, game_id, images):
         # create more pairings dataframes with just the time on ice column; set a max value; scale each line's time on ice relative to the max  
         try:
             pairing1_matchups_pairings_toi = team_pairing1_matchups_pairings_df['TOI']
-            max_pairing1_matchups_pairings_toi = max(pairing1_matchups_pairings_toi)    
-            pairing1_matchups_pairings_toi_color = pairing1_matchups_pairings_toi / float(max(pairing1_matchups_pairings_toi))
+            max_pairing1_matchups_pairings_toi = pairing1_matchups_pairings_toi.max()   
+            pairing1_matchups_pairings_toi_color = pairing1_matchups_pairings_toi / float(max_pairing1_matchups_pairings_toi)
         except:
             pass
         
         try:
             pairing2_matchups_pairings_toi = team_pairing2_matchups_pairings_df['TOI']
-            max_pairing2_matchups_pairings_toi = max(pairing2_matchups_pairings_toi)    
-            pairing2_matchups_pairings_toi_color = pairing2_matchups_pairings_toi / float(max(pairing2_matchups_pairings_toi))
+            max_pairing2_matchups_pairings_toi = pairing2_matchups_pairings_toi.max()     
+            pairing2_matchups_pairings_toi_color = pairing2_matchups_pairings_toi / float(max_pairing2_matchups_pairings_toi)
         except:
             pass
 
         try:
             pairing3_matchups_pairings_toi = team_pairing3_matchups_pairings_df['TOI']
-            max_pairing3_matchups_pairings_toi = max(pairing3_matchups_pairings_toi)    
-            pairing3_matchups_pairings_toi_color = pairing3_matchups_pairings_toi / float(max(pairing3_matchups_pairings_toi))
+            max_pairing3_matchups_pairings_toi = pairing3_matchups_pairings_toi.max()    
+            pairing3_matchups_pairings_toi_color = pairing3_matchups_pairings_toi / float(max_pairing3_matchups_pairings_toi)
         except:
             pass
     
@@ -305,9 +306,9 @@ def parse_ids(season_id, game_id, images):
         ax_pairing3_toi.set_ylabel('')
         
         # set vertical indicators for break-even expected goals differential
-        ax_pairing1_xG.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, zorder=0, linestyle=':', color='black')
-        ax_pairing2_xG.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, zorder=0, linestyle=':', color='black')
-        ax_pairing3_xG.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, zorder=0, linestyle=':', color='black')
+        ax_pairing1_xG.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, linestyle=':', color='black')
+        ax_pairing2_xG.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, linestyle=':', color='black')
+        ax_pairing3_xG.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, linestyle=':', color='black')
     
         # change the tick parameters
         ax_pairing1_xG.tick_params(
@@ -411,7 +412,7 @@ def parse_ids(season_id, game_id, images):
         if xG_tickmax > 3.5 and xG_tickmax <= 4:
             xG_ticklabels = [-4.0, -3.2, -2.4, -1.6, -0.8, 0.0, 0.8, 1.6, 2.4, 3.2, 4.0]
 
-        toi_tickmax = max_pairings_toi
+        toi_tickmax = max_toi
 
         toi_ticklabels = []
         if toi_tickmax <= 2:

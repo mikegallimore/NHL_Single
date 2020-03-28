@@ -68,7 +68,15 @@ def parse_ids(season_id, game_id, images):
 
         if period == 4:
             period_name = 'OT'
-    
+
+        skaters_PP_df = players_df.copy()
+        skaters_PP_df = skaters_PP_df[(skaters_PP_df['STATE'] == 'PP') & (skaters_PP_df['PERIOD'] == period_name) & (skaters_PP_df['POS'] != 'G')]
+        max_PP_toi = skaters_PP_df['TOI'].max()
+
+        skaters_SH_df = players_df.copy()
+        skaters_SH_df = skaters_SH_df[(skaters_SH_df['STATE'] == 'SH') & (skaters_SH_df['PERIOD'] == period_name) & (skaters_PP_df['POS'] != 'G')]
+        max_SH_toi = skaters_SH_df['TOI'].max()
+   
         # loop through each team
         for team in teams:
             
@@ -131,12 +139,14 @@ def parse_ids(season_id, game_id, images):
             team_PP_df = team_df.copy()
             team_PP_df = team_PP_df[(team_PP_df['STATE'] == 'PP') & (team_PP_df['TOI'] > 0)]
             team_PP_df = team_PP_df.sort_values(by=['TOI'], ascending = True)
+            team_PP_df = team_PP_df.iloc[-10:]             
             team_PP_df['RANK'] = team_PP_df['TOI'].rank(method='first')
             team_PP_df['RANK'] -= 1
             
             team_SH_df = team_df.copy()
             team_SH_df = team_SH_df[(team_SH_df['STATE'] == 'SH') & (team_SH_df['TOI'] > 0)]
             team_SH_df = team_SH_df.sort_values(by=['TOI'], ascending = True)
+            team_SH_df = team_SH_df.iloc[-10:]  
             team_SH_df['RANK'] = team_SH_df['TOI'].rank(method='first')
             team_SH_df['RANK'] -= 1
           
@@ -377,7 +387,36 @@ def parse_ids(season_id, game_id, images):
                 left=False,        # ticks along the left edge are off
                 labelleft=False,   # labels along the left edge are off
                 labelbottom=True)  # labels along the bottom edge are on
-    
+
+            # change the y-axis label colors
+            if period < 4 and int(game_id) < 30000 or period == 4 and int(game_id) >= 30000:                          
+                ax_5v5_xG.tick_params(
+                        axis='y',
+                        which='both',
+                        labelcolor=team_color)
+        
+            if period == 4 and int(game_id) < 30000 and int(season_id) <= 20142015:
+                ax_4v4_xG.tick_params(
+                        axis='y',
+                        which='both',
+                        labelcolor=team_color)
+        
+            if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016:
+                ax_3v3_xG.tick_params(
+                        axis='y',
+                        which='both',
+                        labelcolor=team_color)
+            
+            ax_PP_xG.tick_params(
+                    axis='y',
+                    which='both',
+                    labelcolor=team_color)
+        
+            ax_SH_xG.tick_params(
+                    axis='y',
+                    which='both',
+                    labelcolor=team_color)
+       
             # create a list of x-axis tick values contingent on the max values for shots
             if period < 4 and int(game_id) < 30000 or period == 4 and int(game_id) >= 30000:                             
                 xG_5v5_max = team_5v5_df['xG']
@@ -395,20 +434,8 @@ def parse_ids(season_id, game_id, images):
                 if xG_5v5_tickmax > 2 and xG_5v5_tickmax <= 2.5:
                     xG_5v5_ticklabels = [0.0, 0.5, 1.0, 1.5, 2.0, 2.5]
         
-                toi_5v5_tickmax = max_toi_5v5
+                toi_5v5_ticklabels = [0, 20]
         
-                toi_5v5_ticklabels = []
-                if toi_5v5_tickmax <= 10:
-                    toi_5v5_ticklabels = [0, 10]
-                if toi_5v5_tickmax > 10 and toi_5v5_tickmax <= 15:
-                    toi_5v5_ticklabels = [0, 15]
-                if toi_5v5_tickmax > 15 and toi_5v5_tickmax <= 20:
-                    toi_5v5_ticklabels = [0, 20]
-                if toi_5v5_tickmax > 20 and toi_5v5_tickmax <= 25:
-                    toi_5v5_ticklabels = [0, 25]
-                if toi_5v5_tickmax > 25 and toi_5v5_tickmax <= 30:
-                    toi_5v5_ticklabels = [0, 30]
-
             if period == 4 and int(game_id) < 30000 and int(season_id) <= 20142015:
                 xG_4v4_max = team_4v4_df['xG']
                 xG_4v4_tickmax = xG_4v4_max.max()
@@ -425,20 +452,8 @@ def parse_ids(season_id, game_id, images):
                 if xG_4v4_tickmax > 2 and xG_4v4_tickmax <= 2.5:
                     xG_4v4_ticklabels = [0.0, 0.5, 1.0, 1.5, 2.0, 2.5]
         
-                toi_4v4_tickmax = max_toi_4v4
+                toi_4v4_ticklabels = [0, 5]
         
-                toi_4v4_ticklabels = []
-                if toi_4v4_tickmax <= 10:
-                    toi_4v4_ticklabels = [0, 10]
-                if toi_4v4_tickmax > 10 and toi_4v4_tickmax <= 15:
-                    toi_4v4_ticklabels = [0, 15]
-                if toi_4v4_tickmax > 15 and toi_4v4_tickmax <= 20:
-                    toi_4v4_ticklabels = [0, 20]
-                if toi_4v4_tickmax > 20 and toi_4v4_tickmax <= 25:
-                    toi_4v4_ticklabels = [0, 25]
-                if toi_4v4_tickmax > 25 and toi_4v4_tickmax <= 30:
-                    toi_4v4_ticklabels = [0, 30]
-
             if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016:
                 xG_3v3_max = team_3v3_df['xG']
                 xG_3v3_tickmax = xG_3v3_max.max()
@@ -455,20 +470,8 @@ def parse_ids(season_id, game_id, images):
                 if xG_3v3_tickmax > 2 and xG_3v3_tickmax <= 2.5:
                     xG_3v3_ticklabels = [0.0, 0.5, 1.0, 1.5, 2.0, 2.5]
         
-                toi_3v3_tickmax = max_toi_3v3
-        
-                toi_3v3_ticklabels = []
-                if toi_3v3_tickmax <= 10:
-                    toi_3v3_ticklabels = [0, 10]
-                if toi_3v3_tickmax > 10 and toi_3v3_tickmax <= 15:
-                    toi_3v3_ticklabels = [0, 15]
-                if toi_3v3_tickmax > 15 and toi_3v3_tickmax <= 20:
-                    toi_3v3_ticklabels = [0, 20]
-                if toi_3v3_tickmax > 20 and toi_3v3_tickmax <= 25:
-                    toi_3v3_ticklabels = [0, 25]
-                if toi_3v3_tickmax > 25 and toi_3v3_tickmax <= 30:
-                    toi_3v3_ticklabels = [0, 30]
-    
+                toi_3v3_ticklabels = [0, 5]
+           
             xG_PP_max = team_PP_df['xG']
             xG_PP_tickmax = xG_PP_max.max()
     
@@ -495,9 +498,9 @@ def parse_ids(season_id, game_id, images):
             if xG_SH_tickmax > 3 and xG_SH_tickmax <= 4:
                 xG_SH_ticklabels = [0.0, 2.0, 4.0]
     
-            toi_PP_tickmax = max_toi_PP
+            toi_PP_tickmax = max_PP_toi
     
-            toi_SH_tickmax = max_toi_SH
+            toi_SH_tickmax = max_SH_toi
     
             toi_specialteams_tickmax = float()
             if toi_PP_tickmax >= toi_SH_tickmax:
@@ -518,6 +521,14 @@ def parse_ids(season_id, game_id, images):
                 toi_specialteams_ticklabels = [0, 10]
             if toi_specialteams_tickmax > 10 and toi_specialteams_tickmax <= 12:
                 toi_specialteams_ticklabels = [0, 12]
+            if toi_specialteams_tickmax > 12 and toi_specialteams_tickmax <= 14:
+                toi_specialteams_ticklabels = [0, 14]
+            if toi_specialteams_tickmax > 14 and toi_specialteams_tickmax <= 16:
+                toi_specialteams_ticklabels = [0, 16]
+            if toi_specialteams_tickmax > 16 and toi_specialteams_tickmax <= 18:
+                toi_specialteams_ticklabels = [0, 18]
+            if toi_specialteams_tickmax > 18 and toi_specialteams_tickmax <= 20:
+                toi_specialteams_ticklabels = [0, 20]
 
             # set vertical indicator for midpoint of time on ice max
             if period < 4 and int(game_id) < 30000 or period == 4 and int(game_id) >= 30000:                             

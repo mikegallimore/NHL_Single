@@ -4,6 +4,7 @@
 """
 
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 import parameters
 import matplotlib.colors as clr
@@ -35,6 +36,8 @@ def parse_ids(season_id, game_id, images):
     lines_df = pd.read_csv(lines_file)
 
     lines_teammates_pairings_df = pd.read_csv(lines_teammates_pairings_file)
+
+    max_toi = lines_teammates_pairings_df['TOI'].max()  
  
     # choose colors for each team; set them in a list; generate a custom colormap for each team
     away_color = dict_team_colors.team_color_1st[away]
@@ -86,6 +89,9 @@ def parse_ids(season_id, game_id, images):
         team_lines_teammates_pairings_df = team_lines_teammates_pairings_df[(team_lines_teammates_pairings_df['TEAM'] == team)]
 
         max_lines_toi = team_lines_teammates_pairings_df['TOI'].max()
+
+        # remove zeros from the differential column       
+        team_lines_teammates_pairings_df['xGD'] = team_lines_teammates_pairings_df['xGD'].replace(0, np.NaN)       
         
         # make expected goals against negative values
         team_lines_teammates_pairings_df['xGA'] *= -1
@@ -180,21 +186,21 @@ def parse_ids(season_id, game_id, images):
 
         # create more lines dataframes with just the time on ice column; set a max value; scale each line's time on ice relative to the max  
         line1_teammates_pairings_toi = team_line1_teammates_pairings_df['TOI']
-        max_line1_teammates_pairings_toi = max(line1_teammates_pairings_toi)    
-        line1_teammates_pairings_toi_color = line1_teammates_pairings_toi / float(max(line1_teammates_pairings_toi))
+        max_line1_teammates_pairings_toi = line1_teammates_pairings_toi.max()    
+        line1_teammates_pairings_toi_color = line1_teammates_pairings_toi / float(max_line1_teammates_pairings_toi)
 
         line2_teammates_pairings_toi = team_line2_teammates_pairings_df['TOI']
-        max_line2_teammates_pairings_toi = max(line2_teammates_pairings_toi)    
-        line2_teammates_pairings_toi_color = line2_teammates_pairings_toi / float(max(line2_teammates_pairings_toi))
+        max_line2_teammates_pairings_toi = line2_teammates_pairings_toi.max()    
+        line2_teammates_pairings_toi_color = line2_teammates_pairings_toi / float(max_line2_teammates_pairings_toi)
 
         line3_teammates_pairings_toi = team_line3_teammates_pairings_df['TOI']
-        max_line3_teammates_pairings_toi = max(line3_teammates_pairings_toi)    
-        line3_teammates_pairings_toi_color = line3_teammates_pairings_toi / float(max(line3_teammates_pairings_toi))
+        max_line3_teammates_pairings_toi = line3_teammates_pairings_toi.max()    
+        line3_teammates_pairings_toi_color = line3_teammates_pairings_toi / float(max_line3_teammates_pairings_toi)
 
         try:
             line4_teammates_pairings_toi = team_line4_teammates_pairings_df['TOI']
-            max_line4_teammates_pairings_toi = max(line4_teammates_pairings_toi)    
-            line4_teammates_pairings_toi_color = line4_teammates_pairings_toi / float(max(line4_teammates_pairings_toi))
+            max_line4_teammates_pairings_toi = line4_teammates_pairings_toi.max()    
+            line4_teammates_pairings_toi_color = line4_teammates_pairings_toi / float(max_line4_teammates_pairings_toi)
         except:
             pass
 
@@ -351,10 +357,10 @@ def parse_ids(season_id, game_id, images):
         ax_line4_toi.set_ylabel('')
     
         # set vertical indicators for break-even expected goals differential
-        ax_line1_xG.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, zorder=0, linestyle=':', color='black')
-        ax_line2_xG.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, zorder=0, linestyle=':', color='black')
-        ax_line3_xG.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, zorder=0, linestyle=':', color='black')
-        ax_line4_xG.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, zorder=0, linestyle=':', color='black')
+        ax_line1_xG.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, linestyle=':', color='black')
+        ax_line2_xG.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, linestyle=':', color='black')
+        ax_line3_xG.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, linestyle=':', color='black')
+        ax_line4_xG.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, linestyle=':', color='black')
     
         # change the tick parameters
         ax_line1_xG.tick_params(
@@ -481,7 +487,7 @@ def parse_ids(season_id, game_id, images):
         if xG_tickmax > 3.5 and xG_tickmax <= 4:
             xG_ticklabels = [-4.0, -3.2, -2.4, -1.6, -0.8, 0.0, 0.8, 1.6, 2.4, 3.2, 4.0]
 
-        toi_tickmax = max_lines_toi
+        toi_tickmax = max_toi
 
         toi_ticklabels = []
         if toi_tickmax <= 2:

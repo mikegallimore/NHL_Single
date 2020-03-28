@@ -4,6 +4,7 @@
 """
 #import json
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import parameters
@@ -33,6 +34,8 @@ def parse_ids(season_id, game_id, images):
     
     # create dataframe objects that read in info from the .csv files
     lines_df = pd.read_csv(lines_file)
+
+    max_toi = lines_df['TOI'].max()  
     
     # choose colors for each team; set them in a list; generate a custom colormap for each team
     away_color = dict_team_colors.team_color_1st[away]
@@ -47,9 +50,8 @@ def parse_ids(season_id, game_id, images):
     
     team_colors = [away_color, home_color]
 
-    away_cmap = clr.LinearSegmentedColormap.from_list('custom away', [(0,    '#ffffff'), (1, away_color)], N=256)  
-    home_cmap = clr.LinearSegmentedColormap.from_list('custom home', [(0,    '#ffffff'), (1, home_color)], N=256)
-
+    away_cmap = clr.LinearSegmentedColormap.from_list('custom away', [(0, '#ffffff'), (1, away_color)], N=256)  
+    home_cmap = clr.LinearSegmentedColormap.from_list('custom home', [(0, '#ffffff'), (1, home_color)], N=256)
 
     ###
     ### 5v5
@@ -78,16 +80,19 @@ def parse_ids(season_id, game_id, images):
         team_lines_df['RANK'] = team_lines_df['TOI'].rank(method='first')
         team_lines_df = team_lines_df.sort_values(by=['RANK'], ascending = True)
         team_lines_df['RANK'] -= 1
-        
+ 
+        # remove zeros from the differential column       
+        team_lines_df['xGD'] = team_lines_df['xGD'].replace(0, np.NaN)       
+       
         # make expected goals against negative values    
         team_lines_df['xGA'] *= -1
-    
+   
         # create another lines dataframe with just the time on ice column; set a max value; scale each line's time on ice relative to the max value
         lines_toi = team_lines_df['TOI']
         
-        max_lines_toi = max(lines_toi)
+        max_lines_toi = lines_toi.max()
     
-        lines_toi_color = lines_toi / float(max(lines_toi))
+        lines_toi_color = lines_toi / float(max_lines_toi)
     
         # connect team and opponent color map colors to each line's scaled time on ice   
         lines_toi_color_map_for = team_color_map(lines_toi_color)
@@ -134,7 +139,7 @@ def parse_ids(season_id, game_id, images):
         ax_lines_toi.set_ylabel('')
     
         # set vertical indicators for break-even expected goals differential
-        ax_lines_xg.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, zorder=0, linestyle=':', color='black')
+        ax_lines_xg.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, linestyle=':', color='black')
     
         # change the tick parameters
         ax_lines_xg.tick_params(
@@ -192,17 +197,29 @@ def parse_ids(season_id, game_id, images):
         if xG_tickmax > 3.5 and xG_tickmax <= 4:
             xG_ticklabels = [-4.0, -3.2, -2.4, -1.6, -0.8, 0.0, 0.8, 1.6, 2.4, 3.2, 4.0]
 
-        toi_tickmax = max_lines_toi
+        toi_tickmax = max_toi
 
         toi_ticklabels = []
-        if toi_tickmax <= 10:
+        if toi_tickmax <= 2:
+            toi_ticklabels = [0, 2]
+        if toi_tickmax > 2 and toi_tickmax <= 4:
+            toi_ticklabels = [0, 4]
+        if toi_tickmax > 4 and toi_tickmax <= 6:
+            toi_ticklabels = [0, 6]
+        if toi_tickmax > 6 and toi_tickmax <= 8:
+            toi_ticklabels = [0, 8]
+        if toi_tickmax > 8 and toi_tickmax <= 10:
             toi_ticklabels = [0, 10]
-        if toi_tickmax > 10 and toi_tickmax <= 20:
+        if toi_tickmax > 10 and toi_tickmax <= 12:
+            toi_ticklabels = [0, 12]
+        if toi_tickmax > 12 and toi_tickmax <= 14:
+            toi_ticklabels = [0, 14]
+        if toi_tickmax > 14 and toi_tickmax <= 16:
+            toi_ticklabels = [0, 16]
+        if toi_tickmax > 16 and toi_tickmax <= 18:
+            toi_ticklabels = [0, 18]
+        if toi_tickmax > 18 and toi_tickmax <= 20:
             toi_ticklabels = [0, 20]
-        if toi_tickmax > 20 and toi_tickmax <= 30:
-            toi_ticklabels = [0, 30]
-        if toi_tickmax > 30 and toi_tickmax <= 40:
-            toi_ticklabels = [0, 40]
 
         # set vertical indicator for midpoint of time on ice max
         ax_lines_toi.axvspan(toi_ticklabels[1] / 2, toi_ticklabels[1] / 2, ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')

@@ -111,6 +111,9 @@ def parse_ids(season_id, game_id, images):
             # remove zeros from the goals for and against columns       
             team_df['GF'] = team_df['GF'].replace(0, np.NaN)       
             team_df['GA'] = team_df['GA'].replace(0, np.NaN)
+
+            # remove zeros from the differential column
+            team_df['SD'] = team_df['SD'].replace(0, np.NaN)       
     
             # make goals against and shots against negative
             team_df['GA'] *= -1
@@ -386,17 +389,17 @@ def parse_ids(season_id, game_id, images):
             
             # set vertical indicators for zero shots
             if period < 4 and int(game_id) < 30000 or period == 4 and int(game_id) >= 30000:                          
-                ax_5v5_shots.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, zorder=0, linestyle=':', color='black')
+                ax_5v5_shots.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, linestyle=':', color='black')
 
             if period == 4 and int(game_id) < 30000 and int(season_id) <= 20142015:
-                ax_4v4_shots.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, zorder=0, linestyle=':', color='black')
+                ax_4v4_shots.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, linestyle=':', color='black')
 
             if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016:
-                ax_3v3_shots.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, zorder=0, linestyle=':', color='black')
+                ax_3v3_shots.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, linestyle=':', color='black')
 
-            ax_PP_shots.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, zorder=0, linestyle=':', color='black')
+            ax_PP_shots.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, linestyle=':', color='black')
 
-            ax_SH_shots.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, zorder=0, linestyle=':', color='black')
+            ax_SH_shots.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, linestyle=':', color='black')
             
             # change the tick parameters for each axes
             if period < 4 and int(game_id) < 30000 or period == 4 and int(game_id) >= 30000:                          

@@ -121,7 +121,30 @@ def parse_ids(season_id, game_id, images):
 
         if period == 4:
             period_name = 'OT'
-    
+
+        if period < 4 and int(game_id) < 30000 or period == 4 and int(game_id) >= 30000:                        
+            players_5v5_df = players_df.copy()
+            players_5v5_df = players_5v5_df[(players_5v5_df['STATE'] == '5v5') & (players_5v5_df['PERIOD'] == period_name)]
+            max_5v5_toi = players_5v5_df['TOI'].max()
+
+        if period == 4 and int(game_id) < 30000 and int(season_id) <= 20142015:
+            players_4v4_df = players_df.copy()
+            players_4v4_df = players_4v4_df[(players_4v4_df['STATE'] == '4v4') & (players_4v4_df['PERIOD'] == period_name)]
+            max_4v4_toi = players_4v4_df['TOI'].max()
+
+        if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016:
+            players_3v3_df = players_df.copy()
+            players_3v3_df = players_3v3_df[(players_3v3_df['STATE'] == '3v3') & (players_3v3_df['PERIOD'] == period_name)]
+            max_3v3_toi = players_3v3_df['TOI'].max()
+
+        players_PP_df = players_df.copy()
+        players_PP_df = players_PP_df[(players_PP_df['STATE'] == 'PP') & (players_PP_df['PERIOD'] == period_name)]
+        max_PP_toi = players_PP_df['TOI'].max()
+
+        players_SH_df = players_df.copy()
+        players_SH_df = players_SH_df[(players_SH_df['STATE'] == 'SH') & (players_SH_df['PERIOD'] == period_name)]
+        max_SH_toi = players_SH_df['TOI'].max()      
+   
         # add a loop for each team
         for team in teams:
             
@@ -208,6 +231,7 @@ def parse_ids(season_id, game_id, images):
             team_PP_skaters_df = team_PP_skaters_df[(team_PP_skaters_df['TEAM'] == team) & (team_PP_skaters_df['PERIOD'] == period_name)]
             team_PP_skaters_df = team_PP_skaters_df[(team_PP_skaters_df['TOI'] > 0)]
             team_PP_skaters_df = team_PP_skaters_df.sort_values(by=['TOI'], ascending = True)
+            team_PP_skaters_df = team_PP_skaters_df.iloc[-10:]    
             team_PP_skaters_df['RANK'] = team_PP_skaters_df['TOI'].rank(method='first')
             team_PP_skaters_df['RANK'] -= 1
     
@@ -222,6 +246,7 @@ def parse_ids(season_id, game_id, images):
             team_SH_skaters_df = team_SH_skaters_df[(team_SH_skaters_df['TEAM'] == team) & (team_SH_skaters_df['PERIOD'] == period_name)]
             team_SH_skaters_df = team_SH_skaters_df[(team_SH_skaters_df['TOI'] > 0)]
             team_SH_skaters_df = team_SH_skaters_df.sort_values(by=['TOI'], ascending = True)
+            team_SH_skaters_df = team_SH_skaters_df.iloc[-10:]    
             team_SH_skaters_df['RANK'] = team_SH_skaters_df['TOI'].rank(method='first')
             team_SH_skaters_df['RANK'] -= 1
     
@@ -268,7 +293,7 @@ def parse_ids(season_id, game_id, images):
             
             # create a figure with six subplots arrangled complexly using a grid structure
             fig = plt.figure(figsize=(9,9))
-            grid = plt.GridSpec(11, 8,  hspace=0.0, wspace=0.75)
+            grid = plt.GridSpec(11, 8,  hspace=0.25, wspace=0.75)
 
             if period < 4 and int(game_id) < 30000 or period == 4 and int(game_id) >= 30000:               
                 ax_5v5_skaters_gamescore = fig.add_subplot(grid[0:5, :-1])
@@ -538,7 +563,7 @@ def parse_ids(season_id, game_id, images):
                     top=False,         # ticks along the top edge are off
                     left=False,        # ticks along the left edge are off
                     labelleft=False,   # labels along the left edge are off
-                    labelbottom=False)  # labels along the bottom edge are off
+                    labelbottom=False) #  labels along the bottom edge are off
     
                 ax_5v5_goalies_gamescore.tick_params(
                     axis='both',       # changes apply to the x-axis
@@ -571,7 +596,7 @@ def parse_ids(season_id, game_id, images):
                     top=False,         # ticks along the top edge are off
                     left=False,        # ticks along the left edge are off
                     labelleft=False,   # labels along the left edge are off
-                    labelbottom=False)  # labels along the bottom edge are off
+                    labelbottom=False) # labels along the bottom edge are off
     
                 ax_4v4_goalies_gamescore.tick_params(
                     axis='both',       # changes apply to the x-axis
@@ -604,7 +629,7 @@ def parse_ids(season_id, game_id, images):
                     top=False,         # ticks along the top edge are off
                     left=False,        # ticks along the left edge are off
                     labelleft=False,   # labels along the left edge are off
-                    labelbottom=False)  # labels along the bottom edge are off
+                    labelbottom=False) # labels along the bottom edge are off
     
                 ax_3v3_goalies_gamescore.tick_params(
                     axis='both',       # changes apply to the x-axis
@@ -652,7 +677,7 @@ def parse_ids(season_id, game_id, images):
                 top=False,         # ticks along the top edge are off
                 left=False,        # ticks along the left edge are off
                 labelleft=False,   # labels along the left edge are off            
-                labelbottom=False)  # labels along the bottom edge are off
+                labelbottom=False) # labels along the bottom edge are off
     
             ax_PP_goalies_gamescore.tick_params(
                 axis='both',       # changes apply to the x-axis
@@ -684,7 +709,7 @@ def parse_ids(season_id, game_id, images):
                 top=False,         # ticks along the top edge are off
                 left=False,        # ticks along the left edge are off
                 labelleft=False,   # labels along the left edge are off
-                labelbottom=False)  # labels along the bottom edge are off
+                labelbottom=False) # labels along the bottom edge are off
     
             ax_SH_goalies_gamescore.tick_params(
                 axis='both',       # changes apply to the x-axis
@@ -701,6 +726,59 @@ def parse_ids(season_id, game_id, images):
                 left=False,        # ticks along the left edge are off
                 labelleft=False,   # labels along the left edge are off
                 labelbottom=True)  # labels along the bottom edge are on
+
+            # change the y-axis label colors
+            ax_5v5_skaters_gamescore.tick_params(
+                    axis='y',
+                    which='both',
+                    labelcolor=team_color)
+    
+            ax_5v5_goalies_gamescore.tick_params(
+                    axis='y',
+                    which='both',
+                    labelcolor=team_color)
+
+            if period == 4 and int(game_id) < 30000 and int(season_id) <= 20142015:
+                ax_4v4_skaters_gamescore.tick_params(
+                        axis='y',
+                        which='both',
+                        labelcolor=team_color)
+        
+                ax_4v4_goalies_gamescore.tick_params(
+                        axis='y',
+                        which='both',
+                        labelcolor=team_color)
+
+            if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016:
+                ax_3v3_skaters_gamescore.tick_params(
+                        axis='y',
+                        which='both',
+                        labelcolor=team_color)
+        
+                ax_3v3_goalies_gamescore.tick_params(
+                        axis='y',
+                        which='both',
+                        labelcolor=team_color)
+
+            ax_PP_skaters_gamescore.tick_params(
+                    axis='y',
+                    which='both',
+                    labelcolor=team_color)
+    
+            ax_PP_goalies_gamescore.tick_params(
+                    axis='y',
+                    which='both',
+                    labelcolor=team_color)
+    
+            ax_SH_skaters_gamescore.tick_params(
+                    axis='y',
+                    which='both',
+                    labelcolor=team_color)
+    
+            ax_SH_goalies_gamescore.tick_params(
+                    axis='y',
+                    which='both',
+                    labelcolor=team_color)
     
             # create a list of x-axis tick values contingent on the max values for gamescore       
             if period < 4 and int(game_id) < 30000 or period == 4 and int(game_id) >= 30000:               
@@ -718,47 +796,9 @@ def parse_ids(season_id, game_id, images):
                     GS_5v5_tickmin = GS_5v5_min * -1
                 
                 GS_5v5_ticklabels = [GS_5v5_tickmin, round((GS_5v5_tickmin / 2), 1), 0, round((GS_5v5_tickmax / 2), 1), GS_5v5_tickmax]
-                    
-                toi_5v5_skaters_tickmax = max_toi_5v5_skaters
+                          
+                toi_5v5_ticklabels = [0, 20]
         
-                toi_5v5_skaters_ticklabels = []
-                if toi_5v5_skaters_tickmax <= 10:
-                    toi_5v5_skaters_ticklabels = [0, 10]
-                if toi_5v5_skaters_tickmax > 10 and toi_5v5_skaters_tickmax <= 15:
-                    toi_5v5_skaters_ticklabels = [0, 15]
-                if toi_5v5_skaters_tickmax > 15 and toi_5v5_skaters_tickmax <= 20:
-                    toi_5v5_skaters_ticklabels = [0, 20]
-                if toi_5v5_skaters_tickmax > 20 and toi_5v5_skaters_tickmax <= 25:
-                    toi_5v5_skaters_ticklabels = [0, 25]
-                if toi_5v5_skaters_tickmax > 25 and toi_5v5_skaters_tickmax <= 30:
-                    toi_5v5_skaters_ticklabels = [0, 30]
-        
-                toi_5v5_goalies_tickmax = max_toi_5v5_goalies
-        
-                toi_5v5_goalies_ticklabels = []
-                if toi_5v5_goalies_tickmax <= 10:
-                    toi_5v5_goalies_ticklabels = [0, 10]
-                if toi_5v5_goalies_tickmax > 10 and toi_5v5_goalies_tickmax <= 15:
-                    toi_5v5_goalies_ticklabels = [0, 15]
-                if toi_5v5_goalies_tickmax > 15 and toi_5v5_goalies_tickmax <= 20:
-                    toi_5v5_goalies_ticklabels = [0, 20]
-                if toi_5v5_goalies_tickmax > 20 and toi_5v5_goalies_tickmax <= 25:
-                    toi_5v5_goalies_ticklabels = [0, 25]
-                if toi_5v5_goalies_tickmax > 25 and toi_5v5_goalies_tickmax <= 30:
-                    toi_5v5_goalies_ticklabels = [0, 30]
-                if toi_5v5_goalies_tickmax > 30 and toi_5v5_goalies_tickmax <= 35:
-                    toi_5v5_goalies_ticklabels = [0, 35]
-                if toi_5v5_goalies_tickmax > 35 and toi_5v5_goalies_tickmax <= 40:
-                    toi_5v5_goalies_ticklabels = [0, 40]
-                if toi_5v5_goalies_tickmax > 40 and toi_5v5_goalies_tickmax <= 45:
-                    toi_5v5_goalies_ticklabels = [0, 45]
-                if toi_5v5_goalies_tickmax > 45 and toi_5v5_goalies_tickmax <= 50:
-                    toi_5v5_goalies_ticklabels = [0, 50]
-                if toi_5v5_goalies_tickmax > 50 and toi_5v5_goalies_tickmax <= 55:
-                    toi_5v5_goalies_ticklabels = [0, 55]
-                if toi_5v5_goalies_tickmax > 55 and toi_5v5_goalies_tickmax <= 60:
-                    toi_5v5_goalies_ticklabels = [0, 60]
-
             if period == 4 and int(game_id) < 30000 and int(season_id) <= 20142015:
                 GS_4v4_maxmin = teams_4v4_df['GS']
                 GS_4v4_max = round(GS_4v4_maxmin.max(), 1)
@@ -775,45 +815,7 @@ def parse_ids(season_id, game_id, images):
                 
                 GS_4v4_ticklabels = [GS_4v4_tickmin, round((GS_4v4_tickmin / 2), 1), 0, round((GS_4v4_tickmax / 2), 1), GS_4v4_tickmax]
                     
-                toi_4v4_skaters_tickmax = max_toi_4v4_skaters
-        
-                toi_4v4_skaters_ticklabels = []
-                if toi_4v4_skaters_tickmax <= 10:
-                    toi_4v4_skaters_ticklabels = [0, 10]
-                if toi_4v4_skaters_tickmax > 10 and toi_4v4_skaters_tickmax <= 15:
-                    toi_4v4_skaters_ticklabels = [0, 15]
-                if toi_4v4_skaters_tickmax > 15 and toi_4v4_skaters_tickmax <= 20:
-                    toi_4v4_skaters_ticklabels = [0, 20]
-                if toi_4v4_skaters_tickmax > 20 and toi_4v4_skaters_tickmax <= 25:
-                    toi_4v4_skaters_ticklabels = [0, 25]
-                if toi_4v4_skaters_tickmax > 25 and toi_4v4_skaters_tickmax <= 30:
-                    toi_4v4_skaters_ticklabels = [0, 30]
-        
-                toi_4v4_goalies_tickmax = max_toi_4v4_goalies
-        
-                toi_4v4_goalies_ticklabels = []
-                if toi_4v4_goalies_tickmax <= 10:
-                    toi_4v4_goalies_ticklabels = [0, 10]
-                if toi_4v4_goalies_tickmax > 10 and toi_4v4_goalies_tickmax <= 15:
-                    toi_4v4_goalies_ticklabels = [0, 15]
-                if toi_4v4_goalies_tickmax > 15 and toi_4v4_goalies_tickmax <= 20:
-                    toi_4v4_goalies_ticklabels = [0, 20]
-                if toi_4v4_goalies_tickmax > 20 and toi_4v4_goalies_tickmax <= 25:
-                    toi_4v4_goalies_ticklabels = [0, 25]
-                if toi_4v4_goalies_tickmax > 25 and toi_4v4_goalies_tickmax <= 30:
-                    toi_4v4_goalies_ticklabels = [0, 30]
-                if toi_4v4_goalies_tickmax > 30 and toi_4v4_goalies_tickmax <= 35:
-                    toi_4v4_goalies_ticklabels = [0, 35]
-                if toi_4v4_goalies_tickmax > 35 and toi_4v4_goalies_tickmax <= 40:
-                    toi_4v4_goalies_ticklabels = [0, 40]
-                if toi_4v4_goalies_tickmax > 40 and toi_4v4_goalies_tickmax <= 45:
-                    toi_4v4_goalies_ticklabels = [0, 45]
-                if toi_4v4_goalies_tickmax > 45 and toi_4v4_goalies_tickmax <= 50:
-                    toi_4v4_goalies_ticklabels = [0, 50]
-                if toi_4v4_goalies_tickmax > 50 and toi_4v4_goalies_tickmax <= 55:
-                    toi_4v4_goalies_ticklabels = [0, 55]
-                if toi_4v4_goalies_tickmax > 55 and toi_4v4_goalies_tickmax <= 60:
-                    toi_4v4_goalies_ticklabels = [0, 60]
+                toi_4v4_ticklabels = [0, 5]
 
             if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016:
                 GS_3v3_maxmin = teams_3v3_df['GS']
@@ -830,47 +832,9 @@ def parse_ids(season_id, game_id, images):
                     GS_3v3_tickmin = GS_3v3_min * -1
                 
                 GS_3v3_ticklabels = [GS_3v3_tickmin, round((GS_3v3_tickmin / 2), 1), 0, round((GS_3v3_tickmax / 2), 1), GS_3v3_tickmax]
-                    
-                toi_3v3_skaters_tickmax = max_toi_3v3_skaters
-        
-                toi_3v3_skaters_ticklabels = []
-                if toi_3v3_skaters_tickmax <= 10:
-                    toi_3v3_skaters_ticklabels = [0, 10]
-                if toi_3v3_skaters_tickmax > 10 and toi_3v3_skaters_tickmax <= 15:
-                    toi_3v3_skaters_ticklabels = [0, 15]
-                if toi_3v3_skaters_tickmax > 15 and toi_3v3_skaters_tickmax <= 20:
-                    toi_3v3_skaters_ticklabels = [0, 20]
-                if toi_3v3_skaters_tickmax > 20 and toi_3v3_skaters_tickmax <= 25:
-                    toi_3v3_skaters_ticklabels = [0, 25]
-                if toi_3v3_skaters_tickmax > 25 and toi_3v3_skaters_tickmax <= 30:
-                    toi_3v3_skaters_ticklabels = [0, 30]
-        
-                toi_3v3_goalies_tickmax = max_toi_3v3_goalies
-        
-                toi_3v3_goalies_ticklabels = []
-                if toi_3v3_goalies_tickmax <= 10:
-                    toi_3v3_goalies_ticklabels = [0, 10]
-                if toi_3v3_goalies_tickmax > 10 and toi_3v3_goalies_tickmax <= 15:
-                    toi_3v3_goalies_ticklabels = [0, 15]
-                if toi_3v3_goalies_tickmax > 15 and toi_3v3_goalies_tickmax <= 20:
-                    toi_3v3_goalies_ticklabels = [0, 20]
-                if toi_3v3_goalies_tickmax > 20 and toi_3v3_goalies_tickmax <= 25:
-                    toi_3v3_goalies_ticklabels = [0, 25]
-                if toi_3v3_goalies_tickmax > 25 and toi_3v3_goalies_tickmax <= 30:
-                    toi_3v3_goalies_ticklabels = [0, 30]
-                if toi_3v3_goalies_tickmax > 30 and toi_3v3_goalies_tickmax <= 35:
-                    toi_3v3_goalies_ticklabels = [0, 35]
-                if toi_3v3_goalies_tickmax > 35 and toi_3v3_goalies_tickmax <= 40:
-                    toi_3v3_goalies_ticklabels = [0, 40]
-                if toi_3v3_goalies_tickmax > 40 and toi_3v3_goalies_tickmax <= 45:
-                    toi_3v3_goalies_ticklabels = [0, 45]
-                if toi_3v3_goalies_tickmax > 45 and toi_3v3_goalies_tickmax <= 50:
-                    toi_3v3_goalies_ticklabels = [0, 50]
-                if toi_3v3_goalies_tickmax > 50 and toi_3v3_goalies_tickmax <= 55:
-                    toi_3v3_goalies_ticklabels = [0, 55]
-                if toi_3v3_goalies_tickmax > 55 and toi_3v3_goalies_tickmax <= 60:
-                    toi_3v3_goalies_ticklabels = [0, 60]
-                
+                           
+                toi_3v3_ticklabels = [0, 5]
+
             GS_PP_maxmin = teams_PP_df['GS']
             GS_PP_max = round(GS_PP_maxmin.max(), 1)
             GS_PP_min = abs(round(GS_PP_maxmin.min(), 1))
@@ -901,121 +865,105 @@ def parse_ids(season_id, game_id, images):
     
             GS_SH_ticklabels = [GS_SH_tickmin, round((GS_SH_tickmin / 2), 1), 0, round((GS_SH_tickmax / 2), 1), GS_SH_tickmax]            
                
-            toi_PP_skaters_tickmax = max_toi_PP_skaters
+            toi_PP_tickmax = max_PP_toi
     
-            toi_SH_skaters_tickmax = max_toi_SH_skaters
+            toi_SH_tickmax = max_SH_toi
     
-            toi_specialteams_skaters_tickmax = int()
-            if toi_PP_skaters_tickmax >= toi_SH_skaters_tickmax:
-                toi_specialteams_skaters_tickmax = toi_PP_skaters_tickmax
-            if toi_PP_skaters_tickmax < toi_SH_skaters_tickmax:
-                toi_specialteams_skaters_tickmax = toi_SH_skaters_tickmax
+            toi_specialteams_tickmax = int()
+            if toi_PP_tickmax >= toi_SH_tickmax:
+                toi_specialteams_tickmax = toi_PP_tickmax
+            if toi_PP_tickmax < toi_SH_tickmax:
+                toi_specialteams_tickmax = toi_SH_tickmax
     
-            toi_specialteams_skaters_ticklabels = []
-            if toi_specialteams_skaters_tickmax <= 2:
-                toi_specialteams_skaters_ticklabels = [0, 2]
-            if toi_specialteams_skaters_tickmax > 2 and toi_specialteams_skaters_tickmax <= 4:
-                toi_specialteams_skaters_ticklabels = [0, 4]
-            if toi_specialteams_skaters_tickmax > 4 and toi_specialteams_skaters_tickmax <= 6:
-                toi_specialteams_skaters_ticklabels = [0, 6]
-            if toi_specialteams_skaters_tickmax > 6 and toi_specialteams_skaters_tickmax <= 8:
-                toi_specialteams_skaters_ticklabels = [0, 8]
-            if toi_specialteams_skaters_tickmax > 8 and toi_specialteams_skaters_tickmax <= 10:
-                toi_specialteams_skaters_ticklabels = [0, 10]
-            if toi_specialteams_skaters_tickmax > 10 and toi_specialteams_skaters_tickmax <= 12:
-                toi_specialteams_skaters_ticklabels = [0, 12]
-    
-            toi_PP_goalies_tickmax = max_toi_PP_goalies
-    
-            toi_SH_goalies_tickmax = max_toi_SH_goalies
-    
-            toi_specialteams_goalies_tickmax = int()
-            if toi_PP_goalies_tickmax >= toi_SH_goalies_tickmax:
-                toi_specialteams_goalies_tickmax = toi_PP_goalies_tickmax
-            if toi_PP_goalies_tickmax < toi_SH_goalies_tickmax:
-                toi_specialteams_goalies_tickmax = toi_SH_goalies_tickmax
-    
-            toi_specialteams_goalies_ticklabels = []
-            if toi_specialteams_goalies_tickmax <= 2:
-                toi_specialteams_goalies_ticklabels = [0, 2]
-            if toi_specialteams_goalies_tickmax > 2 and toi_specialteams_goalies_tickmax <= 4:
-                toi_specialteams_goalies_ticklabels = [0, 4]
-            if toi_specialteams_goalies_tickmax > 4 and toi_specialteams_goalies_tickmax <= 6:
-                toi_specialteams_goalies_ticklabels = [0, 6]
-            if toi_specialteams_goalies_tickmax > 6 and toi_specialteams_goalies_tickmax <= 8:
-                toi_specialteams_goalies_ticklabels = [0, 8]
-            if toi_specialteams_goalies_tickmax > 8 and toi_specialteams_goalies_tickmax <= 10:
-                toi_specialteams_goalies_ticklabels = [0, 10]
-            if toi_specialteams_goalies_tickmax > 10 and toi_specialteams_goalies_tickmax <= 12:
-                toi_specialteams_goalies_ticklabels = [0, 12]
+            toi_specialteams_ticklabels = []
+            if toi_specialteams_tickmax <= 2:
+                toi_specialteams_ticklabels = [0, 2]
+            if toi_specialteams_tickmax > 2 and toi_specialteams_tickmax <= 4:
+                toi_specialteams_ticklabels = [0, 4]
+            if toi_specialteams_tickmax > 4 and toi_specialteams_tickmax <= 6:
+                toi_specialteams_ticklabels = [0, 6]
+            if toi_specialteams_tickmax > 6 and toi_specialteams_tickmax <= 8:
+                toi_specialteams_ticklabels = [0, 8]
+            if toi_specialteams_tickmax > 8 and toi_specialteams_tickmax <= 10:
+                toi_specialteams_ticklabels = [0, 10]
+            if toi_specialteams_tickmax > 10 and toi_specialteams_tickmax <= 12:
+                toi_specialteams_ticklabels = [0, 12]
+            if toi_specialteams_tickmax > 12 and toi_specialteams_tickmax <= 14:
+                toi_specialteams_ticklabels = [0, 14]
+            if toi_specialteams_tickmax > 14 and toi_specialteams_tickmax <= 16:
+                toi_specialteams_ticklabels = [0, 16]
+            if toi_specialteams_tickmax > 16 and toi_specialteams_tickmax <= 18:
+                toi_specialteams_ticklabels = [0, 18]
+            if toi_specialteams_tickmax > 18 and toi_specialteams_tickmax <= 20:
+                toi_specialteams_ticklabels = [0, 20]
 
             # set vertical indicator for midpoint of time on ice max
             if period < 4 and int(game_id) < 30000 or period == 4 and int(game_id) >= 30000:               
-                ax_5v5_skaters_toi.axvspan(toi_5v5_skaters_ticklabels[1] / 2, toi_5v5_skaters_ticklabels[1] / 2, ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
-                ax_5v5_skaters_toi.axvspan(toi_5v5_skaters_ticklabels[1], toi_5v5_skaters_ticklabels[1], ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
+                ax_5v5_skaters_toi.axvspan(toi_5v5_ticklabels[1] / 2, toi_5v5_ticklabels[1] / 2, ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
+                ax_5v5_skaters_toi.axvspan(toi_5v5_ticklabels[1], toi_5v5_ticklabels[1], ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
         
-                ax_5v5_goalies_toi.axvspan(toi_5v5_goalies_ticklabels[1] / 2, toi_5v5_goalies_ticklabels[1] / 2, ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
-                ax_5v5_goalies_toi.axvspan(toi_5v5_goalies_ticklabels[1], toi_5v5_goalies_ticklabels[1], ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
+                ax_5v5_goalies_toi.axvspan(toi_5v5_ticklabels[1] / 2, toi_5v5_ticklabels[1] / 2, ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
+                ax_5v5_goalies_toi.axvspan(toi_5v5_ticklabels[1], toi_5v5_ticklabels[1], ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
 
             if period == 4 and int(game_id) < 30000 and int(season_id) <= 20142015:
-                ax_4v4_skaters_toi.axvspan(toi_4v4_skaters_ticklabels[1] / 2, toi_4v4_skaters_ticklabels[1] / 2, ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
-                ax_4v4_skaters_toi.axvspan(toi_4v4_skaters_ticklabels[1], toi_4v4_skaters_ticklabels[1], ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
+                ax_4v4_skaters_toi.axvspan(toi_4v4_ticklabels[1] / 2, toi_4v4_ticklabels[1] / 2, ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
+                ax_4v4_skaters_toi.axvspan(toi_4v4_ticklabels[1], toi_4v4_ticklabels[1], ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
         
-                ax_4v4_goalies_toi.axvspan(toi_4v4_goalies_ticklabels[1] / 2, toi_4v4_goalies_ticklabels[1] / 2, ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
-                ax_4v4_goalies_toi.axvspan(toi_4v4_goalies_ticklabels[1], toi_4v4_goalies_ticklabels[1], ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
+                ax_4v4_goalies_toi.axvspan(toi_4v4_ticklabels[1] / 2, toi_4v4_ticklabels[1] / 2, ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
+                ax_4v4_goalies_toi.axvspan(toi_4v4_ticklabels[1], toi_4v4_ticklabels[1], ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
 
             if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016:
-                ax_3v3_skaters_toi.axvspan(toi_3v3_skaters_ticklabels[1] / 2, toi_3v3_skaters_ticklabels[1] / 2, ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
-                ax_3v3_skaters_toi.axvspan(toi_3v3_skaters_ticklabels[1], toi_3v3_skaters_ticklabels[1], ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
+                ax_3v3_skaters_toi.axvspan(toi_3v3_ticklabels[1] / 2, toi_3v3_ticklabels[1] / 2, ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
+                ax_3v3_skaters_toi.axvspan(toi_3v3_ticklabels[1], toi_3v3_ticklabels[1], ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
         
-                ax_3v3_goalies_toi.axvspan(toi_3v3_goalies_ticklabels[1] / 2, toi_3v3_goalies_ticklabels[1] / 2, ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
-                ax_3v3_goalies_toi.axvspan(toi_3v3_goalies_ticklabels[1], toi_3v3_goalies_ticklabels[1], ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
+                ax_3v3_goalies_toi.axvspan(toi_3v3_ticklabels[1] / 2, toi_3v3_ticklabels[1] / 2, ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
+                ax_3v3_goalies_toi.axvspan(toi_3v3_ticklabels[1], toi_3v3_ticklabels[1], ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
 
-            ax_PP_skaters_toi.axvspan(toi_specialteams_skaters_ticklabels[1] / 2, toi_specialteams_skaters_ticklabels[1] / 2, ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
-            ax_PP_skaters_toi.axvspan(toi_specialteams_skaters_ticklabels[1], toi_specialteams_skaters_ticklabels[1], ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
+            ax_PP_skaters_toi.axvspan(toi_specialteams_ticklabels[1] / 2, toi_specialteams_ticklabels[1] / 2, ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
+            ax_PP_skaters_toi.axvspan(toi_specialteams_ticklabels[1], toi_specialteams_ticklabels[1], ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
         
-            ax_PP_goalies_toi.axvspan(toi_specialteams_goalies_ticklabels[1] / 2, toi_specialteams_goalies_ticklabels[1] / 2, ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
-            ax_PP_goalies_toi.axvspan(toi_specialteams_goalies_ticklabels[1], toi_specialteams_goalies_ticklabels[1], ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
+            ax_PP_goalies_toi.axvspan(toi_specialteams_ticklabels[1] / 2, toi_specialteams_ticklabels[1] / 2, ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
+            ax_PP_goalies_toi.axvspan(toi_specialteams_ticklabels[1], toi_specialteams_ticklabels[1], ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
 
-            ax_SH_skaters_toi.axvspan(toi_specialteams_skaters_ticklabels[1] / 2, toi_specialteams_skaters_ticklabels[1] / 2, ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
-            ax_SH_skaters_toi.axvspan(toi_specialteams_skaters_ticklabels[1], toi_specialteams_skaters_ticklabels[1], ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
+            ax_SH_skaters_toi.axvspan(toi_specialteams_ticklabels[1] / 2, toi_specialteams_ticklabels[1] / 2, ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
+            ax_SH_skaters_toi.axvspan(toi_specialteams_ticklabels[1], toi_specialteams_ticklabels[1], ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
         
-            ax_SH_goalies_toi.axvspan(toi_specialteams_goalies_ticklabels[1] / 2, toi_specialteams_goalies_ticklabels[1] / 2, ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
-            ax_SH_goalies_toi.axvspan(toi_specialteams_goalies_ticklabels[1], toi_specialteams_goalies_ticklabels[1], ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
+            ax_SH_goalies_toi.axvspan(toi_specialteams_ticklabels[1] / 2, toi_specialteams_ticklabels[1] / 2, ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
+            ax_SH_goalies_toi.axvspan(toi_specialteams_ticklabels[1], toi_specialteams_ticklabels[1], ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
               
             # use the newly-minted x-ticklabels to ensure the x-axis labels will always display as integers        
             if period < 4 and int(game_id) < 30000 or period == 4 and int(game_id) >= 30000:               
                 ax_5v5_skaters_gamescore.set_xticks(GS_5v5_ticklabels, minor=False)
-                ax_5v5_skaters_toi.set_xticks(toi_5v5_skaters_ticklabels, minor=False)
+                ax_5v5_skaters_toi.set_xticks(toi_5v5_ticklabels, minor=False)
         
                 ax_5v5_goalies_gamescore.set_xticks(GS_5v5_ticklabels, minor=False)
-                ax_5v5_goalies_toi.set_xticks(toi_5v5_goalies_ticklabels, minor=False)
+                ax_5v5_goalies_toi.set_xticks(toi_5v5_ticklabels, minor=False)
 
             if period == 4 and int(game_id) < 30000 and int(season_id) <= 20142015:
                 ax_4v4_skaters_gamescore.set_xticks(GS_4v4_ticklabels, minor=False)
-                ax_4v4_skaters_toi.set_xticks(toi_4v4_skaters_ticklabels, minor=False)
+                ax_4v4_skaters_toi.set_xticks(toi_4v4_ticklabels, minor=False)
         
                 ax_4v4_goalies_gamescore.set_xticks(GS_4v4_ticklabels, minor=False)
-                ax_4v4_goalies_toi.set_xticks(toi_4v4_goalies_ticklabels, minor=False)
+                ax_4v4_goalies_toi.set_xticks(toi_4v4_ticklabels, minor=False)
 
             if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016:
                 ax_3v3_skaters_gamescore.set_xticks(GS_3v3_ticklabels, minor=False)
-                ax_3v3_skaters_toi.set_xticks(toi_3v3_skaters_ticklabels, minor=False)
+                ax_3v3_skaters_toi.set_xticks(toi_3v3_ticklabels, minor=False)
         
                 ax_3v3_goalies_gamescore.set_xticks(GS_3v3_ticklabels, minor=False)
-                ax_3v3_goalies_toi.set_xticks(toi_3v3_goalies_ticklabels, minor=False)
+                ax_3v3_goalies_toi.set_xticks(toi_3v3_ticklabels, minor=False)
             
             ax_PP_skaters_gamescore.set_xticks(GS_PP_ticklabels, minor=False)
-            ax_PP_skaters_toi.set_xticks(toi_specialteams_skaters_ticklabels, minor=False)
+            ax_PP_skaters_toi.set_xticks(toi_specialteams_ticklabels, minor=False)
     
             ax_PP_goalies_gamescore.set_xticks(GS_PP_ticklabels, minor=False)
-            ax_PP_goalies_toi.set_xticks(toi_specialteams_goalies_ticklabels, minor=False)
+            ax_PP_goalies_toi.set_xticks(toi_specialteams_ticklabels, minor=False)
 
             ax_SH_skaters_gamescore.set_xticks(GS_SH_ticklabels, minor=False)
-            ax_SH_skaters_toi.set_xticks(toi_specialteams_skaters_ticklabels, minor=False)
+            ax_SH_skaters_toi.set_xticks(toi_specialteams_ticklabels, minor=False)
     
             ax_SH_goalies_gamescore.set_xticks(GS_SH_ticklabels, minor=False)
-            ax_SH_goalies_toi.set_xticks(toi_specialteams_goalies_ticklabels, minor=False)
+            ax_SH_goalies_toi.set_xticks(toi_specialteams_ticklabels, minor=False)
  
             # remove axes ticks for instances where there is no special teams play    
             if team_PP_toi == 0:            

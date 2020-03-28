@@ -33,7 +33,9 @@ def parse_ids(season_id, game_id, images):
     
     # create dataframe objects that read in info from the .csv files
     pairings_df = pd.read_csv(pairings_file)
-    
+
+    max_toi = pairings_df['TOI'].max()  
+   
     # choose colors for each team; set them in a list; generate a custom colormap for each team
     away_color = dict_team_colors.team_color_1st[away]
     home_color = dict_team_colors.team_color_1st[home]
@@ -81,6 +83,9 @@ def parse_ids(season_id, game_id, images):
         # remove zeros from the goals for and against columns       
         team_pairings_df['GF'] = team_pairings_df['GF'].replace(0, np.NaN)       
         team_pairings_df['GA'] = team_pairings_df['GA'].replace(0, np.NaN)
+
+        # remove zeros from the differential column       
+        team_pairings_df['SD'] = team_pairings_df['SD'].replace(0, np.NaN)       
         
         # make shots against negative values    
         team_pairings_df['SA'] *= -1
@@ -90,7 +95,7 @@ def parse_ids(season_id, game_id, images):
     
         max_pairings_toi = max(pairings_toi)
     
-        pairings_toi_color = pairings_toi / float(max(pairings_toi))
+        pairings_toi_color = pairings_toi / float(max_pairings_toi)
     
         # connect team and opponent color map colors to each line's scaled time on ice 
         pairings_toi_color_map_for = team_color_map(pairings_toi_color)
@@ -145,7 +150,7 @@ def parse_ids(season_id, game_id, images):
         ax_pairings_toi.set_ylabel('')
         
         # set vertical indicators for break-even shot differential
-        ax_pairings_shots.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, zorder=0, linestyle=':', color='black')
+        ax_pairings_shots.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, linestyle=':', color='black')
     
         # change the tick parameters
         ax_pairings_shots.tick_params(
@@ -197,17 +202,29 @@ def parse_ids(season_id, game_id, images):
         if S_tickmax > 20 and S_tickmax <= 25:
             S_ticklabels = [-25, -20, -15, -10, -5, 0, 5, 10, 15, 20, 25]
 
-        toi_tickmax = max_pairings_toi
+        toi_tickmax = max_toi
 
         toi_ticklabels = []
-        if toi_tickmax <= 10:
+        if toi_tickmax <= 2:
+            toi_ticklabels = [0, 2]
+        if toi_tickmax > 2 and toi_tickmax <= 4:
+            toi_ticklabels = [0, 4]
+        if toi_tickmax > 4 and toi_tickmax <= 6:
+            toi_ticklabels = [0, 6]
+        if toi_tickmax > 6 and toi_tickmax <= 8:
+            toi_ticklabels = [0, 8]
+        if toi_tickmax > 8 and toi_tickmax <= 10:
             toi_ticklabels = [0, 10]
-        if toi_tickmax > 10 and toi_tickmax <= 20:
+        if toi_tickmax > 10 and toi_tickmax <= 12:
+            toi_ticklabels = [0, 12]
+        if toi_tickmax > 12 and toi_tickmax <= 14:
+            toi_ticklabels = [0, 14]
+        if toi_tickmax > 14 and toi_tickmax <= 16:
+            toi_ticklabels = [0, 16]
+        if toi_tickmax > 16 and toi_tickmax <= 18:
+            toi_ticklabels = [0, 18]
+        if toi_tickmax > 18 and toi_tickmax <= 20:
             toi_ticklabels = [0, 20]
-        if toi_tickmax > 20 and toi_tickmax <= 30:
-            toi_ticklabels = [0, 30]
-        if toi_tickmax > 30 and toi_tickmax <= 40:
-            toi_ticklabels = [0, 40] 
 
         # set vertical indicator for midpoint of time on ice max
         ax_pairings_toi.axvspan(toi_ticklabels[1] / 2, toi_ticklabels[1] / 2, ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')

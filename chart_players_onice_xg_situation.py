@@ -3,6 +3,7 @@
 @author: @mikegallimore
 """
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 import parameters
 import dict_team_colors
@@ -97,6 +98,9 @@ def parse_ids(season_id, game_id, images):
             # create a dataframe; filter for team; sort by team, game state and position; rank by time on ice and then invert the rankings
             team_df = players_df.copy()
             team_df = team_df[(team_df['TEAM'] == team) & (team_df['POS'] != 'G')]
+ 
+            # remove zeros from the differential column      
+            team_df['xGD'] = team_df['xGD'].replace(0, np.NaN)       
     
             # make expected goals against negative
             team_df['xGA'] *= -1
@@ -236,9 +240,9 @@ def parse_ids(season_id, game_id, images):
             ax_SH_toi.set_ylabel('')
             
             # set vertical indicators for zero shots
-            ax_5v5_xG.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, zorder=0, linestyle=':', color='black')
-            ax_PP_xG.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, zorder=0, linestyle=':', color='black')
-            ax_SH_xG.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, zorder=0, linestyle=':', color='black')
+            ax_5v5_xG.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, linestyle=':', color='black')
+            ax_PP_xG.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, linestyle=':', color='black')
+            ax_SH_xG.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, linestyle=':', color='black')
         
             # change the tick parameters for each axes
             ax_5v5_xG.tick_params(

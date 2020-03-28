@@ -159,10 +159,11 @@ if args.focus == 'players' and args.type is None and args.detail is None or args
 ## Combined
 ##
 
-if args.focus == 'units' and args.type is None or args.focus == 'units' and args.type == 'on' or args.focus == 'units' and args.type == 'on_shots':    
+if args.focus == 'units' and args.type is None and args.detail is None or args.focus == 'units' and args.type is None and args.detail == 'basic' or args.focus == 'units' and args.type == 'on' and args.detail == 'basic' or args.focus == 'units' and args.type == 'on' and args.detail is None or args.focus == 'units' and args.type == 'on_shots' and args.detail is None or args.focus == 'units' and args.type == 'on_shots' and args.detail == 'basic':    
     import chart_units_onice_shots
     chart_units_onice_shots.parse_ids(args.season_id, args.game_id, args.images)
     chart_units_onice_shots
+
 if args.focus == 'units' and args.type is None or args.focus == 'units' and args.type == 'on' or args.focus == 'units' and args.type == 'on_xg':    
     import chart_units_onice_xg
     chart_units_onice_xg.parse_ids(args.season_id, args.game_id, args.images)
@@ -212,7 +213,6 @@ if args.focus == 'units' and args.type is None and args.detail is None or args.f
     chart_units_lines_teammates_pairings_onice_xg.parse_ids(args.season_id, args.game_id, args.images)
     chart_units_lines_teammates_pairings_onice_xg
 
-
 ##
 ## Pairings
 ##
@@ -256,3 +256,31 @@ if args.focus == 'units' and args.type is None and args.detail is None or args.f
     import chart_units_pairings_teammates_lines_onice_xg
     chart_units_pairings_teammates_lines_onice_xg.parse_ids(args.season_id, args.game_id, args.images)
     chart_units_pairings_teammates_lines_onice_xg
+
+##
+## Power Play
+##
+
+if args.focus == 'units' and args.type is None and args.detail is None or args.focus == 'units' and args.type is None and args.detail == 'pp' or args.focus == 'units' and args.type == 'on' and args.detail is None or args.focus == 'units' and args.type == 'on' and args.detail == 'pp' or args.focus == 'units' and args.type == 'on_shots' and args.detail is None or args.focus == 'units' and args.type == 'on_shots' and args.detail == 'pp' or args.focus == 'pp' and args.type is None and args.detail is None or args.focus == 'pp' and args.type == 'on' and args.detail is None or args.focus == 'pp' and args.type == 'on_shots' and args.detail is None:    
+    import chart_units_pp_onice_shots
+    chart_units_pp_onice_shots.parse_ids(args.season_id, args.game_id, args.images)
+    chart_units_pp_onice_shots
+
+if args.focus == 'units' and args.type is None and args.detail is None or args.focus == 'units' and args.type is None and args.detail == 'pp' or args.focus == 'units' and args.type == 'on' and args.detail is None or args.focus == 'units' and args.type == 'on' and args.detail == 'pp' or args.focus == 'units' and args.type == 'on_xg' and args.detail is None or args.focus == 'units' and args.type == 'on_xg' and args.detail == 'pp' or args.focus == 'pp' and args.type is None and args.detail is None or args.focus == 'pp' and args.type == 'on' and args.detail is None or args.focus == 'pp' and args.type == 'on_xg' and args.detail is None:    
+    import chart_units_pp_onice_xg
+    chart_units_pp_onice_xg.parse_ids(args.season_id, args.game_id, args.images)
+    chart_units_pp_onice_xg
+
+##
+## Penalty Kill
+##
+
+if args.focus == 'units' and args.type is None and args.detail is None or args.focus == 'units' and args.type is None and args.detail == 'pk' or args.focus == 'units' and args.type == 'on' and args.detail is None or args.focus == 'units' and args.type == 'on' and args.detail == 'pk' or args.focus == 'units' and args.type == 'on_shots' and args.detail is None or args.focus == 'units' and args.type == 'on_shots' and args.detail == 'pk' or args.focus == 'pk' and args.type is None and args.detail is None or args.focus == 'pk' and args.type == 'on' and args.detail is None or args.focus == 'pk' and args.type == 'on_shots' and args.detail is None:    
+    import chart_units_pk_onice_shots
+    chart_units_pk_onice_shots.parse_ids(args.season_id, args.game_id, args.images)
+    chart_units_pk_onice_shots
+
+if args.focus == 'units' and args.type is None and args.detail is None or args.focus == 'units' and args.type is None and args.detail == 'pk' or args.focus == 'units' and args.type == 'on' and args.detail is None or args.focus == 'units' and args.type == 'on' and args.detail == 'pk' or args.focus == 'units' and args.type == 'on_xg' and args.detail is None or args.focus == 'units' and args.type == 'on_xg' and args.detail == 'pk' or args.focus == 'pk' and args.type is None and args.detail is None or args.focus == 'pk' and args.type == 'on' and args.detail is None or args.focus == 'pk' and args.type == 'on_xg' and args.detail is None:    
+    import chart_units_pk_onice_xg
+    chart_units_pk_onice_xg.parse_ids(args.season_id, args.game_id, args.images)
+    chart_units_pk_onice_xg

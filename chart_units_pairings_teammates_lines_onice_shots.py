@@ -37,6 +37,8 @@ def parse_ids(season_id, game_id, images):
     pairings_df = pd.read_csv(pairings_file)
 
     pairings_teammates_lines_df = pd.read_csv(pairings_teammates_lines_file)
+
+    max_toi = pairings_teammates_lines_df['TOI'].max()  
  
     # choose colors for each team; set them in a list; generate a custom colormap for each team
     away_color = dict_team_colors.team_color_1st[away]
@@ -51,8 +53,8 @@ def parse_ids(season_id, game_id, images):
     
     team_colors = [away_color, home_color]
 
-    away_cmap = clr.LinearSegmentedColormap.from_list('custom away', [(0,    '#ffffff'), (1, away_color)], N=256)  
-    home_cmap = clr.LinearSegmentedColormap.from_list('custom home', [(0,    '#ffffff'), (1, home_color)], N=256)
+    away_cmap = clr.LinearSegmentedColormap.from_list('custom away', [(0, '#ffffff'), (1, away_color)], N=256)  
+    home_cmap = clr.LinearSegmentedColormap.from_list('custom home', [(0, '#ffffff'), (1, home_color)], N=256)
    
     
     ###
@@ -94,6 +96,9 @@ def parse_ids(season_id, game_id, images):
         # remove zeros from the goals for and against columns       
         team_pairings_teammates_lines_df['GF'] = team_pairings_teammates_lines_df['GF'].replace(0, np.NaN)       
         team_pairings_teammates_lines_df['GA'] = team_pairings_teammates_lines_df['GA'].replace(0, np.NaN)
+
+        # remove zeros from the differential column       
+        team_pairings_teammates_lines_df['SD'] = team_pairings_teammates_lines_df['SD'].replace(0, np.NaN)       
         
         # make shots against negative values
         team_pairings_teammates_lines_df['GA'] *= -1
@@ -172,22 +177,22 @@ def parse_ids(season_id, game_id, images):
         # create more pairings dataframes with just the time on ice column; set a max value; scale each line's time on ice relative to the max  
         try:
             pairing1_teammates_lines_toi = team_pairing1_teammates_lines_df['TOI']
-            max_pairing1_teammates_lines_toi = max(pairing1_teammates_lines_toi)    
-            pairing1_teammates_lines_toi_color = pairing1_teammates_lines_toi / float(max(pairing1_teammates_lines_toi))
+            max_pairing1_teammates_lines_toi = pairing1_teammates_lines_toi.max()
+            pairing1_teammates_lines_toi_color = pairing1_teammates_lines_toi / float(max_pairing1_teammates_lines_toi)
         except:
             pass
         
         try:
             pairing2_teammates_lines_toi = team_pairing2_teammates_lines_df['TOI']
-            max_pairing2_teammates_lines_toi = max(pairing2_teammates_lines_toi)    
-            pairing2_teammates_lines_toi_color = pairing2_teammates_lines_toi / float(max(pairing2_teammates_lines_toi))
+            max_pairing2_teammates_lines_toi = pairing2_teammates_lines_toi.max()    
+            pairing2_teammates_lines_toi_color = pairing2_teammates_lines_toi / float(max_pairing2_teammates_lines_toi)
         except:
             pass
 
         try:
             pairing3_teammates_lines_toi = team_pairing3_teammates_lines_df['TOI']
-            max_pairing3_teammates_lines_toi = max(pairing3_teammates_lines_toi)    
-            pairing3_teammates_lines_toi_color = pairing3_teammates_lines_toi / float(max(pairing3_teammates_lines_toi))
+            max_pairing3_teammates_lines_toi = pairing3_teammates_lines_toi.max()    
+            pairing3_teammates_lines_toi_color = pairing3_teammates_lines_toi / float(max_pairing3_teammates_lines_toi)
         except:
             pass
     
@@ -341,9 +346,9 @@ def parse_ids(season_id, game_id, images):
         ax_pairing3_toi.set_ylabel('')
     
         # set vertical indicators for break-even expected goals differential
-        ax_pairing1_shots.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, zorder=0, linestyle=':', color='black')
-        ax_pairing2_shots.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, zorder=0, linestyle=':', color='black')
-        ax_pairing3_shots.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, zorder=0, linestyle=':', color='black')
+        ax_pairing1_shots.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, linestyle=':', color='black')
+        ax_pairing2_shots.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, linestyle=':', color='black')
+        ax_pairing3_shots.axvspan(0, 0, ymin=0, ymax=1, alpha=.25, linestyle=':', color='black')
         
         ### change the tick parameters
         ax_pairing1_shots.tick_params(
@@ -372,7 +377,6 @@ def parse_ids(season_id, game_id, images):
                 left=False,
                 labelleft=True,   # labels along the left edge are on
                 labelbottom=False)
-
 
         ax_pairing2_toi.tick_params(
                 axis='both',
@@ -442,7 +446,7 @@ def parse_ids(season_id, game_id, images):
         if S_tickmax > 20 and S_tickmax <= 25:
             S_ticklabels = [-25, -20, -15, -10, -5, 0, 5, 10, 15, 20, 25]
 
-        toi_tickmax = max_pairings_toi
+        toi_tickmax = max_toi
 
         toi_ticklabels = []
         if toi_tickmax <= 2:

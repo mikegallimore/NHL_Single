@@ -38,6 +38,11 @@ def parse_ids(season_id, game_id, images):
     PP_df = pd.read_csv(pp_file)
     PK_df = pd.read_csv(pk_file)    
 
+    max_lines_toi = lines_df['TOI'].max()      
+    max_pairings_toi = pairings_df['TOI'].max()      
+    max_PP_toi = PP_df['TOI'].max()      
+    max_PK_toi = PK_df['TOI'].max()
+
     # choose colors for each team; set them in a list; generate a custom colormap for each team
     away_color = dict_team_colors.team_color_1st[away]
     home_color = dict_team_colors.team_color_1st[home]
@@ -76,14 +81,16 @@ def parse_ids(season_id, game_id, images):
         team_lines_df['RANK'] = team_lines_df['TOI'].rank(method='first')
         team_lines_df = team_lines_df.sort_values(by=['RANK'], ascending = True)
         team_lines_df['RANK'] -= 1
+
+        # remove zeros from the differential column       
+        team_lines_df['xGD'] = team_lines_df['xGD'].replace(0, np.NaN)       
         
         # make shots against negative values    
         team_lines_df['GA'] *= -1
         team_lines_df['xGA'] *= -1
         
-        # find the max toi value
-        lines_toi = team_lines_df['TOI']        
-        max_lines_toi = max(lines_toi)
+        # find the max toi value       
+        team_max_lines_toi = team_lines_df['TOI'].max()
                       
         # create a pairings dataframe; filter for team; sort by time on ice; keep the pairs with the 3 highest totals; rank and then invert the rankings   
         team_pairings_df = pairings_df.copy()
@@ -92,14 +99,16 @@ def parse_ids(season_id, game_id, images):
         team_pairings_df = team_pairings_df.iloc[-3:]    
         team_pairings_df['RANK'] = team_pairings_df['TOI'].rank(method='first')
         team_pairings_df['RANK'] -= 1
+
+        # remove zeros from the differential column       
+        team_pairings_df['xGD'] = team_pairings_df['xGD'].replace(0, np.NaN)       
         
         # make expected goals against negative values    
         team_pairings_df['GA'] *= -1
         team_pairings_df['xGA'] *= -1
 
-        # find the max toi value
-        pairings_toi = team_pairings_df['TOI']   
-        max_pairings_toi = max(pairings_toi)
+        # find the max toi value       
+        team_max_pairings_toi = team_pairings_df['TOI'].max()
 
         # create a power play units dataframe; filter for team; sort by time on ice; keep the units with the 4 highest totals; rank and then invert the rankings   
         team_PP_df = PP_df.copy()
@@ -109,13 +118,15 @@ def parse_ids(season_id, game_id, images):
         team_PP_df['RANK'] = team_PP_df['TOI'].rank(method='first')
         team_PP_df['RANK'] -= 1
 
+        # remove zeros from the differential column       
+        team_PP_df['xGD'] = team_PP_df['xGD'].replace(0, np.NaN)       
+
         # make expected goals against negative values    
         team_PP_df['GA'] *= -1
         team_PP_df['xGA'] *= -1
 
         # find the max toi value       
-        toi_PP = team_PP_df['TOI']
-        max_toi_PP = toi_PP.max()
+        team_max_PP_toi = team_PP_df['TOI'].max()
 
         # create a penalty kill units dataframe; filter for team; sort by time on ice; keep the units with the 4 highest totals; rank and then invert the rankings   
         team_PK_df = PK_df.copy()
@@ -125,14 +136,16 @@ def parse_ids(season_id, game_id, images):
         team_PK_df = team_PK_df.iloc[-4:]    
         team_PK_df['RANK'] = team_PK_df['TOI'].rank(method='first')
         team_PK_df['RANK'] -= 1
-        
+ 
+        # remove zeros from the differential column       
+        team_PK_df['xGD'] = team_PK_df['xGD'].replace(0, np.NaN)       
+      
         # make expected goals against negative values    
         team_PK_df['GA'] *= -1
         team_PK_df['xGA'] *= -1
 
-        # find the max toi value
-        toi_PK = team_PK_df['TOI']
-        max_toi_PK = toi_PK.max()
+        # find the max toi value       
+        team_max_PK_toi = team_PK_df['TOI'].max()
 
         # create a figure with six subplots arrangled complexly using a grid structure
         fig = plt.figure(figsize=(8,8))
@@ -173,7 +186,7 @@ def parse_ids(season_id, game_id, images):
         except:
             pass
         try:
-            xGD_5v5_lines_plot = team_lines_df.plot(x='xGD', y='RANK', marker='|', markersize=13, markeredgewidth=1, markerfacecolor='None', markeredgecolor='white', linewidth=0, alpha=.5, legend='', label='', ax=ax_5v5_lines_xG);
+            xGD_5v5_lines_plot = team_lines_df.plot(x='xGD', y='RANK', marker='|', markersize=13, markeredgewidth=1, markerfacecolor='None', markeredgecolor='white', linewidth=0, alpha=1, legend='', label='', ax=ax_5v5_lines_xG);
         except:
             pass
 
@@ -186,7 +199,7 @@ def parse_ids(season_id, game_id, images):
         except:
             pass
         try:
-            xGD_5v5_pairings_plot = team_pairings_df.plot(x='xGD', y='RANK', marker='|', markersize=13, markeredgewidth=1, markerfacecolor='None', markeredgecolor='white', linewidth=0, alpha=.5, legend='', label='', ax=ax_5v5_pairings_xG);
+            xGD_5v5_pairings_plot = team_pairings_df.plot(x='xGD', y='RANK', marker='|', markersize=13, markeredgewidth=1, markerfacecolor='None', markeredgecolor='white', linewidth=0, alpha=1, legend='', label='', ax=ax_5v5_pairings_xG);
         except:
             pass
 
@@ -199,7 +212,7 @@ def parse_ids(season_id, game_id, images):
         except:
             pass 
         try:
-            xGD_PP_marker = team_PP_df.plot(x='xGD', y='RANK', marker='|', markersize=13, markeredgewidth=1, markerfacecolor='None', markeredgecolor='white', linewidth=0, alpha=.5, legend='', label='', ax=ax_PP_xG);
+            xGD_PP_marker = team_PP_df.plot(x='xGD', y='RANK', marker='|', markersize=13, markeredgewidth=1, markerfacecolor='None', markeredgecolor='white', linewidth=0, alpha=1, legend='', label='', ax=ax_PP_xG);
         except:
             pass
 
@@ -212,7 +225,7 @@ def parse_ids(season_id, game_id, images):
         except:
             pass
         try:
-            xGD_PK_marker = team_PK_df.plot(x='xGD', y='RANK', marker='|', markersize=13, markeredgewidth=1, markerfacecolor='None', markeredgecolor='white', linewidth=0, alpha=.5, legend='', label='', ax=ax_PK_xG);
+            xGD_PK_marker = team_PK_df.plot(x='xGD', y='RANK', marker='|', markersize=13, markeredgewidth=1, markerfacecolor='None', markeredgecolor='white', linewidth=0, alpha=1, legend='', label='', ax=ax_PK_xG);
         except:
             pass
 
@@ -256,10 +269,10 @@ def parse_ids(season_id, game_id, images):
         ax_PK_toi.set_ylabel('')
         
         # set vertical indicators for zero shots
-        ax_5v5_lines_xG.axvspan(0, 0, ymin=0, ymax=1, alpha=1, color='white')
-        ax_5v5_pairings_xG.axvspan(0, 0, ymin=0, ymax=1, alpha=1, color='white')
-        ax_PP_xG.axvspan(0, 0, ymin=0, ymax=1, alpha=1, color='white')
-        ax_PK_xG.axvspan(0, 0, ymin=0, ymax=1, alpha=1, color='white')
+        ax_5v5_lines_xG.axvspan(0, 0, ymin=0, ymax=1, alpha=0.25, linestyle=':', color='black')
+        ax_5v5_pairings_xG.axvspan(0, 0, ymin=0, ymax=1, alpha=0.25, linestyle=':', color='black')
+        ax_PP_xG.axvspan(0, 0, ymin=0, ymax=1, alpha=0.25, linestyle=':', color='black')
+        ax_PK_xG.axvspan(0, 0, ymin=0, ymax=1, alpha=0.25, linestyle=':', color='black')
         
         # change the tick parameters for each axes
         ax_5v5_lines_xG.tick_params(
@@ -325,6 +338,37 @@ def parse_ids(season_id, game_id, images):
             left=False,        # ticks along the left edge are off
             labelleft=False,   # labels along the left edge are off
             labelbottom=True)  # labels along the bottom edge are on
+
+        # change the y-axis label colors
+        ax_5v5_lines_xG.tick_params(
+                axis='y',
+                which='both',
+                labelcolor=team_color)
+
+        ax_5v5_pairings_xG.tick_params(
+                axis='y',
+                which='both',
+                labelcolor=team_color)
+
+        ax_PP_xG.tick_params(
+                axis='y',
+                which='both',
+                labelcolor=team_color)
+
+        ax_PP_xG.tick_params(
+                axis='y',
+                which='both',
+                labelcolor=team_color)
+
+        ax_PK_xG.tick_params(
+                axis='y',
+                which='both',
+                labelcolor=team_color)
+
+        ax_PK_xG.tick_params(
+                axis='y',
+                which='both',
+                labelcolor=team_color)
 
         # create a list of x-axis tick values contingent on the max values for shots
         team_5v5_lines_df2 = team_lines_df.copy()
@@ -396,14 +440,26 @@ def parse_ids(season_id, game_id, images):
             toi_5v5_tickmax = toi_5v5_pairings_tickmax
 
         toi_5v5_ticklabels = []
-        if toi_5v5_tickmax <= 10:
+        if toi_5v5_tickmax <= 2:
+            toi_5v5_ticklabels = [0, 2]
+        if toi_5v5_tickmax > 2 and toi_5v5_tickmax <= 4:
+            toi_5v5_ticklabels = [0, 4]
+        if toi_5v5_tickmax > 4 and toi_5v5_tickmax <= 6:
+            toi_5v5_ticklabels = [0, 6]
+        if toi_5v5_tickmax > 6 and toi_5v5_tickmax <= 8:
+            toi_5v5_ticklabels = [0, 8]
+        if toi_5v5_tickmax > 8 and toi_5v5_tickmax <= 10:
             toi_5v5_ticklabels = [0, 10]
-        if toi_5v5_tickmax > 10 and toi_5v5_tickmax <= 20:
-            toi_5v5_ticklabels = [0, 20]
-        if toi_5v5_tickmax > 20 and toi_5v5_tickmax <= 30:
-            toi_5v5_ticklabels = [0, 30]
-        if toi_5v5_tickmax > 30 and toi_5v5_tickmax <= 40:
-            toi_5v5_ticklabels = [0, 40]
+        if toi_5v5_tickmax > 10 and toi_5v5_tickmax <= 12:
+            toi_5v5_ticklabels = [0, 12]
+        if toi_5v5_tickmax > 12 and toi_5v5_tickmax <= 14:
+            toi_5v5_ticklabels = [0, 14]
+        if toi_5v5_tickmax > 14 and toi_5v5_tickmax <= 16:
+            toi_5v5_ticklabels = [0, 16]
+        if toi_5v5_tickmax > 16 and toi_5v5_tickmax <= 18:
+            toi_5v5_ticklabels = [0, 18]
+        if toi_5v5_tickmax > 18 and toi_5v5_tickmax <= 20:
+            toi_5v5_ticklabels = [0, 20]     
             
         xGF_PP_max = team_PP_df2['xGF']
         xGF_PP_max = xGF_PP_max.max()
@@ -452,9 +508,9 @@ def parse_ids(season_id, game_id, images):
         if xG_specialteams_tickmax > 3.5 and xG_specialteams_tickmax <= 4:
             xG_specialteams_ticklabels = [-4.0, -3.2, -2.4, -1.6, -0.8, 0.0, 0.8, 1.6, 2.4, 3.2, 4.0]
                         
-        toi_PP_tickmax = max_toi_PP
+        toi_PP_tickmax = max_PP_toi
 
-        toi_SH_tickmax = max_toi_PK
+        toi_SH_tickmax = max_PK_toi
 
         if toi_PP_tickmax >= toi_SH_tickmax:
             toi_specialteams_tickmax = toi_PP_tickmax
@@ -477,9 +533,16 @@ def parse_ids(season_id, game_id, images):
 
         # set vertical indicator for midpoint of time on ice max
         ax_5v5_lines_toi.axvspan(toi_5v5_ticklabels[1] / 2, toi_5v5_ticklabels[1] / 2, ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
+        ax_5v5_lines_toi.axvspan(toi_5v5_ticklabels[1], toi_5v5_ticklabels[1], ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
+
         ax_5v5_pairings_toi.axvspan(toi_5v5_ticklabels[1] / 2, toi_5v5_ticklabels[1] / 2, ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
+        ax_5v5_pairings_toi.axvspan(toi_5v5_ticklabels[1], toi_5v5_ticklabels[1], ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
+
         ax_PP_toi.axvspan(toi_specialteams_ticklabels[1] / 2, toi_specialteams_ticklabels[1] / 2, ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
+        ax_PP_toi.axvspan(toi_specialteams_ticklabels[1], toi_specialteams_ticklabels[1], ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
+
         ax_PK_toi.axvspan(toi_specialteams_ticklabels[1] / 2, toi_specialteams_ticklabels[1] / 2, ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
+        ax_PK_toi.axvspan(toi_specialteams_ticklabels[1], toi_specialteams_ticklabels[1], ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
           
         # use the newly-minted x-ticklabels to ensure the x-axis labels will always display as integers        
         ax_5v5_lines_xG.set_xticks(xG_5v5_ticklabels, minor=False)
@@ -542,18 +605,18 @@ def parse_ids(season_id, game_id, images):
         fig.text(.490, 0.936, '@', color='black', fontsize='12', bbox=dict(facecolor='white', edgecolor='None'))
 
         # add a text box in the event a team does not have a power play
-        if max_toi_PP == 0:
+        if team_max_PP_toi == 0:
             fig.text(0.35, 0.375, 'No PP situations', color='black', fontsize='10', bbox=dict(facecolor='None', edgecolor='None'))
          
         # add a text box in the event a team's opponent does not have a power play
-        if max_toi_PK == 0:
+        if team_max_PK_toi == 0:
             fig.text(0.35, 0.175, 'No PK situations', color='black', fontsize='10', bbox=dict(facecolor='None', edgecolor='None'))
 
         # for games where one (or both!) teams spend no time on a powerplay or shorthanded, turn all indicators for the respective axes off 
-        if max_toi_PP == 0:
+        if team_max_PP_toi == 0:
             ax_PP_xG.axis('off')
             ax_PP_toi.axis('off')
-        if max_toi_PK == 0:
+        if team_max_PK_toi == 0:
             ax_PK_xG.axis('off')
             ax_PK_toi.axis('off')
 

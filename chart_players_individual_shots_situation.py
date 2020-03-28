@@ -117,12 +117,14 @@ def parse_ids(season_id, game_id, images):
             team_PP_df = team_df.copy()
             team_PP_df = team_PP_df[(team_PP_df['STATE'] == 'PP') & (team_PP_df['TOI'] > 0) & (team_PP_df['SITUATION'] == situation)]
             team_PP_df = team_PP_df.sort_values(by=['TOI'], ascending = True)
+            team_PP_df = team_PP_df.iloc[-10:]  
             team_PP_df['RANK'] = team_PP_df['TOI'].rank(method='first')
             team_PP_df['RANK'] -= 1
     
             team_SH_df = team_df.copy()
             team_SH_df = team_SH_df[(team_SH_df['STATE'] == 'SH') & (team_SH_df['TOI'] > 0) & (team_SH_df['SITUATION'] == situation)]
             team_SH_df = team_SH_df.sort_values(by=['TOI'], ascending = True)
+            team_SH_df = team_SH_df.iloc[-10:]  
             team_SH_df['RANK'] = team_SH_df['TOI'].rank(method='first')
             team_SH_df['RANK'] -= 1
     
@@ -292,6 +294,7 @@ def parse_ids(season_id, game_id, images):
                 top=False,         # ticks along the top edge are off
                 left=False,        # ticks along the left edge are off
                 labelbottom=True)  # labels along the bottom edge are on
+
             ax_5v5_toi.tick_params(
                 axis='both',       # changes apply to the x-axis
                 which='both',      # both major and minor ticks are affected
@@ -332,6 +335,22 @@ def parse_ids(season_id, game_id, images):
                 left=False,        # ticks along the left edge are off
                 labelleft=False,   # labels along the left edge are off
                 labelbottom=True)  # labels along the bottom edge are on
+
+            # change the y-axis label colors
+            ax_5v5_shots.tick_params(
+                    axis='y',
+                    which='both',
+                    labelcolor=team_color)
+       
+            ax_PP_shots.tick_params(
+                    axis='y',
+                    which='both',
+                    labelcolor=team_color)
+       
+            ax_SH_shots.tick_params(
+                    axis='y',
+                    which='both',
+                    labelcolor=team_color)
     
             # create a list of x-axis tick values contingent on the max values for shots
             S_5v5_max = team_5v5_df['S']
@@ -402,6 +421,14 @@ def parse_ids(season_id, game_id, images):
                 toi_specialteams_ticklabels = [0, 10]
             if toi_specialteams_tickmax > 10 and toi_specialteams_tickmax <= 12:
                 toi_specialteams_ticklabels = [0, 12]
+            if toi_specialteams_tickmax > 12 and toi_specialteams_tickmax <= 14:
+                toi_specialteams_ticklabels = [0, 14]
+            if toi_specialteams_tickmax > 14 and toi_specialteams_tickmax <= 16:
+                toi_specialteams_ticklabels = [0, 16]
+            if toi_specialteams_tickmax > 16 and toi_specialteams_tickmax <= 18:
+                toi_specialteams_ticklabels = [0, 18]
+            if toi_specialteams_tickmax > 18 and toi_specialteams_tickmax <= 20:
+                toi_specialteams_ticklabels = [0, 20]
 
             # set vertical indicator for midpoint of time on ice max
             ax_5v5_toi.axvspan(toi_5v5_ticklabels[1] / 2, toi_5v5_ticklabels[1] / 2, ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
