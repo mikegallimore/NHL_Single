@@ -35,32 +35,67 @@ args = parser.parse_args()
 ### PARSE FILES
 ###
 
-if args.rosters == 'true' or args.rosters is None and args.shifts is None and args.pbp is None and args.toi is None and args.merge_pbp is None and args.xg is None:    
+##
+## Rosters
+##
+
+if (args.rosters == 'true' 
+    or args.rosters is None and args.shifts is None and args.pbp is None and args.toi is None and args.merge_pbp is None and args.xg is None):    
+
     import files_parse_rosters
     files_parse_rosters.parse_ids(args.season_id, args.game_id, args.switch_F2D, args.switch_D2F)
     files_parse_rosters
 
-if args.shifts == 'true' or args.rosters is None and args.shifts is None and args.pbp is None and args.toi is None and args.merge_pbp is None and args.xg is None:       
+##
+## Shifts
+##
+
+if (args.shifts == 'true' 
+    or args.rosters is None and args.shifts is None and args.pbp is None and args.toi is None and args.merge_pbp is None and args.xg is None):       
+
     import files_parse_shifts
     files_parse_shifts.parse_ids(args.season_id, args.game_id)
     files_parse_shifts
 
-if args.pbp == 'true' or args.rosters is None and args.shifts is None and args.pbp is None and args.toi is None and args.merge_pbp is None and args.xg is None:    
+##
+## Play-by-Play
+##
+
+if (args.pbp == 'true' 
+    or args.rosters is None and args.shifts is None and args.pbp is None and args.toi is None and args.merge_pbp is None and args.xg is None):    
+
     import files_parse_pbp
     files_parse_pbp.parse_ids(args.season_id, args.game_id, args.load_pbp)
     files_parse_pbp
 
-if args.toi == 'true' or args.rosters is None and args.shifts is None and args.pbp is None and args.toi is None and args.merge_pbp is None and args.xg is None:    
+##
+## Time on Ice
+##
+    
+if (args.toi == 'true' 
+    or args.rosters is None and args.shifts is None and args.pbp is None and args.toi is None and args.merge_pbp is None and args.xg is None):    
+
     import files_parse_toi
     files_parse_toi.parse_ids(args.season_id, args.game_id, args.load_pbp)
     files_parse_toi
 
-if args.merge_pbp == 'true' or args.rosters is None and args.shifts is None and args.pbp is None and args.toi is None and args.merge_pbp is None and args.xg is None: 
+##
+## Merge
+##
+    
+if (args.merge_pbp == 'true' 
+    or args.rosters is None and args.shifts is None and args.pbp is None and args.toi is None and args.merge_pbp is None and args.xg is None): 
     import files_parse_merge_pbp
     files_parse_merge_pbp.parse_ids(args.season_id, args.game_id, args.load_pbp)
     files_parse_merge_pbp
 
-if args.xg == 'true' or args.rosters is None and args.shifts is None and args.pbp is None and args.toi is None and args.merge_pbp is None and args.xg is None: 
+##
+## Expected Goals
+##
+
+if (args.xg == 'true' 
+    or args.rosters is None and args.shifts is None and args.pbp is None and args.toi is None and args.merge_pbp is None and args.xg is None): 
+
     import files_parse_xg
     files_parse_xg.parse_ids(args.season_id, args.game_id)
     files_parse_xg

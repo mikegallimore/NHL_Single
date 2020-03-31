@@ -44,6 +44,7 @@ args = parser.parse_args()
 ###
 
 if args.flush != 'no':
+
     import flush_charts
     flush_charts
 
@@ -56,6 +57,7 @@ if args.flush != 'no':
 ###
 
 if args.fetch != 'skip':
+
     import files_fetch
     files_fetch.parse_ids(args.season_id, args.game_id)
     files_fetch
@@ -66,6 +68,7 @@ if args.fetch != 'skip':
 ###
     
 if args.parse != 'skip':
+
     import files_parse_rosters
     files_parse_rosters.parse_ids(args.season_id, args.game_id, args.switch_F2D, args.switch_D2F)
     files_parse_rosters
@@ -92,14 +95,39 @@ if args.parse != 'skip':
 
 
 ###
-### Teams
+### STATS
 ###
+
+ 
+##
+## Teams
+##
+
+#
+# Data
+#
     
 if args.teams != 'skip':
+    
     import stats_teams
     stats_teams.parse_ids(args.season_id, args.game_id)
     stats_teams
 
+if args.teams != 'skip' and args.scope == 'more':
+
+    import stats_teams_period
+    stats_teams_period.parse_ids(args.season_id, args.game_id)
+    stats_teams_period
+    
+    import stats_teams_situation
+    stats_teams_situation.parse_ids(args.season_id, args.game_id)
+    stats_teams_situation
+   
+#
+# Charts
+#
+
+if args.teams != 'skip':
 
     import chart_teams_gameflow_shots
     chart_teams_gameflow_shots.parse_ids(args.season_id, args.game_id, args.images)
@@ -108,7 +136,7 @@ if args.teams != 'skip':
     import chart_teams_gameflow_xg
     chart_teams_gameflow_xg.parse_ids(args.season_id, args.game_id, args.images)
     chart_teams_gameflow_xg
-
+    
     import chart_teams_shots_scatter
     chart_teams_shots_scatter.parse_ids(args.season_id, args.game_id, args.images)
     chart_teams_shots_scatter
@@ -117,26 +145,7 @@ if args.teams != 'skip':
     chart_teams_shots_density.parse_ids(args.season_id, args.game_id, args.images)
     chart_teams_shots_density    
 
-
-if args.teams != 'skip' and args.tweet != 'no':
-    import tweet_teams_gameflow
-    tweet_teams_gameflow.parse_ids(args.season_id, args.game_id)
-    tweet_teams_gameflow
-   
-    import tweet_teams_shotmaps
-    tweet_teams_shotmaps.parse_ids(args.season_id, args.game_id)  
-    tweet_teams_shotmaps
-
-    
-if args.teams != 'skip' and args.scope == 'full':
-    import stats_teams_period
-    stats_teams_period.parse_ids(args.season_id, args.game_id)
-    stats_teams_period
-    
-    import stats_teams_situation
-    stats_teams_situation.parse_ids(args.season_id, args.game_id)
-    stats_teams_situation
-
+if args.teams != 'skip' and args.scope == 'more':
 
     import chart_teams_shots_scatter_period
     chart_teams_shots_scatter_period.parse_ids(args.season_id, args.game_id, args.images)
@@ -154,16 +163,81 @@ if args.teams != 'skip' and args.scope == 'full':
     chart_teams_shots_density_situation.parse_ids(args.season_id, args.game_id, args.images)
     chart_teams_shots_density_situation
 
+#
+# Tweets
+#
 
-###
-### Players
-###
+if args.teams != 'skip' and args.tweet != 'no':
+
+    import tweet_teams_gameflow
+    tweet_teams_gameflow.parse_ids(args.season_id, args.game_id)
+    tweet_teams_gameflow
+   
+    import tweet_teams_shots_scatter
+    tweet_teams_shots_scatter.parse_ids(args.season_id, args.game_id)  
+    tweet_teams_shots_scatter
+
+    import tweet_teams_shots_density
+    tweet_teams_shots_density.parse_ids(args.season_id, args.game_id)  
+    tweet_teams_shots_density
+
+if args.teams != 'skip' and args.scope == 'more' and args.tweet != 'no':
+  
+    import tweet_teams_shots_scatter_period
+    tweet_teams_shots_scatter_period.parse_ids(args.season_id, args.game_id)  
+    tweet_teams_shots_scatter_period
+
+    import tweet_teams_shots_scatter_situation
+    tweet_teams_shots_scatter_situation.parse_ids(args.season_id, args.game_id)  
+    tweet_teams_shots_scatter_situation
+    
+    import tweet_teams_shots_density_period
+    tweet_teams_shots_density_period.parse_ids(args.season_id, args.game_id, args.images)
+    tweet_teams_shots_density_period
+    
+    import tweet_teams_shots_density_situation
+    tweet_teams_shots_density_situation.parse_ids(args.season_id, args.game_id, args.images)
+    tweet_teams_shots_density_situation  
+ 
+##
+## Players
+##
+
+#
+# Data
+#
     
 if args.players != 'skip':    
+
     import stats_players
     stats_players.parse_ids(args.season_id, args.game_id)
     stats_players
 
+if args.players != 'skip' and args.scope == 'more':    
+
+    import stats_players_period
+    stats_players_period.parse_ids(args.season_id, args.game_id)
+    stats_players_period
+    
+    import stats_players_situation
+    stats_players_situation.parse_ids(args.season_id, args.game_id)
+    stats_players_situation
+
+if args.players != 'skip' and args.scope == 'max':    
+
+    import stats_players_teammates
+    stats_players_teammates.parse_ids(args.season_id, args.game_id)
+    stats_players_teammates
+    
+    import stats_players_opponents
+    stats_players_opponents.parse_ids(args.season_id, args.game_id)
+    stats_players_opponents
+
+#
+# Charts
+#
+
+if args.players != 'skip':    
 
     import chart_players_gamescore
     chart_players_gamescore.parse_ids(args.season_id, args.game_id, args.images)
@@ -185,38 +259,7 @@ if args.players != 'skip':
     chart_players_onice_xg.parse_ids(args.season_id, args.game_id, args.images)
     chart_players_onice_xg
 
-
-if args.players != 'skip' and args.tweet != 'no': 
-    import tweet_players_gamescore
-    tweet_players_gamescore.parse_ids(args.season_id, args.game_id)
-    tweet_players_gamescore
-
-    import tweet_players_individual
-    tweet_players_individual.parse_ids(args.season_id, args.game_id)
-    tweet_players_individual
-  
-    import tweet_players_onice
-    tweet_players_onice.parse_ids(args.season_id, args.game_id)
-    tweet_players_onice
-
-
-if args.players != 'skip' and args.scope == 'full':    
-    import stats_players_period
-    stats_players_period.parse_ids(args.season_id, args.game_id)
-    stats_players_period
-    
-    import stats_players_situation
-    stats_players_situation.parse_ids(args.season_id, args.game_id)
-    stats_players_situation
-
-    import stats_players_teammates
-    stats_players_teammates.parse_ids(args.season_id, args.game_id)
-    stats_players_teammates
-    
-    import stats_players_opponents
-    stats_players_opponents.parse_ids(args.season_id, args.game_id)
-    stats_players_opponents
-
+if args.players != 'skip' and args.scope == 'more':    
 
     import chart_players_gamescore_period
     chart_players_gamescore_period.parse_ids(args.season_id, args.game_id, args.images)
@@ -257,12 +300,83 @@ if args.players != 'skip' and args.scope == 'full':
     import chart_players_onice_xg_situation
     chart_players_onice_xg_situation.parse_ids(args.season_id, args.game_id, args.images)
     chart_players_onice_xg_situation
+
+''' NOT YET AVAILABLE
+if args.players != 'skip' and args.scope == 'max':    
+
+    import charts_players_teammates
+    charts_players_teammates.parse_ids(args.season_id, args.game_id)
+    charts_players_teammates
     
-###
-### Units
-###
+    import charts_players_opponents
+    charts_players_opponents.parse_ids(args.season_id, args.game_id)
+    charts_players_opponents
+'''
+
+#
+# Tweets
+#
     
+if args.players != 'skip' and args.tweet != 'no': 
+    import tweet_players_gamescore
+    tweet_players_gamescore.parse_ids(args.season_id, args.game_id)
+    tweet_players_gamescore
+
+    import tweet_players_individual
+    tweet_players_individual.parse_ids(args.season_id, args.game_id)
+    tweet_players_individual
+  
+    import tweet_players_onice
+    tweet_players_onice.parse_ids(args.season_id, args.game_id)
+    tweet_players_onice
+
+if args.players != 'skip' and args.scope == 'more' and args.tweet != 'no':    
+
+    import tweet_players_gamescore_period
+    tweet_players_gamescore_period.parse_ids(args.season_id, args.game_id)
+    tweet_players_gamescore_period
+
+    import tweet_players_gamescore_situation
+    tweet_players_gamescore_situation.parse_ids(args.season_id, args.game_id)
+    tweet_players_gamescore_situation
+
+    import tweet_players_individual_period
+    tweet_players_individual_period.parse_ids(args.season_id, args.game_id)
+    tweet_players_individual_period
+  
+    import tweet_players_individual_situation
+    tweet_players_individual_situation.parse_ids(args.season_id, args.game_id)
+    tweet_players_individual_situation
+
+    import tweet_players_onice_period
+    tweet_players_onice_period.parse_ids(args.season_id, args.game_id)
+    tweet_players_onice_period
+  
+    import tweet_players_onice_situation
+    tweet_players_onice_situation.parse_ids(args.season_id, args.game_id)
+    tweet_players_onice_situation
+
+''' NOT YET AVAILABLE
+if args.players != 'skip' and args.scope == 'max' and args.tweet != 'no':    
+    import tweet_players_teammates
+    tweet_players_teammates.parse_ids(args.season_id, args.game_id)
+    tweet_players_teammates
+    
+    import tweet_players_opponents
+    tweet_players_opponents.parse_ids(args.season_id, args.game_id)
+    tweet_players_opponents
+'''
+    
+##
+## Units
+##
+
+#
+# Data
+#
+
 if args.units != 'skip':
+
     import stats_units_lines
     stats_units_lines.parse_ids(args.season_id, args.game_id)
     stats_units_lines
@@ -279,39 +393,8 @@ if args.units != 'skip':
     stats_units_pk.parse_ids(args.season_id, args.game_id)
     stats_units_pk
 
-    
-    import chart_units_onice_shots
-    chart_units_onice_shots.parse_ids(args.season_id, args.game_id, args.images)
-    chart_units_onice_shots
+if args.units != 'skip' and args.scope == 'max':    
 
-    import chart_units_onice_xg
-    chart_units_onice_xg.parse_ids(args.season_id, args.game_id, args.images)
-    chart_units_onice_xg
-    
-    import chart_units_lines_onice_shots
-    chart_units_lines_onice_shots.parse_ids(args.season_id, args.game_id, args.images)
-    chart_units_lines_onice_shots
-
-    import chart_units_lines_onice_xg
-    chart_units_lines_onice_xg.parse_ids(args.season_id, args.game_id, args.images)
-    chart_units_lines_onice_xg
-    
-    import chart_units_pairings_onice_shots
-    chart_units_pairings_onice_shots.parse_ids(args.season_id, args.game_id, args.images)
-    chart_units_pairings_onice_shots    
-
-    import chart_units_pairings_onice_xg
-    chart_units_pairings_onice_xg.parse_ids(args.season_id, args.game_id, args.images)
-    chart_units_pairings_onice_xg
-
-
-if args.units != 'skip' and args.tweet != 'no': 
-    import tweet_units_onice
-    tweet_units_onice.parse_ids(args.season_id, args.game_id)
-    tweet_units_onice
-
-
-if args.units != 'skip' and args.scope == 'full':
     import stats_units_lines_matchups_lines
     stats_units_lines_matchups_lines.parse_ids(args.season_id, args.game_id)
     stats_units_lines_matchups_lines
@@ -335,7 +418,57 @@ if args.units != 'skip' and args.scope == 'full':
     import stats_units_pairings_teammates_lines
     stats_units_pairings_teammates_lines.parse_ids(args.season_id, args.game_id)
     stats_units_pairings_teammates_lines  
+
+#
+# Charts
+#
+
+if args.units != 'skip':  
+
+    import chart_units_onice_shots
+    chart_units_onice_shots.parse_ids(args.season_id, args.game_id, args.images)
+    chart_units_onice_shots
+
+    import chart_units_onice_xg
+    chart_units_onice_xg.parse_ids(args.season_id, args.game_id, args.images)
+    chart_units_onice_xg
+
+if args.units != 'skip' and args.scope == 'more':    
+
+    import chart_units_lines_onice_shots
+    chart_units_lines_onice_shots.parse_ids(args.season_id, args.game_id, args.images)
+    chart_units_lines_onice_shots
+
+    import chart_units_lines_onice_xg
+    chart_units_lines_onice_xg.parse_ids(args.season_id, args.game_id, args.images)
+    chart_units_lines_onice_xg
     
+    import chart_units_pairings_onice_shots
+    chart_units_pairings_onice_shots.parse_ids(args.season_id, args.game_id, args.images)
+    chart_units_pairings_onice_shots    
+
+    import chart_units_pairings_onice_xg
+    chart_units_pairings_onice_xg.parse_ids(args.season_id, args.game_id, args.images)
+    chart_units_pairings_onice_xg
+
+    import chart_units_pp_onice_shots
+    chart_units_pp_onice_shots.parse_ids(args.season_id, args.game_id, args.images)
+    chart_units_pp_onice_shots    
+
+    import chart_units_pp_onice_xg
+    chart_units_pp_onice_xg.parse_ids(args.season_id, args.game_id, args.images)
+    chart_units_pp_onice_xg
+
+    import chart_units_pk_onice_shots
+    chart_units_pk_onice_shots.parse_ids(args.season_id, args.game_id, args.images)
+    chart_units_pk_onice_shots    
+
+    import chart_units_pk_onice_xg
+    chart_units_pk_onice_xg.parse_ids(args.season_id, args.game_id, args.images)
+    chart_units_pk_onice_xg
+
+if args.units != 'skip' and args.scope == 'max':    
+
     import chart_units_lines_matchups_lines_onice_shots
     chart_units_lines_matchups_lines_onice_shots.parse_ids(args.season_id, args.game_id, args.images)
     chart_units_lines_matchups_lines_onice_shots
@@ -384,7 +517,36 @@ if args.units != 'skip' and args.scope == 'full':
     chart_units_pairings_teammates_lines_onice_xg.parse_ids(args.season_id, args.game_id, args.images)
     chart_units_pairings_teammates_lines_onice_xg
 
-if args.units != 'skip' and args.scope == 'full' and args.tweet != 'no':
+#
+# Tweets
+#
+
+if args.units != 'skip' and args.tweet != 'no': 
+
+    import tweet_units_onice
+    tweet_units_onice.parse_ids(args.season_id, args.game_id)
+    tweet_units_onice
+
+if args.units != 'skip' and args.scope == 'more' and args.tweet != 'no':    
+
+    import tweet_units_lines_onice
+    tweet_units_lines_onice.parse_ids(args.season_id, args.game_id, args.images)
+    tweet_units_lines_onice    
+
+    import tweet_units_pairings_onice
+    tweet_units_pairings_onice.parse_ids(args.season_id, args.game_id, args.images)
+    tweet_units_pairings_onice
+    
+    import tweet_units_pp_onice
+    tweet_units_pp_onice.parse_ids(args.season_id, args.game_id, args.images)
+    tweet_units_pp_onice    
+
+    import tweet_units_pk_onice
+    tweet_units_pk_onice.parse_ids(args.season_id, args.game_id, args.images)
+    tweet_units_pk_onice
+
+if args.units != 'skip' and args.scope == 'max' and args.tweet != 'no':
+
     import tweet_units_lines_matchups_lines
     tweet_units_lines_matchups_lines.parse_ids(args.season_id, args.game_id)
     tweet_units_lines_matchups_lines
