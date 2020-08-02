@@ -32,8 +32,12 @@ def parse_ids(season_id, game_id):
         try:    
             year_start = season_id[0:4]
             year_end = season_id[4:8]
-        
-            JSON_schedule_url = 'https://statsapi.web.nhl.com/api/v1/schedule?startDate=' + year_start + '-08-30&endDate=' + year_end + '-06-30'
+
+            if int(season_id) != 20192020:       
+                JSON_schedule_url = 'https://statsapi.web.nhl.com/api/v1/schedule?startDate=' + year_start + '-08-30&endDate=' + year_end + '-06-30'
+            if int(season_id) == 20192020:       
+                JSON_schedule_url = 'https://statsapi.web.nhl.com/api/v1/schedule?startDate=' + year_start + '-08-30&endDate=' + year_end + '-10-30'
+            
             JSON_schedule_request = requests.get(JSON_schedule_url, timeout=5).text
         
             f = open(files_root + season_id + '_schedule.json', 'w+')

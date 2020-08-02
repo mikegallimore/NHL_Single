@@ -11,22 +11,22 @@ parser = argparse.ArgumentParser()
 ### COMMAND LINE ARGUMENTS
 ###
 
-parser.add_argument('season_id', help='Set the season (e.g. 20182019)')
-parser.add_argument('game_id', help='Set the game (e.g. 20001)')
+parser.add_argument('season_id', help='Set to [8-digit season number] (e.g. 20182019)')
+parser.add_argument('game_id', help='Set to [5-digit game number] game (e.g. 20001)')
 
-parser.add_argument('--rosters', dest='rosters', help='Can set to true', required=False)
-parser.add_argument('--shifts', dest='shifts', help='Can set to true', required=False)
-parser.add_argument('--pbp', dest='pbp', help='Can set to true', required=False)
-parser.add_argument('--toi', dest='toi', help='Can set to true', required=False)
-parser.add_argument('--merge_pbp', dest='merge_pbp', help='Can set to true', required=False)
-parser.add_argument('--xg', dest='xg', help='Can set to true', required=False)
+parser.add_argument('--rosters', dest='rosters', help='Can set to [true]', required=False)
+parser.add_argument('--shifts', dest='shifts', help='Can set to [true]', required=False)
+parser.add_argument('--pbp', dest='pbp', help='Can set to [true]', required=False)
+parser.add_argument('--toi', dest='toi', help='Can set to [true]', required=False)
+parser.add_argument('--merge_pbp', dest='merge_pbp', help='Can set to [true]', required=False)
+parser.add_argument('--xg', dest='xg', help='Can set to [true]', required=False)
 
 # for use with the 20062007 season only
-parser.add_argument('--load_pbp', dest='load_pbp', help='Setting to true will load a stored play-by-play file', required=False)
+parser.add_argument('--load_pbp', dest='load_pbp', help='Setting to [true] will load a stored play-by-play file', required=False)
 
 # for instances where players are recorded in the lineup at one position but actually playing another (e.g. Luke Witkowski listed as a D while playing F)
-parser.add_argument('--switch_F2D', dest='switch_F2D', help='Set to player name (e.g. Luke_Witkowski)', required=False)
-parser.add_argument('--switch_D2F', dest='switch_D2F', help='Set to player name (e.g. Luke_Witkowski)', required=False)
+parser.add_argument('--switch_F2D', dest='switch_F2D', help='Set to [player name] (e.g. Luke_Witkowski)', required=False)
+parser.add_argument('--switch_D2F', dest='switch_D2F', help='Set to [player name] (e.g. Luke_Witkowski)', required=False)
 
 args = parser.parse_args()
 

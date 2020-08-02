@@ -11,17 +11,14 @@ parser = argparse.ArgumentParser()
 ### COMMAND LINE ARGUMENTS
 ###
 
-parser.add_argument('season_id', help='Set the season (e.g. 20182019)')
-parser.add_argument('game_id', help='Set the game (e.g. 20001)')
-
-parser.add_argument('--units_lines', dest='units_lines', help='Can set to true, matchups, matchups_lines, matchups_lines_shots, matchups_pairings, matchups_pairings_shots, teammates or teammates_shots', required=False)
-parser.add_argument('--units_pairings', dest='units_pairings', help='Can set to true, matchups, matchups_lines, matchups_lines_shots, matchups_pairings, matchups_pairings_shots, teammates or teammates_shots', required=False)
+parser.add_argument('season_id', help='Set to [8-digit season number] (e.g. 20182019)')
+parser.add_argument('game_id', help='Set to [5-digit game number] game (e.g. 20001)')
 
 parser.add_argument('--focus', dest='focus', help='Can set to [teams, players, units, lines, pairings, pp, pk]', required=False)
 parser.add_argument('--type', dest='type', help='Can set to [summary, gameflow, gameflow_shots, gameflow_xg, scatter, density] for teams, [gamescore, i, i_shots, i_xg, on, on_shots, on_xg] for players, [i, i_shots, i_xg, on, on_shots, on_xg] for units', required=False)
 parser.add_argument('--detail', dest='detail', help='Can set to [period, situation] for teams, [matchups, matchups_lines, matchups_pairings, teammates] for units', required=False)
 
-parser.add_argument('--images', dest='images', help='Setting to show will display images as they are generated', required=False)
+parser.add_argument('--images', dest='images', help='Setting to [show] will display images as they are generated', required=False)
 
 args = parser.parse_args()
 

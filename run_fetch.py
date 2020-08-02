@@ -11,10 +11,10 @@ parser = argparse.ArgumentParser()
 ### COMMAND LINE ARGUMENTS
 ###
 
-parser.add_argument('season_id', help='Set the season (e.g. 20182019)')
-parser.add_argument('game_id', help='Set the game (e.g. 20001)')
+parser.add_argument('season_id', help='Set to [8-digit season number] (e.g. 20182019)')
+parser.add_argument('game_id', help='Set to [5-digit game number] game (e.g. 20001)')
 
-parser.add_argument('--fetch', dest='fetch', help='Can set to true', required=False)
+parser.add_argument('--fetch', dest='fetch', help='Can set to [true]', required=False)
 
 
 args = parser.parse_args()

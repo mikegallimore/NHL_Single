@@ -197,7 +197,7 @@ def parse_ids(season_id, game_id, images):
         
             toi_5v5_goalies = team_5v5_goalies_df['TOI']        
             max_toi_5v5_goalies = toi_5v5_goalies.max()
-           
+                        
             toi_PP_skaters = team_PP_skaters_df['TOI']
             max_toi_PP_skaters = toi_PP_skaters.max()
     
@@ -528,7 +528,7 @@ def parse_ids(season_id, game_id, images):
             toi_5v5_tickmax = max_toi_5v5_goalies
     
             toi_5v5_ticklabels = []
-            if toi_5v5_tickmax > 0 and toi_5v5_tickmax <= 5:
+            if toi_5v5_tickmax <= 5:
                 toi_5v5_ticklabels = [0, 5]
             if toi_5v5_tickmax > 5 and toi_5v5_tickmax <= 10:
                 toi_5v5_ticklabels = [0, 10]

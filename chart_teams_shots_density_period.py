@@ -92,14 +92,21 @@ def parse_ids(season_id, game_id, images):
                 except:
                     toi = 0.0
 
-            if state == '5v5' and period < 4 and int(game_id) < 30000 or state == '5v5' and int(game_id) >= 30000:
+            if state == '5v5' and period < 4 or state == '5v5' and int(season_id) != 20192020 and period == 4 and int(game_id) >= 30000 or state == '5v5' and int(season_id) == 20192020 and period == 4 and int(game_id) >= 30021:
                 try:
                     toi_df = stats_teams_df[(stats_teams_df['TEAM'] == home) & (stats_teams_df['STATE'] == '5v5') & (stats_teams_df['PERIOD'] == period_name)]
                     toi = toi_df['TOI'].item()
                 except:
                     toi = 0.0
 
-            if state == '5v5' and period == 4 and int(game_id) < 30000:
+            if state == '5v5' and period == 4 and int(game_id) < 30000 and int(season_id) <= 20142015:
+                try:
+                    toi_df = stats_teams_df[(stats_teams_df['TEAM'] == home) & (stats_teams_df['STATE'] == '4v4') & (stats_teams_df['PERIOD'] == period_name)]
+                    toi = toi_df['TOI'].item()
+                except:
+                    toi = 0.0
+
+            if state == '5v5' and period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016 or state == '5v5' and season_id == 20192020 and period == 4 and int(game_id) > 30000 and int(game_id) <= 30020:
                 try:
                     toi_df = stats_teams_df[(stats_teams_df['TEAM'] == home) & (stats_teams_df['STATE'] == '3v3') & (stats_teams_df['PERIOD'] == period_name)]
                     toi = toi_df['TOI'].item()
@@ -129,11 +136,15 @@ def parse_ids(season_id, game_id, images):
                 away_count = str(pbp_df[(pbp_df['TEAM'] == away) & (pbp_df['EVENT'] == 'Shot') & (pbp_df['EVENT_TYPE'] != 'Block') & (pbp_df['PERIOD'] == period) & (pbp_df['HOME_STRENGTH'] == '5v5') & (pbp_df['AWAY_STRENGTH'] == '5v5')].count()[1])
                 home_count = str(pbp_df[(pbp_df['TEAM'] == home) & (pbp_df['EVENT'] == 'Shot') & (pbp_df['EVENT_TYPE'] != 'Block') & (pbp_df['PERIOD'] == period) & (pbp_df['HOME_STRENGTH'] == '5v5') & (pbp_df['AWAY_STRENGTH'] == '5v5')].count()[1])
 
-            if state == '5v5' and period == 4 and int(game_id) < 30000:
+            if state == '5v5' and period == 4 and int(game_id) < 30000 and int(season_id) <= 20142015:
+                away_count = str(pbp_df[(pbp_df['TEAM'] == away) & (pbp_df['EVENT'] == 'Shot') & (pbp_df['EVENT_TYPE'] != 'Block') & (pbp_df['PERIOD'] == period) & (pbp_df['HOME_STRENGTH'] == '4v4') & (pbp_df['AWAY_STRENGTH'] == '4v4')].count()[1])
+                home_count = str(pbp_df[(pbp_df['TEAM'] == home) & (pbp_df['EVENT'] == 'Shot') & (pbp_df['EVENT_TYPE'] != 'Block') & (pbp_df['PERIOD'] == period) & (pbp_df['HOME_STRENGTH'] == '4v4') & (pbp_df['AWAY_STRENGTH'] == '4v4')].count()[1])
+
+            if state == '5v5' and period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016 or state == '5v5' and season_id == 20192020 and period == 4 and int(game_id) > 30000 and int(game_id) <= 30020:
                 away_count = str(pbp_df[(pbp_df['TEAM'] == away) & (pbp_df['EVENT'] == 'Shot') & (pbp_df['EVENT_TYPE'] != 'Block') & (pbp_df['PERIOD'] == period) & (pbp_df['HOME_STRENGTH'] == '3v3') & (pbp_df['AWAY_STRENGTH'] == '3v3')].count()[1])
                 home_count = str(pbp_df[(pbp_df['TEAM'] == home) & (pbp_df['EVENT'] == 'Shot') & (pbp_df['EVENT_TYPE'] != 'Block') & (pbp_df['PERIOD'] == period) & (pbp_df['HOME_STRENGTH'] == '3v3') & (pbp_df['AWAY_STRENGTH'] == '3v3')].count()[1])
 
-            if state == '5v5' and period == 4 and int(game_id) >= 30000:           
+            if state == '5v5' and int(season_id) != 20192020 and period == 4 and int(game_id) >= 30000 or state == '5v5' and int(season_id) == 20192020 and period == 4 and int(game_id) >= 30021:           
                 away_count = str(pbp_df[(pbp_df['TEAM'] == away) & (pbp_df['EVENT'] == 'Shot') & (pbp_df['EVENT_TYPE'] != 'Block') & (pbp_df['PERIOD'] >= period) & (pbp_df['HOME_STRENGTH'] == '5v5') & (pbp_df['AWAY_STRENGTH'] == '5v5')].count()[1])
                 home_count = str(pbp_df[(pbp_df['TEAM'] == home) & (pbp_df['EVENT'] == 'Shot') & (pbp_df['EVENT_TYPE'] != 'Block') & (pbp_df['PERIOD'] >= period) & (pbp_df['HOME_STRENGTH'] == '5v5') & (pbp_df['AWAY_STRENGTH'] == '5v5')].count()[1])
 
@@ -164,7 +175,16 @@ def parse_ids(season_id, game_id, images):
                 home_shots = home_shots.dropna(subset=['X_1', 'Y_1'])
                 home_scored = pbp_df[(pbp_df['TEAM'] == home) & (pbp_df['EVENT'] == 'Shot') & (pbp_df['EVENT_TYPE'] == 'Goal') & (away_df['PERIOD'] == period) & (pbp_df['HOME_STRENGTH'] == '5v5') & (pbp_df['AWAY_STRENGTH'] == '5v5')]
 
-            if state == '5v5' and period == 4 and int(game_id) < 30000:
+            if state == '5v5' and period == 4 and int(game_id) < 30000 and int(season_id) <= 20142015:
+                away_shots = away_df[(away_df['TEAM'] == away) & (away_df['EVENT'] == 'Shot') & (away_df['EVENT_TYPE'] != 'Block') & (away_df['PERIOD'] == period) & (pbp_df['HOME_STRENGTH'] == '4v4') & (pbp_df['AWAY_STRENGTH'] == '4v4')]
+                away_shots = away_shots.dropna(subset=['X_1', 'Y_1'])
+                away_scored = pbp_df[(pbp_df['TEAM'] == away) & (pbp_df['EVENT'] == 'Shot') & (pbp_df['EVENT_TYPE'] == 'Goal') & (away_df['PERIOD'] == period) & (pbp_df['HOME_STRENGTH'] == '4v4') & (pbp_df['AWAY_STRENGTH'] == '4v4')]
+            
+                home_shots = home_df[(home_df['TEAM'] == home) & (home_df['EVENT'] == 'Shot') & (home_df['EVENT_TYPE'] != 'Block') & (away_df['PERIOD'] == period) & (pbp_df['HOME_STRENGTH'] == '4v4') & (pbp_df['AWAY_STRENGTH'] == '4v4')]
+                home_shots = home_shots.dropna(subset=['X_1', 'Y_1'])
+                home_scored = pbp_df[(pbp_df['TEAM'] == home) & (pbp_df['EVENT'] == 'Shot') & (pbp_df['EVENT_TYPE'] == 'Goal') & (away_df['PERIOD'] == period) & (pbp_df['HOME_STRENGTH'] == '4v4') & (pbp_df['AWAY_STRENGTH'] == '4v4')]
+
+            if state == '5v5' and period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016 or state == '5v5' and season_id == 20192020 and period == 4 and int(game_id) > 30000 and int(game_id) <= 30020:
                 away_shots = away_df[(away_df['TEAM'] == away) & (away_df['EVENT'] == 'Shot') & (away_df['EVENT_TYPE'] != 'Block') & (away_df['PERIOD'] == period) & (pbp_df['HOME_STRENGTH'] == '3v3') & (pbp_df['AWAY_STRENGTH'] == '3v3')]
                 away_shots = away_shots.dropna(subset=['X_1', 'Y_1'])
                 away_scored = pbp_df[(pbp_df['TEAM'] == away) & (pbp_df['EVENT'] == 'Shot') & (pbp_df['EVENT_TYPE'] == 'Goal') & (away_df['PERIOD'] == period) & (pbp_df['HOME_STRENGTH'] == '3v3') & (pbp_df['AWAY_STRENGTH'] == '3v3')]
@@ -173,7 +193,7 @@ def parse_ids(season_id, game_id, images):
                 home_shots = home_shots.dropna(subset=['X_1', 'Y_1'])
                 home_scored = pbp_df[(pbp_df['TEAM'] == home) & (pbp_df['EVENT'] == 'Shot') & (pbp_df['EVENT_TYPE'] == 'Goal') & (away_df['PERIOD'] == period) & (pbp_df['HOME_STRENGTH'] == '3v3') & (pbp_df['AWAY_STRENGTH'] == '3v3')]
 
-            if state == '5v5' and period == 4 and int(game_id) >= 30000:           
+            if state == '5v5' and int(season_id) != 20192020 and period == 4 and int(game_id) >= 30000 or state == '5v5' and int(season_id) == 20192020 and period == 4 and int(game_id) >= 30021:           
                 away_shots = away_df[(away_df['TEAM'] == away) & (away_df['EVENT'] == 'Shot') & (away_df['EVENT_TYPE'] != 'Block') & (away_df['PERIOD'] >= period) & (pbp_df['HOME_STRENGTH'] == '5v5') & (pbp_df['AWAY_STRENGTH'] == '5v5')]
                 away_shots = away_shots.dropna(subset=['X_1', 'Y_1'])
                 away_scored = pbp_df[(pbp_df['TEAM'] == away) & (pbp_df['EVENT'] == 'Shot') & (pbp_df['EVENT_TYPE'] == 'Goal') & (away_df['PERIOD'] >= period) & (pbp_df['HOME_STRENGTH'] == '5v5') & (pbp_df['AWAY_STRENGTH'] == '5v5')]
@@ -254,11 +274,17 @@ def parse_ids(season_id, game_id, images):
             if state == 'ALL':
                 plt.title(date + ' ' + period_name + ' Period Unblocked Shots\n' + str(toi) + ' Minutes\n\n')
 
-            if state == '5v5' and period < 4 and int(game_id) < 30000 or state == '5v5' and int(game_id) >= 30000:           
+            if state == '5v5' and period < 4:           
                 plt.title(date + ' ' + period_name + ' Period Unblocked Shots\n' + str(toi) + ' 5v5 Minutes\n\n')
 
-            if state == '5v5' and period == 4 and int(game_id) < 30000:
+            if state == '5v5' and period == 4 and int(game_id) < 30000 and int(season_id) <= 20142015:
+                plt.title(date + ' ' + period_name + ' Period Unblocked Shots\n' + str(toi) + ' 4v4 Minutes\n\n')
+
+            if state == '5v5' and period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016 or state == '5v5' and season_id == 20192020 and period == 4 and int(game_id) > 30000 and int(game_id) <= 30020:
                 plt.title(date + ' ' + period_name + ' Period Unblocked Shots\n' + str(toi) + ' 3v3 Minutes\n\n')
+
+            if state == '5v5' and int(season_id) != 20192020 and period == 4 and int(game_id) >= 30000 or state == '5v5' and int(season_id) == 20192020 and period == 4 and int(game_id) >= 30021:           
+                plt.title(date + ' ' + period_name + ' Period Unblocked Shots\n' + str(toi) + ' 5v5 Minutes\n\n')
 
             if state == 'PP':
                 plt.title(date + ' ' + period_name + ' Period Unblocked Shots\n' + str(toi) + ' Home PP Minutes\n\n')
@@ -285,10 +311,13 @@ def parse_ids(season_id, game_id, images):
             if state == 'ALL':
                 plt.savefig(charts_teams_period + 'shots_density_' + period_name + '.png', bbox_inches='tight', pad_inches=0.2)
 
-            if state == '5v5' and period < 4 and int(game_id) < 30000 or state == '5v5' and int(game_id) >= 30000:           
+            if state == '5v5' and period < 4 or state == '5v5' and int(season_id) != 20192020 and period == 4 and int(game_id) >= 30000 or state == '5v5' and int(season_id) == 20192020 and period == 4 and int(game_id) >= 30021:
                 plt.savefig(charts_teams_period + 'shots_density_5v5_' + period_name + '.png', bbox_inches='tight', pad_inches=0.2)
 
-            if state == '5v5' and period == 4 and int(game_id) < 30000:
+            if state == '5v5' and period == 4 and int(game_id) < 30000 and int(season_id) <= 20142015:
+                plt.savefig(charts_teams_period + 'shots_density_4v4_' + period_name + '.png', bbox_inches='tight', pad_inches=0.2)
+
+            if state == '5v5' and period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016 or state == '5v5' and season_id == 20192020 and period == 4 and int(game_id) > 30000 and int(game_id) <= 30020:
                 plt.savefig(charts_teams_period + 'shots_density_3v3_' + period_name + '.png', bbox_inches='tight', pad_inches=0.2)
 
             if state == 'PP':
@@ -312,10 +341,13 @@ def parse_ids(season_id, game_id, images):
             if state == 'ALL':
                 print('Finished density plot for ' + period_name + ' period unblocked shots.')
 
-            if state == '5v5' and period < 4 and int(game_id) < 30000 or state == '5v5' and int(game_id) >= 30000:           
+            if state == '5v5' and period < 4 or state == '5v5' and int(season_id) != 20192020 and period == 4 and int(game_id) >= 30000 or state == '5v5' and int(season_id) == 20192020 and period == 4 and int(game_id) >= 30021:
                 print('Finished density plot for ' + period_name + ' period unblocked 5v5 shots.')
 
-            if state == '5v5' and period == 4 and int(game_id) < 30000:
+            if state == '5v5' and period == 4 and int(game_id) < 30000 and int(season_id) <= 20142015:
+                print('Finished density plot for ' + period_name + ' period unblocked 4v4 shots.')
+
+            if state == '5v5' and period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016 or state == '5v5' and season_id == 20192020 and period == 4 and int(game_id) > 30000 and int(game_id) <= 30020:
                 print('Finished density plot for ' + period_name + ' period unblocked 3v3 shots.')
 
             if state == 'PP':

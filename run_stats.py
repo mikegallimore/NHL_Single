@@ -7,8 +7,8 @@ import argparse
 parser = argparse.ArgumentParser()
 
 ### creates arguments to make use of in functions
-parser.add_argument('season_id', help='Set the season (e.g. 20182019)')
-parser.add_argument('game_id', help='Set the game (e.g. 20001)')
+parser.add_argument('season_id', help='Set to [8-digit season number] (e.g. 20182019)')
+parser.add_argument('game_id', help='Set to [5-digit game number] game (e.g. 20001)')
 
 parser.add_argument('--focus', dest='focus', help='Can set to [teams, players, units, lines, pairings, pp, pk]', required=False)
 parser.add_argument('--detail', dest='detail', help='Can set to [basic, period, situation] for teams, [basic, period, situation, opponents, teammates] for players, [basic, matchups, matchups_lines, matchups_pairings, teammates] for units', required=False)

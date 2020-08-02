@@ -11,14 +11,14 @@ parser = argparse.ArgumentParser()
 ### COMMAND LINE ARGUMENTS
 ###
 
-parser.add_argument('season_id', help='Set the season (e.g. 20182019)')
-parser.add_argument('game_id', help='Set the game (e.g. 20001)')
+parser.add_argument('season_id', help='Set to [8-digit season number] (e.g. 20182019)')
+parser.add_argument('game_id', help='Set to [5-digit game number] game (e.g. 20001)')
 
 parser.add_argument('--teams', dest='teams', help='Set to [no] to bypass tweeting team charts', required=False)
 parser.add_argument('--players', dest='players', help='Set to [no] to bypass tweeting all players charts', required=False)
 parser.add_argument('--units', dest='units', help='Set to [no] to bypass tweeting all units charts', required=False)
 
-parser.add_argument('--scope', dest='scope', help='Set to [full] to run additional scripts for teams, players and units', required=False)
+parser.add_argument('--scope', dest='scope', help='Set to [more] to run additional scripts for teams, players and units', required=False)
 
 args = parser.parse_args()
 
@@ -64,7 +64,7 @@ if args.units != 'no':
     tweet_units_onice.parse_ids(args.season_id, args.game_id)
     tweet_units_onice
 
-if args.units != 'skip' and args.scope == 'full' and args.tweet != 'no':
+if args.units != 'skip' and args.scope == 'more' and args.tweet != 'no':
     import tweet_units_lines_matchups_lines
     tweet_units_lines_matchups_lines.parse_ids(args.season_id, args.game_id)
     tweet_units_lines_matchups_lines

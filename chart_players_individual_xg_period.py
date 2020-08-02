@@ -90,9 +90,12 @@ def parse_ids(season_id, game_id, images):
             team_toi_df = team_stats_df.copy()
 
             team_all_toi = team_toi_df[(team_toi_df['TEAM'] == team) & (team_toi_df['STATE'] == 'ALL') & (team_toi_df['PERIOD'] == period_name)]
-            team_all_toi = team_all_toi['TOI'].item()
+            try:
+                team_all_toi = team_all_toi['TOI'].item()
+            except:
+                continue
 
-            if period < 4 and int(game_id) < 30000 or period == 4 and int(game_id) >= 30000:                        
+            if period < 4 or season_id != 20192020 and period == 4 and int(game_id) >= 30000 or season_id == 20192020 and period == 4 and int(game_id) >= 30021:               
                 team_5v5_toi = team_toi_df[(team_toi_df['TEAM'] == team) & (team_toi_df['STATE'] == '5v5') & (team_toi_df['PERIOD'] == period_name)]
                 team_5v5_toi = team_5v5_toi['TOI'].item()
 
@@ -100,7 +103,7 @@ def parse_ids(season_id, game_id, images):
                 team_4v4_toi = team_toi_df[(team_toi_df['TEAM'] == team) & (team_toi_df['STATE'] == '4v4') & (team_toi_df['PERIOD'] == period_name)]
                 team_4v4_toi = team_4v4_toi['TOI'].item()
 
-            if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016:
+            if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016 or season_id == 20192020 and period == 4 and int(game_id) > 30000 and int(game_id) <= 30020:
                 team_3v3_toi = team_toi_df[(team_toi_df['TEAM'] == team) & (team_toi_df['STATE'] == '3v3') & (team_toi_df['PERIOD'] == period_name)]
                 team_3v3_toi = team_3v3_toi['TOI'].item()
 
@@ -115,7 +118,7 @@ def parse_ids(season_id, game_id, images):
             team_df = team_df[(team_df['TEAM'] == team) & (team_df['POS'] != 'G') & (team_df['PERIOD'] == period_name)]
     
             # create a filtered dataframe for each game state; sort by team, game state and position; rank by time on ice and then invert the rankings
-            if period < 4 and int(game_id) < 30000 or period == 4 and int(game_id) >= 30000:                   
+            if period < 4 or season_id != 20192020 and period == 4 and int(game_id) >= 30000 or season_id == 20192020 and period == 4 and int(game_id) >= 30021:               
                 team_5v5_df = team_df.copy()
                 team_5v5_df = team_5v5_df[(team_5v5_df['STATE'] == '5v5')]
                 team_5v5_df = team_5v5_df.sort_values(by=['TOI'], ascending = True)
@@ -129,7 +132,7 @@ def parse_ids(season_id, game_id, images):
                 team_4v4_df['RANK'] = team_4v4_df['TOI'].rank(method='first')
                 team_4v4_df['RANK'] -= 1
 
-            if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016:
+            if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016 or season_id == 20192020 and period == 4 and int(game_id) > 30000 and int(game_id) <= 30020:
                 team_3v3_df = team_df.copy()
                 team_3v3_df = team_3v3_df[(team_3v3_df['STATE'] == '3v3')]
                 team_3v3_df = team_3v3_df.sort_values(by=['TOI'], ascending = True)
@@ -151,7 +154,7 @@ def parse_ids(season_id, game_id, images):
             team_SH_df['RANK'] -= 1
           
             # for each game state, create a dataframe with just the time on ice column; set a max value; scale each player's time on ice relative to the max
-            if period < 4 and int(game_id) < 30000 or period == 4 and int(game_id) >= 30000:                   
+            if period < 4 or season_id != 20192020 and period == 4 and int(game_id) >= 30000 or season_id == 20192020 and period == 4 and int(game_id) >= 30021:               
                 toi_5v5 = team_5v5_df['TOI']        
                 max_toi_5v5 = toi_5v5.max()
 
@@ -159,7 +162,7 @@ def parse_ids(season_id, game_id, images):
                 toi_4v4 = team_4v4_df['TOI']        
                 max_toi_4v4 = toi_4v4.max()  
 
-            if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016:
+            if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016 or season_id == 20192020 and period == 4 and int(game_id) > 30000 and int(game_id) <= 30020:
                 toi_3v3 = team_3v3_df['TOI']        
                 max_toi_3v3 = toi_3v3.max()          
                 
@@ -173,7 +176,7 @@ def parse_ids(season_id, game_id, images):
             fig = plt.figure(figsize=(8,8))
             grid = plt.GridSpec(5, 8,  hspace=0.75, wspace=0.75)
 
-            if period < 4 and int(game_id) < 30000 or period == 4 and int(game_id) >= 30000:                             
+            if period < 4 or season_id != 20192020 and period == 4 and int(game_id) >= 30000 or season_id == 20192020 and period == 4 and int(game_id) >= 30021:               
                 ax_5v5_xG = fig.add_subplot(grid[0:-2, :-1])
                 ax_5v5_toi = fig.add_subplot(grid[0:-2, 7])        
 
@@ -181,7 +184,7 @@ def parse_ids(season_id, game_id, images):
                 ax_4v4_xG = fig.add_subplot(grid[0:-2, :-1])
                 ax_4v4_toi = fig.add_subplot(grid[0:-2, 7])  
 
-            if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016:
+            if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016 or season_id == 20192020 and period == 4 and int(game_id) > 30000 and int(game_id) <= 30020:
                 ax_3v3_xG = fig.add_subplot(grid[0:-2, :-1])
                 ax_3v3_toi = fig.add_subplot(grid[0:-2, 7])        
     
@@ -195,7 +198,7 @@ def parse_ids(season_id, game_id, images):
             fig.suptitle(date + ' Skaters Individual Expected Goals ('+ period_name + ' Period)\n\n')       
     
             # set the axes titles
-            if period < 4 and int(game_id) < 30000 or period == 4 and int(game_id) >= 30000:                             
+            if period < 4 or season_id != 20192020 and period == 4 and int(game_id) >= 30000 or season_id == 20192020 and period == 4 and int(game_id) >= 30021:               
                 ax_5v5_xG.set_title('5v5 xG', fontsize=10)
                 ax_5v5_toi.set_title('5v5 TOI', fontsize=10)
 
@@ -203,7 +206,7 @@ def parse_ids(season_id, game_id, images):
                 ax_4v4_xG.set_title('4v4 xG', fontsize=10)
                 ax_4v4_toi.set_title('4v4 TOI', fontsize=10)
 
-            if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016:
+            if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016 or season_id == 20192020 and period == 4 and int(game_id) > 30000 and int(game_id) <= 30020:
                 ax_3v3_xG.set_title('3v3 xG', fontsize=10)
                 ax_3v3_toi.set_title('3v3 TOI', fontsize=10)
             
@@ -214,7 +217,7 @@ def parse_ids(season_id, game_id, images):
             ax_SH_toi.set_title('SH TOI', fontsize=10)
             
             # for each state, plot the bars for total shots and markers for saved, missed and blocked shots markers
-            if period < 4 and int(game_id) < 30000 or period == 4 and int(game_id) >= 30000:                             
+            if period < 4 or season_id != 20192020 and period == 4 and int(game_id) >= 30000 or season_id == 20192020 and period == 4 and int(game_id) >= 30021:               
                 try:
                     xG_5v5_plot = team_5v5_df.plot.barh(x='PLAYER', y='xG', color=team_color, edgecolor=None, width=0.75, legend=None, label='', ax=ax_5v5_xG);
                 except:
@@ -226,7 +229,7 @@ def parse_ids(season_id, game_id, images):
                 except:
                     pass 
 
-            if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016:
+            if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016 or season_id == 20192020 and period == 4 and int(game_id) > 30000 and int(game_id) <= 30020:
                 try:
                     xG_3v3_plot = team_3v3_df.plot.barh(x='PLAYER', y='xG', color=team_color, edgecolor=None, width=0.75, legend=None, label='', ax=ax_3v3_xG);
                 except:
@@ -245,7 +248,7 @@ def parse_ids(season_id, game_id, images):
                     pass 
     
             # for each state, plot the bars for time on ice
-            if period < 4 and int(game_id) < 30000 or period == 4 and int(game_id) >= 30000:                             
+            if period < 4 or season_id != 20192020 and period == 4 and int(game_id) >= 30000 or season_id == 20192020 and period == 4 and int(game_id) >= 30021:               
                 try:
                     toi_5v5_plot = team_5v5_df.plot.barh(x='PLAYER', y='TOI', color='white', edgecolor=team_color, width=0.75, legend=None, label='', ax=ax_5v5_toi);
                 except:
@@ -257,7 +260,7 @@ def parse_ids(season_id, game_id, images):
                 except:
                     pass
                 
-            if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016:
+            if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016 or season_id == 20192020 and period == 4 and int(game_id) > 30000 and int(game_id) <= 30020:
                 try:
                     toi_3v3_plot = team_3v3_df.plot.barh(x='PLAYER', y='TOI', color='white', edgecolor=team_color, width=0.75, legend=None, label='', ax=ax_3v3_toi);
                 except:
@@ -276,7 +279,7 @@ def parse_ids(season_id, game_id, images):
                     pass
     
             # set / remove the y-labels for the subplots
-            if period < 4 and int(game_id) < 30000 or period == 4 and int(game_id) >= 30000:                             
+            if period < 4 or season_id != 20192020 and period == 4 and int(game_id) >= 30000 or season_id == 20192020 and period == 4 and int(game_id) >= 30021:               
                 ax_5v5_xG.set_xlabel('')
                 ax_5v5_xG.set_ylabel('', fontsize=10)
                 ax_5v5_toi.set_xlabel('')
@@ -288,7 +291,7 @@ def parse_ids(season_id, game_id, images):
                 ax_4v4_toi.set_xlabel('')
                 ax_4v4_toi.set_ylabel('')
 
-            if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016:
+            if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016 or season_id == 20192020 and period == 4 and int(game_id) > 30000 and int(game_id) <= 30020:
                 ax_3v3_xG.set_xlabel('')
                 ax_3v3_xG.set_ylabel('', fontsize=10)
                 ax_3v3_toi.set_xlabel('')
@@ -305,7 +308,7 @@ def parse_ids(season_id, game_id, images):
             ax_SH_toi.set_ylabel('')
                     
             # change the tick parameters for each axes
-            if period < 4 and int(game_id) < 30000 or period == 4 and int(game_id) >= 30000:                             
+            if period < 4 or season_id != 20192020 and period == 4 and int(game_id) >= 30000 or season_id == 20192020 and period == 4 and int(game_id) >= 30021:               
                 ax_5v5_xG.tick_params(
                     axis='both',       # changes apply to the x-axis
                     which='both',      # both major and minor ticks are affected
@@ -339,7 +342,7 @@ def parse_ids(season_id, game_id, images):
                     labelleft=False,   # labels along the left edge are off
                     labelbottom=True)  # labels along the bottom edge are on
 
-            if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016:
+            if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016 or season_id == 20192020 and period == 4 and int(game_id) > 30000 and int(game_id) <= 30020:
                 ax_3v3_xG.tick_params(
                     axis='both',       # changes apply to the x-axis
                     which='both',      # both major and minor ticks are affected
@@ -389,7 +392,7 @@ def parse_ids(season_id, game_id, images):
                 labelbottom=True)  # labels along the bottom edge are on
 
             # change the y-axis label colors
-            if period < 4 and int(game_id) < 30000 or period == 4 and int(game_id) >= 30000:                          
+            if period < 4 or season_id != 20192020 and period == 4 and int(game_id) >= 30000 or season_id == 20192020 and period == 4 and int(game_id) >= 30021:               
                 ax_5v5_xG.tick_params(
                         axis='y',
                         which='both',
@@ -401,7 +404,7 @@ def parse_ids(season_id, game_id, images):
                         which='both',
                         labelcolor=team_color)
         
-            if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016:
+            if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016 or season_id == 20192020 and period == 4 and int(game_id) > 30000 and int(game_id) <= 30020:
                 ax_3v3_xG.tick_params(
                         axis='y',
                         which='both',
@@ -418,7 +421,7 @@ def parse_ids(season_id, game_id, images):
                     labelcolor=team_color)
        
             # create a list of x-axis tick values contingent on the max values for shots
-            if period < 4 and int(game_id) < 30000 or period == 4 and int(game_id) >= 30000:                             
+            if period < 4 or season_id != 20192020 and period == 4 and int(game_id) >= 30000 or season_id == 20192020 and period == 4 and int(game_id) >= 30021:               
                 xG_5v5_max = team_5v5_df['xG']
                 xG_5v5_tickmax = xG_5v5_max.max()
         
@@ -454,7 +457,7 @@ def parse_ids(season_id, game_id, images):
         
                 toi_4v4_ticklabels = [0, 5]
         
-            if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016:
+            if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016 or season_id == 20192020 and period == 4 and int(game_id) > 30000 and int(game_id) <= 30020:
                 xG_3v3_max = team_3v3_df['xG']
                 xG_3v3_tickmax = xG_3v3_max.max()
         
@@ -531,7 +534,7 @@ def parse_ids(season_id, game_id, images):
                 toi_specialteams_ticklabels = [0, 20]
 
             # set vertical indicator for midpoint of time on ice max
-            if period < 4 and int(game_id) < 30000 or period == 4 and int(game_id) >= 30000:                             
+            if period < 4 or season_id != 20192020 and period == 4 and int(game_id) >= 30000 or season_id == 20192020 and period == 4 and int(game_id) >= 30021:               
                 ax_5v5_toi.axvspan(toi_5v5_ticklabels[1] / 2, toi_5v5_ticklabels[1] / 2, ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
                 ax_5v5_toi.axvspan(toi_5v5_ticklabels[1], toi_5v5_ticklabels[1], ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
 
@@ -539,7 +542,7 @@ def parse_ids(season_id, game_id, images):
                 ax_4v4_toi.axvspan(toi_4v4_ticklabels[1] / 2, toi_4v4_ticklabels[1] / 2, ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
                 ax_4v4_toi.axvspan(toi_4v4_ticklabels[1], toi_4v4_ticklabels[1], ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
 
-            if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016:
+            if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016 or season_id == 20192020 and period == 4 and int(game_id) > 30000 and int(game_id) <= 30020:
                 ax_3v3_toi.axvspan(toi_3v3_ticklabels[1] / 2, toi_3v3_ticklabels[1] / 2, ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
                 ax_3v3_toi.axvspan(toi_3v3_ticklabels[1], toi_3v3_ticklabels[1], ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
     
@@ -550,7 +553,7 @@ def parse_ids(season_id, game_id, images):
             ax_SH_toi.axvspan(toi_specialteams_ticklabels[1], toi_specialteams_ticklabels[1], ymin=0, ymax=1, zorder=0, alpha=0.25, linestyle=':', color='black')
               
             # use the newly-minted x-ticklabels to ensure the x-axis labels will always display as integers        
-            if period < 4 and int(game_id) < 30000 or period == 4 and int(game_id) >= 30000:                             
+            if period < 4 or season_id != 20192020 and period == 4 and int(game_id) >= 30000 or season_id == 20192020 and period == 4 and int(game_id) >= 30021:               
                 ax_5v5_xG.set_xticks(xG_5v5_ticklabels, minor=False)
                 ax_5v5_toi.set_xticks(toi_5v5_ticklabels, minor=False)
 
@@ -558,7 +561,7 @@ def parse_ids(season_id, game_id, images):
                 ax_4v4_xG.set_xticks(xG_4v4_ticklabels, minor=False)
                 ax_4v4_toi.set_xticks(toi_4v4_ticklabels, minor=False)
 
-            if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016:
+            if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016 or season_id == 20192020 and period == 4 and int(game_id) > 30000 and int(game_id) <= 30020:
                 ax_3v3_xG.set_xticks(xG_3v3_ticklabels, minor=False)
                 ax_3v3_toi.set_xticks(toi_3v3_ticklabels, minor=False)
             
@@ -584,7 +587,7 @@ def parse_ids(season_id, game_id, images):
                 ax_SH_toi.set_yticks([], minor=False)
                         
             # remove the borders to each subplot
-            if period < 4 and int(game_id) < 30000 or period == 4 and int(game_id) >= 30000:                          
+            if period < 4 or season_id != 20192020 and period == 4 and int(game_id) >= 30000 or season_id == 20192020 and period == 4 and int(game_id) >= 30021:               
                 ax_5v5_xG.spines["top"].set_visible(False)   
                 ax_5v5_xG.spines["bottom"].set_visible(False)    
                 ax_5v5_xG.spines["right"].set_visible(False)    
@@ -604,7 +607,7 @@ def parse_ids(season_id, game_id, images):
                 ax_4v4_toi.spines["right"].set_visible(False)    
                 ax_4v4_toi.spines["left"].set_visible(False) 
 
-            if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016:
+            if period == 4 and int(game_id) < 30000 and int(season_id) >= 20152016 or season_id == 20192020 and period == 4 and int(game_id) > 30000 and int(game_id) <= 30020:
                 ax_3v3_xG.spines["top"].set_visible(False)   
                 ax_3v3_xG.spines["bottom"].set_visible(False)    
                 ax_3v3_xG.spines["right"].set_visible(False)    
